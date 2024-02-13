@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import LoginPage from './components/LoginPage'
 import {
@@ -7,11 +7,27 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import NavigationBar from './components/NavigationBar';
+import TopBar from './components/TopBar';
+import HomeScreen from './components/HomeScreen';
+import { createTheme } from '@mui/material/styles';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#3f51b5',
+    },
+    secondary: {
+      main: '#f50057',
+    },
+  },
+})
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <h1>welcome!</h1>,
+    element: <HomeScreen />,
   },
   {
     path: "/login",
@@ -21,11 +37,26 @@ const router = createBrowserRouter([
 
 function App() {
   const [count, setCount] = useState(0)
+
+  const [backendData, setBackendData] = useState([{}])
+
+  useEffect(() => {
+    fetch("/api").then(
+      response => response.json()
+    ).then(
+      data => {
+        setBackendData(data)
+        console.log(backendData.users)
+      }
+    )
+  }, [])
   
   return (
     <>
-      <NavigationBar />
-      <RouterProvider router={router} />
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </>
   )
 }

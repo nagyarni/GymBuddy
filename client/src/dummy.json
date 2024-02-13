@@ -1,0 +1,85 @@
+{
+    "user": "user1",
+    "weeks": [
+        {
+            "days": [
+                {
+                    "exercises": [
+                        {
+                            "exerciseName": "Bench Press",
+                            "weight": "?",
+                            "series": 5,
+                            "reps": 4,
+                            "RPE": 7
+                        },
+                        {
+                            "exerciseName": "Squat",
+                            "weight": "?",
+                            "series": 5,
+                            "reps": 4,
+                            "RPE": 7
+                        }
+                    ]
+                },
+                {
+                    "exercises": [
+                        {
+                            "exerciseName": "Deadlift",
+                            "weight": "?",
+                            "series": 5,
+                            "reps": 4,
+                            "RPE": 7
+                        },
+                        {
+                            "exerciseName": "Bench Press",
+                            "weight": "?",
+                            "series": 5,
+                            "reps": 4,
+                            "RPE": 7
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "days": [
+                {
+                    "exercises": [
+                        {
+                            "exerciseName": "Bench Press W2",
+                            "weight": "?",
+                            "series": 5,
+                            "reps": 4,
+                            "RPE": 7
+                        },
+                        {
+                            "exerciseName": "Squat W2",
+                            "weight": "?",
+                            "series": 5,
+                            "reps": 4,
+                            "RPE": 7
+                        }
+                    ]
+                },
+                {
+                    "exercises": [
+                        {
+                            "exerciseName": "Deadlift W2",
+                            "weight": "?",
+                            "series": 5,
+                            "reps": 4,
+                            "RPE": 7
+                        },
+                        {
+                            "exerciseName": "Bench Press W2",
+                            "weight": "?",
+                            "series": 5,
+                            "reps": 4,
+                            "RPE": 7
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

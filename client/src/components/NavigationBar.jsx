@@ -29,7 +29,7 @@ const NavigationBar = () => {
           textAlign='center'
           role='presentation'
         >
-          <Typography variant="h6" color='initial'>
+          <Typography variant="h6" color='text'>
             Menu
           </Typography>
         </Box>
