@@ -40,7 +40,7 @@ function App() {
 
   const [backendData, setBackendData] = useState([{}])
 
-  useEffect(() => {
+/*   useEffect(() => {
     fetch("/api").then(
       response => response.json()
     ).then(
@@ -49,7 +49,7 @@ function App() {
         console.log(backendData.users)
       }
     )
-  }, [])
+  }, []) */
   
   return (
     <>
