@@ -4,18 +4,28 @@ import { Box, AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Button, S
 import NavigationBar from './NavigationBar';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { borders } from '@mui/system';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions } from './store/auth-slice';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 function TopBar(props) {
 
-  const [isLoggedIn, setLoggedIn] = useState(false)
+  const dispatch = useDispatch()
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+  const navigate = useNavigate()
 
   const handleLogin = (event) => {
     event.preventDefault()
-    console.log("Running login button handler, WIP!\nLogged in!")
-    setLoggedIn(true)
+    dispatch(authActions.login())
+  }
+
+  const handleLogout = (event) => {
+    event.preventDefault()
+    dispatch(authActions.logout())
+    navigate("/")
   }
 
   return (
@@ -42,9 +52,10 @@ function TopBar(props) {
               <>
                 <Button color="inherit" onClick={handleLogin}>Login</Button>
                 <Button color="inherit">Sign up</Button>
-              </> : (
+              </> : <>
+                <Button color="inherit" onClick={handleLogout}>Logout</Button>
                 <Button color="inherit">Account</Button>
-              )
+              </>
 
             }
           </Stack>

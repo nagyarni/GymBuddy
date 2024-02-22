@@ -11,6 +11,8 @@ import TopBar from './components/TopBar';
 import HomeScreen from './components/HomeScreen';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import CyclesPage from './components/CyclePage';
+import WorkoutTable from './components/WorkoutTable';
 
 const darkTheme = createTheme({
   palette: {
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LoginPage />,
   },
+  {
+    path: "/cycles",
+    element: <CyclesPage />,
+  },
+  {
+    path: "/cycles/:id",
+    element: <WorkoutTable />
+  }
 ]);
 
 function App() {

@@ -1,12 +1,22 @@
 import React from 'react'
 import TopBar from './TopBar'
 import WorkoutTable from './WorkoutTable'
+import { Typography } from '@mui/material'
+import { useSelector } from 'react-redux'
 
 function HomeScreen() {
+
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+
+
   return (
     <>
       <TopBar title='Home Screen' />
-      <WorkoutTable />
+      <Typography>
+        {
+          isLoggedIn? "Hello logged in user!" : "Please Log in!" 
+        }
+      </Typography>
     </>
   )
 }

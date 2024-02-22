@@ -1,0 +1,312 @@
+{
+  "cycles": [
+      {
+          "id": 1,
+          "createdAt": "2024-01-1",
+          "name": "Cycle 1",
+          "weeks": 4,
+          "days": [
+            [
+              {
+                "name": "Bench press",
+                "series": 4,
+                "reps": 3,
+                "rpe": [5,6,7,8],
+                "weight": [0,0,0,0]
+              },
+              {
+                "name": "Squat",
+                "series": 4,
+                "reps": 3,
+                "rpe": [5,6,7,8],
+                "weight": [0,0,0,0]
+              },
+              {
+                "name": "Deadlift",
+                "series": 4,
+                "reps": 3,
+                "rpe": [5,6,7,8],
+                "weight": [0,0,0,0]
+              }
+            ],
+            [
+              {
+                "name": "Bench pressd2",
+                "series": 4,
+                "reps": 3,
+                "rpe": [5,6,7,8],
+                "weight": [0,0,0,0]
+              },
+              {
+                "name": "Squatd2",
+                "series": 4,
+                "reps": 3,
+                "rpe": [5,6,7,8],
+                "weight": [0,0,0,0]
+              },
+              {
+                "name": "Deadliftd2",
+                "series": 4,
+                "reps": 3,
+                "rpe": [5,6,7,8],
+                "weight": [0,0,0,0]
+              }
+            ],
+            [
+              {
+                "name": "Bench pressd3",
+                "series": 4,
+                "reps": 3,
+                "rpe": [5,6,7,8],
+                "weight": [0,0,0,0]
+              },
+              {
+                "name": "Squatd3",
+                "series": 4,
+                "reps": 3,
+                "rpe": [5,6,7,8],
+                "weight": [0,0,0,0]
+              },
+              {
+                "name": "Deadliftd3",
+                "series": 4,
+                "reps": 3,
+                "rpe": [5,6,7,8],
+                "weight": [0,0,0,0]
+              }
+            ]
+          ]
+      },
+      {
+        "id": 2,
+        "createdAt": "2024-01-1",
+        "name": "Cycle 2",
+        "weeks": 4,
+        "days": [
+          [
+            {
+              "name": "Bench press",
+              "series": 4,
+              "reps": 3,
+              "rpe": [5,6,7,8],
+              "weight": [0,0,0,0]
+            },
+            {
+              "name": "Squat",
+              "series": 4,
+              "reps": 3,
+              "rpe": [5,6,7,8],
+              "weight": [0,0,0,0]
+            },
+            {
+              "name": "Deadlift",
+              "series": 4,
+              "reps": 3,
+              "rpe": [5,6,7,8],
+              "weight": [0,0,0,0]
+            }
+          ],
+          [
+            {
+              "name": "Bench pressd2",
+              "series": 4,
+              "reps": 3,
+              "rpe": [5,6,7,8],
+              "weight": [0,0,0,0]
+            },
+            {
+              "name": "Squatd2",
+              "series": 4,
+              "reps": 3,
+              "rpe": [5,6,7,8],
+              "weight": [0,0,0,0]
+            },
+            {
+              "name": "Deadliftd2",
+              "series": 4,
+              "reps": 3,
+              "rpe": [5,6,7,8],
+              "weight": [0,0,0,0]
+            }
+          ],
+          [
+            {
+              "name": "Bench pressd3",
+              "series": 4,
+              "reps": 3,
+              "rpe": [5,6,7,8],
+              "weight": [0,0,0,0]
+            },
+            {
+              "name": "Squatd3",
+              "series": 4,
+              "reps": 3,
+              "rpe": [5,6,7,8],
+              "weight": [0,0,0,0]
+            },
+            {
+              "name": "Deadliftd3",
+              "series": 4,
+              "reps": 3,
+              "rpe": [5,6,7,8],
+              "weight": [0,0,0,0]
+            }
+          ]
+        ]
+    },
+    {
+      "id": 3,
+      "createdAt": "2024-01-1",
+      "name": "Cycle 3",
+      "weeks": 4,
+      "days": [
+        [
+          {
+            "name": "Bench press",
+            "series": 4,
+            "reps": 3,
+            "rpe": [5,6,7,8],
+            "weight": [0,0,0,0]
+          },
+          {
+            "name": "Squat",
+            "series": 4,
+            "reps": 3,
+            "rpe": [5,6,7,8],
+            "weight": [0,0,0,0]
+          },
+          {
+            "name": "Deadlift",
+            "series": 4,
+            "reps": 3,
+            "rpe": [5,6,7,8],
+            "weight": [0,0,0,0]
+          }
+        ],
+        [
+          {
+            "name": "Bench pressd2",
+            "series": 4,
+            "reps": 3,
+            "rpe": [5,6,7,8],
+            "weight": [0,0,0,0]
+          },
+          {
+            "name": "Squatd2",
+            "series": 4,
+            "reps": 3,
+            "rpe": [5,6,7,8],
+            "weight": [0,0,0,0]
+          },
+          {
+            "name": "Deadliftd2",
+            "series": 4,
+            "reps": 3,
+            "rpe": [5,6,7,8],
+            "weight": [0,0,0,0]
+          }
+        ],
+        [
+          {
+            "name": "Bench pressd3",
+            "series": 4,
+            "reps": 3,
+            "rpe": [5,6,7,8],
+            "weight": [0,0,0,0]
+          },
+          {
+            "name": "Squatd3",
+            "series": 4,
+            "reps": 3,
+            "rpe": [5,6,7,8],
+            "weight": [0,0,0,0]
+          },
+          {
+            "name": "Deadliftd3",
+            "series": 4,
+            "reps": 3,
+            "rpe": [5,6,7,8],
+            "weight": [0,0,0,0]
+          }
+        ]
+      ]
+  },
+  {
+    "id": 4,
+    "createdAt": "2024-01-1",
+    "name": "Cycle 4",
+    "weeks": 4,
+    "days": [
+      [
+        {
+          "name": "Bench press",
+          "series": 4,
+          "reps": 3,
+          "rpe": [5,6,7,8],
+          "weight": [0,0,0,0]
+        },
+        {
+          "name": "Squat",
+          "series": 4,
+          "reps": 3,
+          "rpe": [5,6,7,8],
+          "weight": [0,0,0,0]
+        },
+        {
+          "name": "Deadlift",
+          "series": 4,
+          "reps": 3,
+          "rpe": [5,6,7,8],
+          "weight": [0,0,0,0]
+        }
+      ],
+      [
+        {
+          "name": "Bench pressd2",
+          "series": 4,
+          "reps": 3,
+          "rpe": [5,6,7,8],
+          "weight": [0,0,0,0]
+        },
+        {
+          "name": "Squatd2",
+          "series": 4,
+          "reps": 3,
+          "rpe": [5,6,7,8],
+          "weight": [0,0,0,0]
+        },
+        {
+          "name": "Deadliftd2",
+          "series": 4,
+          "reps": 3,
+          "rpe": [5,6,7,8],
+          "weight": [0,0,0,0]
+        }
+      ],
+      [
+        {
+          "name": "Bench pressd3",
+          "series": 4,
+          "reps": 3,
+          "rpe": [5,6,7,8],
+          "weight": [0,0,0,0]
+        },
+        {
+          "name": "Squatd3",
+          "series": 4,
+          "reps": 3,
+          "rpe": [5,6,7,8],
+          "weight": [0,0,0,0]
+        },
+        {
+          "name": "Deadliftd3",
+          "series": 4,
+          "reps": 3,
+          "rpe": [5,6,7,8],
+          "weight": [0,0,0,0]
+        }
+      ]
+    ]
+    }
+  ]
+}

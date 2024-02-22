@@ -1,0 +1,1 @@
+// slice containing information on the registered clients for a trainer

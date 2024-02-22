@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import dummy from '../dummy.json'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,6 +12,14 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import TopBar from './TopBar';
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import SaveIcon from '@mui/icons-material/Save';
+import { setUnsavedChanges } from './store/unsavedChanges-slice';
+
 
 
 function WorkoutTable(props) {
@@ -21,18 +28,24 @@ function WorkoutTable(props) {
   const [isRightButtonDisabled, setRightButtonDisabled] = useState(false)
   const [weekCounter, setWeekCounter] = useState(0)
 
-  const totalWeeks = dummy.weeks.length
+  const { id } = useParams()
 
-  //console.log(dummy)
+  //setting params of the component
+  const workoutData = useSelector((state) => state.cycles.cycles[id-1])
+  console.log(workoutData)
+  const unsavedChanges = useSelector((state) => state.unsavedChanges);
+  const dispatch = useDispatch();
 
-  const generateTableDays = function(currentWeek) {
-    //console.log(dummy.weeks[currentWeek].days)
-    return (dummy.weeks[currentWeek].days).map((data, i) => {
-      return (
-        <TableDay key={i} day={i} exercises={data.exercises} />
-      )
-    })
-  }
+
+  
+  const totalWeeks = workoutData.weeks
+
+  const handleSaveClick = () => {
+    // Your custom save function logic here
+    console.log('Save button clicked');
+    dispatch(setUnsavedChanges(false))
+  };
+
 
   useEffect(() => {
     console.log("Week counter:" + weekCounter + "\ntotal weeks:" + totalWeeks)
@@ -65,6 +78,7 @@ function WorkoutTable(props) {
   
   return (
     <>
+    <TopBar title={workoutData.name} />
     <Container maxWidth="lg">
       <Box sx={{ bgcolor: 'black', height: '100vh' }}>
         <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
@@ -82,9 +96,12 @@ function WorkoutTable(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* <TableDay exercises={dummy.weeks[0].days} /> */}
               {
-                generateTableDays(weekCounter)
+                workoutData.days.map((day, index) => {
+                  return (
+                    <TableDay key={index} dayNumber={index+1} day={day} week={weekCounter} cycleIndex={id} />
+                  )
+                })
               }
             </TableBody>
           </Table>
@@ -96,21 +113,31 @@ function WorkoutTable(props) {
           textAlign="center"
           padding={3}
           height={"5%"}
-
         >
           <Grid item xs={3}>
           </Grid>
           <Grid item xs={3}>
             <Fab color="primary" aria-label="add" disabled={isLeftButtonDisabled} onClick={handleLeftClick} >
-              <AddIcon  />
+              <ArrowBackIosNewIcon  />
             </Fab>
           </Grid>
           <Grid item xs={3}>
             <Fab color="primary" aria-label="add" disabled={isRightButtonDisabled} onClick={handleRightClick} >
-              <AddIcon />
+              <ArrowForwardIosIcon />
             </Fab>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={3}  justifyContent="flex-end" textAlign={'end'}>
+            <Fab
+              color="primary"
+              disabled={!unsavedChanges}
+              style={{
+                width: '80px',
+                height: '80px',
+              }}
+              onClick={handleSaveClick}
+            >
+              <SaveIcon />
+            </Fab>
           </Grid>
         </Grid>
       </Box>
