@@ -1,6 +1,5 @@
 import React from 'react'
 import TopBar from './TopBar'
-import WorkoutTable from './WorkoutTable'
 import { Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 

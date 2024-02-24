@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import dummy from '../dummy.json'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,18 +14,26 @@ import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import TopBar from './TopBar';
+import TopBar from '../layout/TopBar';
 import { useSelector } from 'react-redux';
-import Cycle from './Cycle';
+import Cycle from './tablecomponents/Cycle';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { CardActionArea } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { cyclesActions } from '../store/cycles-slice';
 
-function CyclesPage(props) {
+function CyclesPageEditable(props) {
+
+  const dispatch = useDispatch()
 
   const cyclesData = useSelector((state) => state.cycles)
   console.log(cyclesData)
 
-
-  
-
+  const handleAddCycleClick = (event) => {
+    console.log("Add clicked")
+    dispatch(cyclesActions.addNewCycle())
+  }
 
 
   return (
@@ -34,17 +41,27 @@ function CyclesPage(props) {
       <TopBar title="Training cycles" />
       <Container maxWidth="lg">
       <Box sx={{ bgcolor: 'black', height: '100vh' }}>
-         <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
+        <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
           Hello world
         </Typography> 
         <Grid container spacing={2} sx={{ flexGrow: 1, padding: 4 }}>
           {
             cyclesData.cycles.map((cycle, index) => {
               return(
-                <Cycle key={index} data={cycle} />
+                <Cycle key={index} data={cycle} removable={true} />
               )
             })
           }
+          {/* Add new cycle button area */}
+          <Grid item xs={4}>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardActionArea onClick={handleAddCycleClick}>
+                <CardContent>
+                  <AddIcon />
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
         </Grid>
       </Box>
       </Container>
@@ -52,4 +69,4 @@ function CyclesPage(props) {
   )
 }
 
-export default CyclesPage
+export default CyclesPageEditable

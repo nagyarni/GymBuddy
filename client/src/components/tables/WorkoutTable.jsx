@@ -14,11 +14,11 @@ import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import TopBar from './TopBar';
+import TopBar from '../layout/TopBar';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import SaveIcon from '@mui/icons-material/Save';
-import { setUnsavedChanges } from './store/unsavedChanges-slice';
+import { setUnsavedChanges } from '../store/unsavedChanges-slice';
 
 
 
@@ -32,7 +32,7 @@ function WorkoutTable(props) {
 
   //setting params of the component
   const workoutData = useSelector((state) => state.cycles.cycles[id-1])
-  console.log(workoutData)
+  //console.log(workoutData)
   const unsavedChanges = useSelector((state) => state.unsavedChanges);
   const dispatch = useDispatch();
 
@@ -48,7 +48,7 @@ function WorkoutTable(props) {
 
 
   useEffect(() => {
-    console.log("Week counter:" + weekCounter + "\ntotal weeks:" + totalWeeks)
+    //console.log("Week counter:" + weekCounter + "\ntotal weeks:" + totalWeeks)
     if (weekCounter == 0) {
       setLeftButtonDisabled(true)
       setRightButtonDisabled(false)
@@ -93,6 +93,7 @@ function WorkoutTable(props) {
                 <TableCell>Weight</TableCell>
                 <TableCell>Series</TableCell>
                 <TableCell>Repetitions</TableCell>
+                <TableCell>RPE</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

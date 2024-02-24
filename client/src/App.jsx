@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import LoginPage from './components/LoginPage'
+import LoginPage from './components/login/LoginPage'
 import {
   createBrowserRouter,
   Router,
   RouterProvider,
 } from "react-router-dom";
-import NavigationBar from './components/NavigationBar';
-import TopBar from './components/TopBar';
-import HomeScreen from './components/HomeScreen';
+import NavigationBar from './components/layout/NavigationBar';
+import TopBar from './components/layout/TopBar';
+import HomeScreen from './components/layout/HomeScreen';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import CyclesPage from './components/CyclePage';
-import WorkoutTable from './components/WorkoutTable';
+import CyclesPage from './components/tables/CyclesPage';
+import WorkoutTable from './components/tables/WorkoutTable';
+import CyclesPageEditable from './components/tables/CyclesPageEditable';
+import WorkoutTableEditable from './components/tables/WorkoutTableEditable'
 
 const darkTheme = createTheme({
   palette: {
@@ -42,6 +44,14 @@ const router = createBrowserRouter([
   {
     path: "/cycles/:id",
     element: <WorkoutTable />
+  },
+  {
+    path: "/cyclesedit",
+    element: <CyclesPageEditable />
+  },
+  {
+    path: "/cyclesedit/:id",
+    element: <WorkoutTableEditable />
   }
 ]);
 

@@ -9,22 +9,27 @@ import {
   DialogContent,
   TextField,
   DialogActions,
+  DialogContentText,
+  IconButton,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { cyclesActions } from '../store/cycles-slice';
+import { cyclesActions } from '../../store/cycles-slice';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteTableDayButton from '../utils/DeleteTableDayButton';
 
 
 
 function TableDay(props) {
 //props.exercises will contain the data that needs to be mapped
 
-  //console.log("Data: "+props.day)
+  console.log(props.day)
   //console.log("Week: "+props.week)
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editedWeight, setEditedWeight] = useState('');
   const [isFormFilled, setIsFormFilled] = useState(false);
   const [exerciseIndex, setExerciseIndex] = useState(0); // Initialize with a default value
+  const [previousWeightData, setPreviousWeightData] = useState(0);
 
   const dispatch = useDispatch()
 
@@ -32,8 +37,9 @@ function TableDay(props) {
   const cycleIndex = props.cycleIndex-1
 
 
-  const handleOpenModal = (index) => {
+  const handleOpenModal = (index, data) => {
     setExerciseIndex(index); // Set the exerciseIndex when opening the modal
+    setPreviousWeightData(data)
     setEditedWeight('')
     setModalOpen(true);
   };
@@ -44,19 +50,27 @@ function TableDay(props) {
 
   const handleConfirm = (event) => {
     // Your logic to handle the confirmed weight value
-    console.log('Confirmed weight:', editedWeight);
+    //console.log('Confirmed weight:', editedWeight);
 
-    console.log(event)
+    //console.log(event)
 
     // Replace with the desired cycle index
     const dayIndex = dayNumber-1; // Replace with the desired day index
     // Replace with the desired exercise index
     const newWeight = editedWeight; // Replace with the new weight value
+    const weekIndex = props.week;
 
-    console.log(cycleIndex,
-      dayIndex,
-      exerciseIndex,
-      newWeight,)
+    console.log(
+      "cycle index: "+cycleIndex)
+    console.log(
+      "day index: "+dayIndex
+    )
+    console.log(
+      "exercise index: "+exerciseIndex
+    )
+    console.log(
+      "weighrt: "+newWeight
+    )
 
     dispatch(
       cyclesActions.updateWeight({
@@ -64,6 +78,7 @@ function TableDay(props) {
         dayIndex,
         exerciseIndex,
         newWeight,
+        weekIndex
       }))
     // Close the modal
     handleCloseModal();
@@ -79,7 +94,7 @@ function TableDay(props) {
   const dayNumber = props.dayNumber
   const week = props.week
   const currentDayData = props.day
-  console.log(currentDayData)
+  //console.log(currentDayData)
 
 
   const generateDay = function() {
@@ -95,20 +110,23 @@ function TableDay(props) {
             <TableCell>
               { data.weight[week] }
               <div>
-                <Button
-                  variant="contained"
+                <IconButton
+                  aria-label='edit'
                   color="warning"
                   onClick={() => {
                     setEditedWeight(data.weight[week]);
-                    handleOpenModal(index);
+                    handleOpenModal(index, data.weight[week]);
                   }}
                 >
-                  Edit
-                </Button>
+                  <EditIcon />
+                </IconButton>
               </div>
             </TableCell>
             <TableCell>
               { data.series }
+            </TableCell>
+            <TableCell>
+              { data.reps }
             </TableCell>
             <TableCell>
               { data.rpe[week] }
@@ -124,6 +142,7 @@ function TableDay(props) {
       <TableRow key={dayNumber}>
         <TableCell rowSpan={ currentDayData.length+1 } >
           { dayNumber }
+          { <DeleteTableDayButton cycleIndex={cycleIndex} dayIndex={dayNumber-1} /> }
         </TableCell>
       </TableRow>
       {
@@ -133,6 +152,9 @@ function TableDay(props) {
       {/* Modal for editing weight */}
       <Dialog open={modalOpen} onClose={handleCloseModal} maxWidth="md">
         <DialogTitle>Edit Weight</DialogTitle>
+        {<DialogContentText sx={{ paddingLeft: 3 }}>
+          { previousWeightData != 0 ? "Previous weight: " + previousWeightData : "" }
+        </DialogContentText>}
         <DialogContent>
           <TextField
             label="Weight"

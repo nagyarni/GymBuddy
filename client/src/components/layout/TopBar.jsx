@@ -5,7 +5,7 @@ import NavigationBar from './NavigationBar';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { borders } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions } from './store/auth-slice';
+import { authActions } from '../store/auth-slice';
 import { useNavigate } from 'react-router-dom';
 
 
