@@ -17,34 +17,23 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import TopBar from '../layout/TopBar';
 import { useSelector } from 'react-redux';
 import Cycle from './tablecomponents/Cycle';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { CardActionArea } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { cyclesActions } from '../store/cycles-slice';
+import Client from './tablecomponents/Client';
 import NotLoggedInPage from './utils/NotLoggedInPage';
 
-function CyclesPageEditable(props) {
 
+function ClientsPage() {
+
+  const clientsData = useSelector((state) => state.clients)
+  console.log(clientsData)
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const isCoach = useSelector((state) => state.auth.isCoach)
-
-  const dispatch = useDispatch()
-
-  const cyclesData = useSelector((state) => state.cycles)
-  console.log(cyclesData)
-
-  const handleAddCycleClick = (event) => {
-    console.log("Add clicked")
-    dispatch(cyclesActions.addNewCycle())
-  }
 
 
   return (
     <>
     {
       isLoggedIn && isCoach ?
-      <>
+        <>
         <TopBar title="Training cycles" />
         <Container maxWidth="lg">
         <Box sx={{ bgcolor: 'black', height: '100vh' }}>
@@ -53,22 +42,12 @@ function CyclesPageEditable(props) {
           </Typography> 
           <Grid container spacing={2} sx={{ flexGrow: 1, padding: 4 }}>
             {
-              cyclesData.cycles.map((cycle, index) => {
+              clientsData.clients.map((client, index) => {
                 return(
-                  <Cycle key={index} data={cycle} removable={true} />
+                  <Client key={index} data={client} />
                 )
               })
             }
-            {/* Add new cycle button area */}
-            <Grid item xs={4}>
-              <Card sx={{ maxWidth: 345 }}>
-                <CardActionArea onClick={handleAddCycleClick}>
-                  <CardContent>
-                    <AddIcon />
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
           </Grid>
         </Box>
         </Container>
@@ -76,8 +55,9 @@ function CyclesPageEditable(props) {
       :
       <NotLoggedInPage />
     }
+      
     </>
   )
 }
 
-export default CyclesPageEditable
+export default ClientsPage

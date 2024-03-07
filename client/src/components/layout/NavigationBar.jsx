@@ -15,6 +15,7 @@ const NavigationBar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const navigate = useNavigate()
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+  const isCoach = useSelector((state) => state.auth.isCoach)
 
 
   const handleHomepageClick = (event) => (
@@ -26,6 +27,9 @@ const NavigationBar = () => {
   const handleMyProfileClick = (event) => (
     console.log("My profile click handler function")
   )
+  const handleMyClientsClick = (event) => {
+    navigate('/clients')
+  }
 
   return (
     <>
@@ -56,29 +60,45 @@ const NavigationBar = () => {
           </Typography>
           <Divider />
           <List>
-            <ListItem disablePadding>
-              <ListItemButton onClick={handleHomepageClick}>
-                <ListItemIcon>
-                  <HomeIcon />
-                </ListItemIcon>
-                <ListItemText primary={"Homepage"} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton onClick={handleMyCyclesClick} disabled={!isLoggedIn}>
-                <ListItemIcon>
-                  <FormatListBulletedIcon />
-                </ListItemIcon>
-                <ListItemText primary={"My Cycles"} />
-              </ListItemButton>
-            </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleHomepageClick}>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Homepage"} />
+            </ListItemButton>
+          </ListItem>
+            {
+              isCoach ?
+              <>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={handleMyClientsClick} disabled={!isLoggedIn}>
+                    <ListItemIcon>
+                      <FormatListBulletedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"My Clients"} />
+                  </ListItemButton>
+                </ListItem>
+              </>
+              :
+              <>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={handleMyCyclesClick} disabled={!isLoggedIn}>
+                    <ListItemIcon>
+                      <FormatListBulletedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"My Cycles"} />
+                  </ListItemButton>
+                </ListItem>
+              </>
+            }
             <Divider />
             <ListItem disablePadding>
               <ListItemButton onClick={handleMyProfileClick} disabled={!isLoggedIn}>
                 <ListItemIcon>
                   <AccountBoxIcon />
                 </ListItemIcon>
-                <ListItemText primary={"My Profile"} />
+              <ListItemText primary={"My Profile"} />
               </ListItemButton>
             </ListItem>
           </List>

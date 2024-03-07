@@ -40,6 +40,40 @@ const cyclesSlice = createSlice({
     deleteDay: (state, action) => {
       const { cycleIndex, dayIndex } = action.payload
       state.cycles[cycleIndex].days.splice(dayIndex, 1)
+    },
+    deleteWeek: (state, action) => {
+      const { cycleIndex, weekIndex } = action.payload;
+      state.cycles[cycleIndex].weeks = state.cycles[cycleIndex].weeks - 1
+      state.cycles[cycleIndex].days = deleteWeekToExercises(state.cycles[cycleIndex].days, weekIndex)
+    },
+    addNewExercise: (state, action) => {
+      const { exerciseName, series, reps, rpes  } = action.payload;
+      const { cycleIndex, dayIndex, weekCount } = action.payload.info;
+      const newExercise = {
+        "name": exerciseName,
+        "series": series,
+        "reps": reps,
+        "rpe": rpes,
+        "weight": Array(weekCount).fill(0)
+      }
+      state.cycles[cycleIndex].days[dayIndex].push(newExercise)
+    },
+    deleteExercise: (state, action) => {
+      const { exerciseIndex } = action.payload
+      const { cycleIndex, dayIndex, weekCount } = action.payload.info;
+      state.cycles[cycleIndex].days[dayIndex].splice(exerciseIndex, 1)
+    },
+    editExercise: (state, action) => {
+      const { cycleIndex, dayIndex, weekCount } = action.payload.info;
+      const { exerciseIndex, exerciseName, series, reps, rpes } = action.payload
+      const modifiedExercise = {
+        "name": exerciseName,
+        "series": series,
+        "reps": reps,
+        "rpe": rpes,
+        "weight": Array(weekCount).fill(0)
+      }
+      state.cycles[cycleIndex].days[dayIndex][exerciseIndex] = modifiedExercise
     }
   }
 })
@@ -51,8 +85,18 @@ export default cyclesSlice
 const addWeekToExercises = (days) => {
   days.map((day, index) => {
     day.forEach(exercise => {
-      exercise.rpe.push(0)
+      exercise.rpe.push(exercise.rpe[exercise.rpe.length - 1])
       exercise.weight.push(0)
+    });
+  })
+  return days
+}
+
+const deleteWeekToExercises = (days, weekIndex) => {
+  days.map((day, index) => {
+    day.forEach(exercise => {
+      exercise.rpe.splice(weekIndex, 1)
+      exercise.weight.splice(weekIndex, 1)
     });
   })
   return days

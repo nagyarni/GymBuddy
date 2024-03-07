@@ -16,31 +16,28 @@ import { useDispatch } from 'react-redux';
 import { cyclesActions } from '../../store/cycles-slice';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 
-function AddTableDayButton(props) {
+function DeleteExerciseButton(props) {
 
   const dispatch = useDispatch()
-  const cycleIndex = props.cycleIndex
+  const info = props.info
+  const exerciseIndex = props.exerciseIndex
 
-  //console.log(cycleIndex)
 
-  const handleAddDayClick = () => {
-    dispatch(cyclesActions.addNewDay({cycleIndex: cycleIndex}))
+  const handleDeleteExerciseClick = () => {
+    dispatch(cyclesActions.deleteExercise({ info, exerciseIndex: exerciseIndex }))
   }
 
   return (
     <>
-      <TableRow>
-        <TableCell>
-          <IconButton aria-label="add" onClick={handleAddDayClick}>
-            <AddIcon />
+          <IconButton aria-label="delete" onClick={handleDeleteExerciseClick}>
+            <DeleteIcon />
           </IconButton>
-        </TableCell>
-      </TableRow>
     </>
   )
 }
 
-export default AddTableDayButton
+export default DeleteExerciseButton

@@ -23,7 +23,7 @@ function DeleteTableDayButton(props) {
   const cycleIndex = props.cycleIndex
   const dayIndex = props.dayIndex
 
-  console.log(cycleIndex)
+  //console.log(cycleIndex)
 
   const handleDeleteDayClick = () => {
     dispatch(cyclesActions.deleteDay({cycleIndex: cycleIndex, dayIndex}))

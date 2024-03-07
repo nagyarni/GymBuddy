@@ -10,19 +10,23 @@ import {
   TextField,
   DialogActions,
   DialogContentText,
-  IconButton,
+  IconButton, Typography,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { cyclesActions } from '../../store/cycles-slice';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteTableDayButton from '../utils/DeleteTableDayButton';
-
+import AddIcon from '@mui/icons-material/Add';
+import AddExerciseModal from '../utils/AddExerciseModal';
+import DeleteExerciseButton from '../utils/DeleteExerciseButton';
+import EditExerciseModal from '../utils/EditExerciseModal'
+import EditExerciseButton from '../utils/EditExerciseButton'
 
 
 function TableDay(props) {
 //props.exercises will contain the data that needs to be mapped
 
-  console.log(props.day)
+  //console.log(props.day)
   //console.log("Week: "+props.week)
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -30,11 +34,25 @@ function TableDay(props) {
   const [isFormFilled, setIsFormFilled] = useState(false);
   const [exerciseIndex, setExerciseIndex] = useState(0); // Initialize with a default value
   const [previousWeightData, setPreviousWeightData] = useState(0);
+  const [addExerciseModalOpen, setAddExerciseModalOpen] = useState(false);
+  const [editExerciseModalOpen, setEditExerciseModalOpen] = useState(false);
+  const removable = props.removable
+
+
+  
 
   const dispatch = useDispatch()
 
 
   const cycleIndex = props.cycleIndex-1
+
+  const infoForExerciseModals = {
+    dayIndex: props.dayNumber-1,
+    cycleIndex: cycleIndex,
+    weekCount: props.weekCount
+  }
+
+  //console.log(infoForExerciseModals)
 
 
   const handleOpenModal = (index, data) => {
@@ -90,6 +108,13 @@ function TableDay(props) {
     setIsFormFilled(value !== ''); // Set isFormFilled based on whether the input is not empty
   };
 
+  const handleAddExerciseClick = (event) => {
+    setAddExerciseModalOpen(true)
+  }
+  const handleEditExerciseClick = (event) => {
+    setEditExerciseModalOpen(true)
+  }
+
 
   const dayNumber = props.dayNumber
   const week = props.week
@@ -103,9 +128,17 @@ function TableDay(props) {
     return (currentDayData).map((data, index) => {
       return (
         <>
-          <TableRow key={dayNumber} >
+          <TableRow key={index} >
             <TableCell>
-              { data.name }
+              <Typography variant="body1" color="text.primary">{ data.name }</Typography>
+              {
+                removable ?
+                <>
+                  <DeleteExerciseButton info={infoForExerciseModals} exerciseIndex={index} />
+                  <EditExerciseButton info={infoForExerciseModals} exerciseIndex={index} openModal={handleEditExerciseClick} setExerciseIndex={setExerciseIndex} />
+                </>
+                : ""
+              }
             </TableCell>
             <TableCell>
               { data.weight[week] }
@@ -140,13 +173,32 @@ function TableDay(props) {
   return (
     <>
       <TableRow key={dayNumber}>
-        <TableCell rowSpan={ currentDayData.length+1 } >
+        <TableCell rowSpan={ removable ? currentDayData.length+2 : currentDayData.length+1 } >
           { dayNumber }
-          { <DeleteTableDayButton cycleIndex={cycleIndex} dayIndex={dayNumber-1} /> }
+          { 
+            removable ?
+            <DeleteTableDayButton cycleIndex={cycleIndex} dayIndex={dayNumber-1} /> 
+            : ""
+          }
         </TableCell>
       </TableRow>
       {
         generateDay()
+      }
+      {
+        removable ? 
+        <TableRow>
+          <TableCell>
+            <IconButton aria-label="add" onClick={handleAddExerciseClick} >
+              <AddIcon />
+            </IconButton>
+          </TableCell>
+          <TableCell />
+          <TableCell />
+          <TableCell />
+          <TableCell />
+        </TableRow>
+        : ""
       }
 
       {/* Modal for editing weight */}
@@ -169,6 +221,9 @@ function TableDay(props) {
           <Button onClick={handleConfirm} disabled={!isFormFilled}>Confirm</Button>
         </DialogActions>
       </Dialog>
+
+      <AddExerciseModal info={infoForExerciseModals} addExerciseModalOpen={addExerciseModalOpen} setAddExerciseModalOpen={setAddExerciseModalOpen} />
+      <EditExerciseModal info={infoForExerciseModals} editExerciseModalOpen={editExerciseModalOpen} setEditExerciseModalOpen={setEditExerciseModalOpen} exerciseIndex={exerciseIndex} />
     </>
   )
 }

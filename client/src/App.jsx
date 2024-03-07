@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import LoginPage from './components/login/LoginPage'
+import LoginPage from './components/user/LoginPage'
+import RegisterPage from './components/user/RegisterPage'
+import AccountPage from './components/user/AccountPage'
 import {
   createBrowserRouter,
   Router,
@@ -15,6 +17,7 @@ import CyclesPage from './components/tables/CyclesPage';
 import WorkoutTable from './components/tables/WorkoutTable';
 import CyclesPageEditable from './components/tables/CyclesPageEditable';
 import WorkoutTableEditable from './components/tables/WorkoutTableEditable'
+import ClientsPage from './components/tables/ClientsPage'
 
 const darkTheme = createTheme({
   palette: {
@@ -34,10 +37,6 @@ const router = createBrowserRouter([
     element: <HomeScreen />,
   },
   {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
     path: "/cycles",
     element: <CyclesPage />,
   },
@@ -52,6 +51,22 @@ const router = createBrowserRouter([
   {
     path: "/cyclesedit/:id",
     element: <WorkoutTableEditable />
+  },
+  {
+    path: "/login",
+    element: <LoginPage />
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />
+  },
+  {
+    path: "/account",
+    element: <AccountPage />
+  },
+  {
+    path: "/clients",
+    element: <ClientsPage />
   }
 ]);
 

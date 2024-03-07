@@ -17,36 +17,45 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import TopBar from '../layout/TopBar';
 import { useSelector } from 'react-redux';
 import Cycle from './tablecomponents/Cycle';
+import NotLoggedInPage from './utils/NotLoggedInPage';
+
 
 function CyclesPage(props) {
 
   const cyclesData = useSelector((state) => state.cycles)
   console.log(cyclesData)
 
-
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   
 
 
 
   return (
     <>
-      <TopBar title="Training cycles" />
-      <Container maxWidth="lg">
-      <Box sx={{ bgcolor: 'black', height: '100vh' }}>
-         <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
-          Hello world
-        </Typography> 
-        <Grid container spacing={2} sx={{ flexGrow: 1, padding: 4 }}>
-          {
-            cyclesData.cycles.map((cycle, index) => {
-              return(
-                <Cycle key={index} data={cycle} />
-              )
-            })
-          }
-        </Grid>
-      </Box>
-      </Container>
+    {
+      isLoggedIn ?
+      <>
+        <TopBar title="Training cycles" />
+        <Container maxWidth="lg">
+        <Box sx={{ bgcolor: 'black', height: '100vh' }}>
+          <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
+            Hello world
+          </Typography> 
+          <Grid container spacing={2} sx={{ flexGrow: 1, padding: 4 }}>
+            {
+              cyclesData.cycles.map((cycle, index) => {
+                return(
+                  <Cycle key={index} data={cycle} />
+                )
+              })
+            }
+          </Grid>
+        </Box>
+        </Container>
+      </>
+      :
+      <NotLoggedInPage />
+    }
     </>
   )
 }

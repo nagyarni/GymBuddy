@@ -1,0 +1,28 @@
+{
+  "clients": [
+    {
+      "name": "Johhny",
+      "id": 1
+    },
+    {
+      "name": "Johhny2",
+      "id": 2
+    },
+    {
+      "name": "Johhny3",
+      "id": 3
+    },
+    {
+      "name": "Johhny4",
+      "id": 4
+    },
+    {
+      "name": "Johhny5",
+      "id": 5
+    },
+    {
+      "name": "Johhny6",
+      "id": 6
+    }
+  ]
+}

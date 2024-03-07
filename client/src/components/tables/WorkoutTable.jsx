@@ -19,10 +19,15 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import SaveIcon from '@mui/icons-material/Save';
 import { setUnsavedChanges } from '../store/unsavedChanges-slice';
+import NotLoggedInPage from './utils/NotLoggedInPage';
 
 
 
 function WorkoutTable(props) {
+
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+  const isCoach = useSelector((state) => state.auth.isCoach)
+
 
   const [isLeftButtonDisabled, setLeftButtonDisabled] = useState(true)
   const [isRightButtonDisabled, setRightButtonDisabled] = useState(false)
@@ -49,7 +54,11 @@ function WorkoutTable(props) {
 
   useEffect(() => {
     //console.log("Week counter:" + weekCounter + "\ntotal weeks:" + totalWeeks)
-    if (weekCounter == 0) {
+    if (totalWeeks - 1 === 0 && weekCounter === 0) {
+      setLeftButtonDisabled(true)
+      setRightButtonDisabled(true)
+    }
+    else if (weekCounter == 0) {
       setLeftButtonDisabled(true)
       setRightButtonDisabled(false)
     }
@@ -78,72 +87,79 @@ function WorkoutTable(props) {
   
   return (
     <>
-    <TopBar title={workoutData.name} />
-    <Container maxWidth="lg">
-      <Box sx={{ bgcolor: 'black', height: '100vh' }}>
-        <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
-          Week {weekCounter+1}
-        </Typography>
-          <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Day</TableCell>
-                <TableCell>Exercise</TableCell>
-                <TableCell>Weight</TableCell>
-                <TableCell>Series</TableCell>
-                <TableCell>Repetitions</TableCell>
-                <TableCell>RPE</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {
-                workoutData.days.map((day, index) => {
-                  return (
-                    <TableDay key={index} dayNumber={index+1} day={day} week={weekCounter} cycleIndex={id} />
-                  )
-                })
-              }
-            </TableBody>
-          </Table>
-        </TableContainer>
+    {
+      isLoggedIn && !isCoach ?
+      <>
+        <TopBar title={workoutData.name} />
+        <Container maxWidth="lg">
+          <Box sx={{ bgcolor: 'black', height: '100vh' }}>
+            <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
+              Week {weekCounter+1}
+            </Typography>
+              <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Day</TableCell>
+                    <TableCell>Exercise</TableCell>
+                    <TableCell>Weight</TableCell>
+                    <TableCell>Series</TableCell>
+                    <TableCell>Repetitions</TableCell>
+                    <TableCell>RPE</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {
+                    workoutData.days.map((day, index) => {
+                      return (
+                        <TableDay key={index} dayNumber={index+1} day={day} week={weekCounter} cycleIndex={id} />
+                      )
+                    })
+                  }
+                </TableBody>
+              </Table>
+            </TableContainer>
 
-        <Grid 
-          container 
-          spacing={2}
-          textAlign="center"
-          padding={3}
-          height={"5%"}
-        >
-          <Grid item xs={3}>
-          </Grid>
-          <Grid item xs={3}>
-            <Fab color="primary" aria-label="add" disabled={isLeftButtonDisabled} onClick={handleLeftClick} >
-              <ArrowBackIosNewIcon  />
-            </Fab>
-          </Grid>
-          <Grid item xs={3}>
-            <Fab color="primary" aria-label="add" disabled={isRightButtonDisabled} onClick={handleRightClick} >
-              <ArrowForwardIosIcon />
-            </Fab>
-          </Grid>
-          <Grid item xs={3}  justifyContent="flex-end" textAlign={'end'}>
-            <Fab
-              color="primary"
-              disabled={!unsavedChanges}
-              style={{
-                width: '80px',
-                height: '80px',
-              }}
-              onClick={handleSaveClick}
+            <Grid 
+              container 
+              spacing={2}
+              textAlign="center"
+              padding={3}
+              height={"5%"}
             >
-              <SaveIcon />
-            </Fab>
-          </Grid>
-        </Grid>
-      </Box>
-    </Container>
-    </>
+              <Grid item xs={3}>
+              </Grid>
+              <Grid item xs={3}>
+                <Fab color="primary" aria-label="add" disabled={isLeftButtonDisabled} onClick={handleLeftClick} >
+                  <ArrowBackIosNewIcon  />
+                </Fab>
+              </Grid>
+              <Grid item xs={3}>
+                <Fab color="primary" aria-label="add" disabled={isRightButtonDisabled} onClick={handleRightClick} >
+                  <ArrowForwardIosIcon />
+                </Fab>
+              </Grid>
+              <Grid item xs={3}  justifyContent="flex-end" textAlign={'end'}>
+                <Fab
+                  color="primary"
+                  disabled={!unsavedChanges}
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                  }}
+                  onClick={handleSaveClick}
+                >
+                  <SaveIcon />
+                </Fab>
+              </Grid>
+            </Grid>
+          </Box>
+        </Container>
+      </>
+      :
+      <NotLoggedInPage />
+    }
+=    </>
   )
 }
 
