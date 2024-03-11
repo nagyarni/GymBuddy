@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const secretKey = require('../secret')
+const Cycle = require('./Cycle')
 
 const clientSchema = new mongoose.Schema({
   emailnotif: Boolean,
@@ -21,7 +22,8 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    lowercase: true
+    lowercase: true,
+    unique: true
   },
   password: {
     type: String,
@@ -62,9 +64,9 @@ userSchema.statics.authenticate = async function (email, password) {
 userSchema.methods.generateAuthToken = function () {
   // You can customize the payload of the token based on your needs
   
-  const client = this._client ? true : false
-  const coach = this._coach ? true : false
-  const admin = this._admin ? true : false
+  const client = this._client
+  const coach = this._coach
+  const admin = this._admin
 
   //console.log(client, coach, admin)
   const payload = {
@@ -92,6 +94,38 @@ userSchema.pre('save', async function (next) {
 
   next();
 });
+
+// Delete all associated cycle documents in case of user deletion
+// userSchema.pre('deleteOne', async function (next) {
+//   try {
+//     // Extract the _id condition from the query
+//     const userIdCondition = this.getQuery()._id;
+//     console.log(userIdCondition)
+
+//     // Check if _id condition is valid
+//     if (!userIdCondition || userIdCondition === undefined) {
+//       throw new Error("Invalid _id condition in the deleteOne query");
+//     }
+
+//     // Find the user by _id
+//     const user = await User.findById(userIdCondition);
+
+//     if (!user) {
+//       throw new Error("User not found!");
+//     }
+
+//     if (user._client) {
+//       console.log("User is a client, removing all associated cycles");
+//       const cycleIdsToDelete = user._client.cycles.map(cycle => cycle._id);
+//       await Cycle.deleteMany({ _id: { $in: cycleIdsToDelete } });
+//     }
+
+//     next();
+//   } catch (error) {
+//     console.error('Error deleting cycles:', error.message);
+//     next(error);
+//   }
+// });
 
 const User = mongoose.model('User', userSchema);
 

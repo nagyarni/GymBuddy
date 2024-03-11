@@ -3,6 +3,8 @@ import authSlice from './auth-slice'
 import cyclesSlice from './cycles-slice'
 import unsavedChangesSlice from './unsavedChanges-slice'
 import clientsSlice from './clients-slice'
+// const applyMiddleware = redux.applyMiddleware
+// const thunkMiddleware = require('redux-thunk').default
 
 const store = configureStore({
   reducer: {

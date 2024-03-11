@@ -1,4 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import axios from 'axios';
+
+// export const login = createAsyncThunk(
+//   "login",
+//   async () => {
+//     try {
+//       const body = {
+//         "password": "redDeleteTest",
+//         "email": "redclient@email.hu"
+//       }
+//       const response = await axios.post('localhost:5000/api/auth/login', body.json())
+//       console.log(response.data)
+//       return response
+//     } catch (error) {
+//       throw error
+//     }
+//   }
+// )
 
 const authSlice = createSlice({
   name: 'auth',

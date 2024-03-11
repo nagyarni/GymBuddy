@@ -1,6 +1,8 @@
 // UserController.js
 const { default: mongoose } = require('mongoose');
 const User = require('../schemas/User'); // Assuming you have a User model
+const Cycle = require('../schemas/Cycle')
+const { isClientIDValid } = require('../middleware/userTypeMiddleware');
 
 const UserController = {
   getAllUsers: async (req, res) => {
@@ -14,6 +16,11 @@ const UserController = {
 
   getUserById: async (req, res) => {
     try {
+      // Check if ID is correct
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: 'Invalid ID format' });
+      }
+
       const user = await User.findById(req.params.id).select("-password");
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
@@ -91,6 +98,11 @@ const UserController = {
 
         const coach = await User.findById(req.body.coachID)
 
+        // Check if a user was found or not
+        if (!coach) {
+          return res.status(401).json({ message: 'No user found with the provided ID' });
+        }
+
         if (!coach._coach) {
           return res.status(401).json({ message: 'Bad coach ID!' });
         }
@@ -102,12 +114,63 @@ const UserController = {
 
       res.json({ token });
     } catch (error) {
+      if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+        // Duplicate key violation for the email field
+        const duplicateEmail = error.keyValue.email;
+        console.error(`Error creating user: Email '${duplicateEmail}' is already in use.`);
+        // Send a user-friendly response to the client
+        return res.status(400).json({ error: `Email '${duplicateEmail}' is already in use.` });
+      } else {
+        // Handle other errors
+        console.error('Error creating user:', error.message);
+        // Send a generic error response to the client
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+    }
+  },
+
+  addClient: async (req, res) => {
+    try {
+      //Query the user based on query param ID
+      // Client inside body will be added to this user (coach)
+      const user = req.user
+
+      // Request body clientID validity checks
+      if (req.body.clientID === undefined || req.body.clientID === null) {
+        return res.status(401).json({ message: 'No clientID received in request!' });
+      }
+      
+      const result = await isClientIDValid(req.body.clientID)
+      if (result.error) {
+        return res.status(401).json({ message: result.message })
+      }
+
+      const clientID = req.body.clientID
+
+      // First, make sure that the coach clients list does NOT
+      // contain the ClientID to be added - no duplicates
+      if (user._coach.clients.some(client => client._id.toString() === clientID)) {
+        return res.status(400).json({ message: 'Client is already added to the coach' });
+      }
+
+      // Update user information with new ClientID
+      user._coach.clients.push(clientID)
+
+      await user.save()
+
+      res.json(user);
+    } catch (error) {
       res.status(500).json({ error: error.message });
     }
   },
 
   updateUser: async (req, res) => {
     try {
+      // Since there is no user type middleware included, check for ID validity is required
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: 'Invalid ID format' });
+      }
+
       // Assuming req.body contains the updated user information
       const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (!updatedUser) {
@@ -121,17 +184,74 @@ const UserController = {
 
   deleteUser: async (req, res) => {
     try {
-      const deletedUser = await User.findByIdAndDelete(req.params.id);
-      if (!deletedUser) {
-        return res.status(404).json({ message: 'User not found' });
+      let message = "User deleted successfully"
+      // Since there is no user type middleware included, check for ID validity is required
+      const userId = req.params.id;
+
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid ID format' });
       }
 
-      // Assuming you have a method to delete all associated cycles
-      await Cycle.deleteMany({ userId: req.params.id });
+      // const user = await User.findById(req.params.id);
 
-      res.json({ message: 'User and associated cycles deleted successfully' });
+      // if (!user) {
+      //   return res.status(404).json({ message: 'Failed to find user.' });
+      // }
+
+      // if (user._client) {
+      //   // We need to delete all associated cycles first if the user is a client
+      //   await Cycle.deleteMany({ user });
+      //   message = "User and associated cycles deleted successfully"
+      // }
+
+
+
+      // Find the user by _id
+      const user = await User.findById(userId);
+
+      if (!user) {
+        throw new Error("User not found!");
+      }
+
+      if (user._client && user._client.cycles && user._client.cycles.length > 0) {
+        console.log("User is a client, removing all associated cycles");
+        const cycleIdsToDelete = user._client.cycles.map(cycle => cycle._id);
+        await Cycle.deleteManyByIdList(cycleIdsToDelete);
+      }
+      console.log("breakpoint")
+
+      const deletedUser = await User.deleteOne({ _id: userId });
+      if (!deletedUser) {
+        return res.status(404).json({ message: 'Failed to delete user.' });
+      }
+      console.log(deletedUser)
+      res.json({ message: message });
     } catch (error) {
       res.status(500).json({ error: error.message });
+    }
+  },
+
+  deleteClient: async (req, res) => {
+    try {
+      // Coach ID and existence already verified by middleware
+      const coach = req.user
+      //console.log(coach)
+
+      // Need to make sure given clientID is correct and exists within coach data
+      if (!mongoose.Types.ObjectId.isValid(req.params.clientid)) {
+        return res.status(400).json({ message: 'Invalid clientID format' });
+      }
+
+      // Remove given clientID from _coach.clients array and save coach document to db
+      coach._coach.clients = coach._coach.clients.filter(_id => _id.toString() !== req.params.clientid);
+      // This won't check if the given clientID exists within the coaches clients!
+
+      // Save the modified coach document to the database
+      await coach.save();
+
+      res.json({ message: 'Client deleted from coach successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message })
     }
   },
 

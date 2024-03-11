@@ -3,7 +3,8 @@ const secretKey = require('../secret')
 
 function authenticateToken(req, res, next) {
   const token = req.header('Authorization');
-  if (!token) return res.status(401).json({ message: 'Unauthorized' });
+  //console.log(token)
+  if (!token) return res.status(401).json({ message: 'Unauthorized 90' });
 
   const tokenWithoutBearer = token.replace('Bearer ', '');
 
@@ -14,6 +15,8 @@ function authenticateToken(req, res, next) {
     }
     req.user = user;
     //console.log(user)
+    //console.log(req.params)
+    //console.log(req.body)
     next();
   });
 }
