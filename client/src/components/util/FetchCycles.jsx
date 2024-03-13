@@ -1,0 +1,44 @@
+import React, { useState, useEffect } from 'react'
+import { Container, MenuItem, Fab, Typography, CircularProgress  } from '@mui/material';
+import { useDispatch, useSelector, useStore } from 'react-redux';
+import { useSnackbar } from '../util/SnackBarContext';
+import { useGetCyclesByUserIdQuery } from '../../features/cycles/cyclesApi-slice';
+import { cyclesActions } from '../../features/cycles/cycles-slice';
+
+
+function FetchCycles({ userId, children, dataLoaded }) {
+
+  if (!dataLoaded) {
+    // Import update cycle store reducer
+    const { updateCycleStore } = cyclesActions;
+
+    // Declare dispatch
+    const dispatch = useDispatch()
+
+    const { setSnackbarMessage } = useSnackbar()
+
+    const { data, error, isLoading } = useGetCyclesByUserIdQuery({ id: userId });
+    console.log("Fetching via query")
+
+    if (isLoading) {
+      return <CircularProgress />;
+    }
+
+    if (error) {
+      setSnackbarMessage(error)
+      return <CircularProgress />;
+    }
+
+    //console.log(data)
+
+    dispatch(updateCycleStore(data))
+  }
+  
+  return (
+    <>
+      { children }
+    </>
+  )
+}
+
+export default FetchCycles

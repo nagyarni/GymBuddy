@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "baseUrl": "./src",
+    "paths": {
+      "app/*": ["app/*"],
+      "assets/*": ["assets/*"],
+      "components/*": ["components/*"],
+      "features/*": ["features/*"]
+    }
+  },
+  "include": [
+    "app/**/*.jsx",
+    "assets/**/*.jsx",
+    "components/**/*.jsx",
+    "features/**/*.jsx",
+    "App.jsx",
+    "main.jsx"
+  ]
+}

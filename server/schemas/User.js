@@ -80,7 +80,7 @@ userSchema.methods.generateAuthToken = function () {
   };
 
   // Sign the token with your secret key
-  const token = jwt.sign(payload, secretKey, { expiresIn: '1h' }); // Adjust the expiration time as needed
+  const token = jwt.sign(payload, secretKey, { expiresIn: '12h' }); // Adjust the expiration time as needed
 
   return token;
 };

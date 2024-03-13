@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import LoginPage from './components/user/LoginPage'
-import RegisterPage from './components/user/RegisterPage'
-import AccountPage from './components/user/AccountPage'
+import LoginPage from './components/auth/LoginPage'
+import RegisterPage from './components/auth/RegisterPage'
+import AccountPage from './components/auth/AccountPage'
 import {
   createBrowserRouter,
   Router,
   RouterProvider,
 } from "react-router-dom";
-import NavigationBar from './components/layout/NavigationBar';
-import TopBar from './components/layout/TopBar';
-import HomeScreen from './components/layout/HomeScreen';
+import NavigationBar from './components/util/NavigationBar';
+import TopBar from './components/util/TopBar';
+import HomeScreen from './components/HomeScreen';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import CyclesPage from './components/tables/CyclesPage';
-import WorkoutTable from './components/tables/WorkoutTable';
-import CyclesPageEditable from './components/tables/CyclesPageEditable';
-import WorkoutTableEditable from './components/tables/WorkoutTableEditable'
-import ClientsPage from './components/tables/ClientsPage'
+import CyclesPage from './components/client/CyclesPage';
+import WorkoutTable from './components/client/WorkoutTable';
+import CyclesPageEditable from './components/coach/CyclesPageEditable';
+import WorkoutTableEditable from './components/coach/WorkoutTableEditable'
+import ClientsPage from './components/coach/ClientsPage'
+import FetchTesting from './components/util/FetchTesting'
+import ClientFetchWrapper from './components/client/ClientFetchWrapper'
 
 const darkTheme = createTheme({
   palette: {
@@ -38,11 +40,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/cycles",
-    element: <CyclesPage />,
+    element: <ClientFetchWrapper content={0} />,
   },
   {
     path: "/cycles/:id",
-    element: <WorkoutTable />
+    element: <ClientFetchWrapper content={1} />
   },
   {
     path: "/cyclesedit",
@@ -67,6 +69,10 @@ const router = createBrowserRouter([
   {
     path: "/clients",
     element: <ClientsPage />
+  },
+  {
+    path: "/test",
+    element: <FetchTesting />
   }
 ]);
 
