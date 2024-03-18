@@ -14,8 +14,10 @@ import { useSelector } from 'react-redux';
 const NavigationBar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const navigate = useNavigate()
-  const isLoggedIn = true
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+  const isClient = useSelector((state) => state.auth.isClient)
   const isCoach = useSelector((state) => state.auth.isCoach)
+  const isAdmin = useSelector((state) => state.auth.isAdmin)
 
 
   const handleHomepageClick = (event) => (
@@ -25,10 +27,13 @@ const NavigationBar = () => {
     navigate('/cycles')
   )
   const handleMyProfileClick = (event) => (
-    console.log("My profile click handler function")
+    navigate('/profile')
   )
   const handleMyClientsClick = (event) => {
     navigate('/clients')
+  }
+  const handleManageUsersClick = (event) => {
+    navigate('/users')
   }
 
   return (
@@ -68,19 +73,8 @@ const NavigationBar = () => {
               <ListItemText primary={"Homepage"} />
             </ListItemButton>
           </ListItem>
-            {
-              isCoach ?
-              <>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={handleMyClientsClick} disabled={!isLoggedIn}>
-                    <ListItemIcon>
-                      <FormatListBulletedIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={"My Clients"} />
-                  </ListItemButton>
-                </ListItem>
-              </>
-              :
+
+            { isClient ? 
               <>
                 <ListItem disablePadding>
                   <ListItemButton onClick={handleMyCyclesClick} disabled={!isLoggedIn}>
@@ -91,7 +85,37 @@ const NavigationBar = () => {
                   </ListItemButton>
                 </ListItem>
               </>
+              : ""
             }
+
+            { isCoach ? 
+              <>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={handleMyClientsClick} disabled={!isLoggedIn}>
+                    <ListItemIcon>
+                      <FormatListBulletedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"My Clients"} />
+                  </ListItemButton>
+                </ListItem>
+              </>
+              : ""  
+            }
+
+            { isAdmin ? 
+              <>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={handleManageUsersClick} disabled={!isLoggedIn}>
+                    <ListItemIcon>
+                      <FormatListBulletedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"Manage users"} />
+                  </ListItemButton>
+                </ListItem>
+              </>
+              : ""    
+            }
+
             <Divider />
             <ListItem disablePadding>
               <ListItemButton onClick={handleMyProfileClick} disabled={!isLoggedIn}>

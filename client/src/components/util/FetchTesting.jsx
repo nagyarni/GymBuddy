@@ -22,13 +22,13 @@ function FetchTesting(props) {
 
   // Access specific values from the state
   const userInfo = JSON.parse(state.auth.user)
-  console.log(userInfo)
+  //console.log(userInfo)
   const clientUserId = userInfo.userId;
   if (!clientUserId) {
-    console.log("Client user ID is undefined therefore user is not logged in (this is only here for debugging this should not appear if protected routes work properly")
+    //console.log("Client user ID is undefined therefore user is not logged in (this is only here for debugging this should not appear if protected routes work properly")
   }
 
-  console.log(clientUserId)
+  //console.log(clientUserId)
   const { setSnackbarMessage } = useSnackbar()
 
   const { data, error, isLoading } = useGetCyclesByUserIdQuery({ id: clientUserId });
@@ -41,7 +41,7 @@ function FetchTesting(props) {
     return <div>Error: {error.message}</div>;
   }
 
-  console.log(data)
+  //console.log(data)
 
   dispatch(updateCycleStore(data))
   

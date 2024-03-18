@@ -26,16 +26,18 @@ import NotLoggedInPage from '../util/tablecomponents/NotLoggedInPage';
 
 function CyclesPageEditable(props) {
 
+  const userid = props.userid
+
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const isCoach = useSelector((state) => state.auth.isCoach)
 
   const dispatch = useDispatch()
 
   const cyclesData = useSelector((state) => state.cycles)
-  console.log(cyclesData)
+  //console.log(cyclesData)
 
   const handleAddCycleClick = (event) => {
-    console.log("Add clicked")
+    //console.log("Add clicked")
     dispatch(cyclesActions.addNewCycle())
   }
 
@@ -55,7 +57,7 @@ function CyclesPageEditable(props) {
             {
               cyclesData.cycles.map((cycle, index) => {
                 return(
-                  <Cycle key={index} data={cycle} removable={true} />
+                  <Cycle key={index} userid={userid} data={cycle} removable={true} />
                 )
               })
             }

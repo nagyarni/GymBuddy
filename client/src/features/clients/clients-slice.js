@@ -3,9 +3,12 @@ import { createSlice, current } from '@reduxjs/toolkit'
 
 const clientsSlice = createSlice({
   name: 'clients',
-  initialState: null,
+  initialState: { clients: null },
   reducers: {
-
+    updateClientsStore: (state, action) => {
+      const { clients } = action.payload
+      state.clients = clients
+    },
   }
 })
 

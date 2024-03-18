@@ -26,8 +26,8 @@ import EditExerciseButton from './EditExerciseButton'
 function TableDay(props) {
 //props.exercises will contain the data that needs to be mapped
 
-  //console.log(props.day)
-  //console.log("Week: "+props.week)
+  ////console.log(props.day)
+  ////console.log("Week: "+props.week)
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editedWeight, setEditedWeight] = useState('');
@@ -52,7 +52,7 @@ function TableDay(props) {
     weekCount: props.weekCount
   }
 
-  //console.log(infoForExerciseModals)
+  ////console.log(infoForExerciseModals)
 
 
   const handleOpenModal = (index, data) => {
@@ -68,9 +68,9 @@ function TableDay(props) {
 
   const handleConfirm = (event) => {
     // Your logic to handle the confirmed weight value
-    //console.log('Confirmed weight:', editedWeight);
+    ////console.log('Confirmed weight:', editedWeight);
 
-    //console.log(event)
+    ////console.log(event)
 
     // Replace with the desired cycle index
     const dayIndex = dayNumber-1; // Replace with the desired day index
@@ -78,17 +78,17 @@ function TableDay(props) {
     const newWeight = editedWeight; // Replace with the new weight value
     const weekIndex = props.week;
 
-    console.log(
-      "cycle index: "+cycleIndex)
-    console.log(
-      "day index: "+dayIndex
-    )
-    console.log(
-      "exercise index: "+exerciseIndex
-    )
-    console.log(
-      "weighrt: "+newWeight
-    )
+    // console.log(
+    //   "cycle index: "+cycleIndex)
+    // console.log(
+    //   "day index: "+dayIndex
+    // )
+    // console.log(
+    //   "exercise index: "+exerciseIndex
+    // )
+    // console.log(
+    //   "weighrt: "+newWeight
+    // )
 
     dispatch(
       cyclesActions.updateWeight({
@@ -119,11 +119,11 @@ function TableDay(props) {
   const dayNumber = props.dayNumber
   const week = props.week
   const currentDayData = props.day
-  //console.log(currentDayData)
+  ////console.log(currentDayData)
 
 
   const generateDay = function() {
-    //console.log(dummy.weeks[currentWeek].days)
+    ////console.log(dummy.weeks[currentWeek].days)
     
     return (currentDayData).map((data, index) => {
       return (

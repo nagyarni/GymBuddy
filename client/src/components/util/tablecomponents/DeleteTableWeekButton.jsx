@@ -33,8 +33,8 @@ function DeleteTableWeekButton(props) {
     if (weekCounter === totalWeeks - 1) {
       setWeekCounter(weekCounter - 1)
     }
-    console.log("total weeks")
-    console.log(totalWeeks)
+    //console.log("total weeks")
+    //console.log(totalWeeks)
   }
 
   return (

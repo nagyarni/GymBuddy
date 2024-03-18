@@ -9,6 +9,7 @@ import { cyclesActions } from '../../features/cycles/cycles-slice';
 function FetchCycles({ userId, children, dataLoaded }) {
 
   if (!dataLoaded) {
+    console.log("Component re rendered, re-fetching")
     // Import update cycle store reducer
     const { updateCycleStore } = cyclesActions;
 
@@ -18,7 +19,7 @@ function FetchCycles({ userId, children, dataLoaded }) {
     const { setSnackbarMessage } = useSnackbar()
 
     const { data, error, isLoading } = useGetCyclesByUserIdQuery({ id: userId });
-    console.log("Fetching via query")
+    //console.log("Fetching via query")
 
     if (isLoading) {
       return <CircularProgress />;
@@ -29,9 +30,13 @@ function FetchCycles({ userId, children, dataLoaded }) {
       return <CircularProgress />;
     }
 
-    //console.log(data)
+    ////console.log(data)
 
     dispatch(updateCycleStore(data))
+    dispatch(cyclesActions.setCurrentlyFetchedUserId({ currentlyFetchedUserId: userId }))
+  }
+  else {
+    console.log("Component re rendered, not re-fetching")
   }
   
   return (

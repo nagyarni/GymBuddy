@@ -30,7 +30,7 @@ function Cycle(props) {
 
   const handleCardClick = (e) => {
     if(props.removable) (
-      navigate('/cyclesedit/'+props.data._id)
+      navigate(`${props.data._id}`)
     )
     else (
       navigate('/cycles/'+props.data._id)

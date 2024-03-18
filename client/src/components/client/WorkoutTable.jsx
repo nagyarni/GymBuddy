@@ -1,3 +1,4 @@
+// WorkoutTable.jsx
 import React, { useState, useEffect } from 'react'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -56,13 +57,13 @@ function WorkoutTable(props) {
 
   const handleSaveClick = () => {
     // Your custom save function logic here
-    console.log('Save button clicked');
+    //console.log('Save button clicked');
     dispatch(setUnsavedChanges(false))
   };
 
 
   useEffect(() => {
-    //console.log("Week counter:" + weekCounter + "\ntotal weeks:" + totalWeeks)
+    ////console.log("Week counter:" + weekCounter + "\ntotal weeks:" + totalWeeks)
     if (totalWeeks - 1 === 0 && weekCounter === 0) {
       setLeftButtonDisabled(true)
       setRightButtonDisabled(true)
@@ -83,12 +84,12 @@ function WorkoutTable(props) {
 
 
   const handleLeftClick = function() {
-    console.log("Moving left")
+    //console.log("Moving left")
     setWeekCounter(weekCounter-1)
   }
 
   const handleRightClick = function() {
-    console.log("Moving right")
+    //console.log("Moving right")
     setWeekCounter(weekCounter+1)
   }
 

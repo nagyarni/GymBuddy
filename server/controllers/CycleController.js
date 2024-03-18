@@ -17,6 +17,17 @@ const CycleController = {
     }
   },
 
+  // New method for the improved coach fetching logic
+  getCycleByCycleId: async (req, res) => {
+    try {
+      
+
+
+    } catch (error) {
+      res.status(500).json({ error: error.message })
+    }
+  }
+
   addCycle: async (req, res) => {
     try {
       //Query the user based on query param ID

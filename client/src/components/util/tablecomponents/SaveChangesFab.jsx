@@ -23,15 +23,18 @@ function SaveChangesFab(params) {
 
   const handleSaveClick = async () => {
     // Your custom save function logic here
-    console.log('Save button clicked');
+    //console.log('Save button clicked');
     //dispatch(cyclesActions.saveChanges(false))
     try {
       const { data, error, isLoading } = await patchCyclesByUserId({ id: userid, cycleid: cycleid, cycle: currentCycleInfo });
 
       dispatch(cyclesActions.saveChanges(false))
       setSnackbarMessage({ message: "Successfully saved cycle!", isError: false });
+      // Sleep a little time for request to take effect on database
+
+      //dispatch(cyclesActions.setCurrentlyFetchedUserId({ currentlyFetchedUserId: null }))
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       const errorMessage = error.data ? error.data.message : 'Saving failed!';
       setSnackbarMessage({ message: errorMessage, isError: true });
     }

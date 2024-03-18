@@ -25,7 +25,7 @@ import { useGetCyclesByUserIdQuery } from '../../features/cycles/cyclesApi-slice
 function CyclesPage(props) {
 
   const cyclesData = useSelector((state) => state.cycles)
-  console.log(cyclesData)
+  //console.log(cyclesData)
 
   //const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   

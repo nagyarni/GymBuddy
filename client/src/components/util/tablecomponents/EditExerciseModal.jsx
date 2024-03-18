@@ -10,11 +10,16 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { cyclesActions } from '../../../features/cycles/cycles-slice';
+import { useParams } from 'react-router-dom';
 
 const EditExerciseModal = (props) => {
   const info = props.info;
   const exerciseIndex = props.exerciseIndex;
-  const cycleData = useSelector((state) => state.cycles.cycles[info.cycleIndex]);
+
+  const { id } = useParams()
+  // For the sake of naming the variable correctly :D
+  const urlId = id
+  const cycleData = useSelector((state) => state.cycles.cycles).find(workout => workout._id === urlId);
   const rpeCount = cycleData.weeks;
   const dispatch = useDispatch();
   const initialValues = cycleData.days[info.dayIndex][exerciseIndex];
@@ -28,7 +33,7 @@ const EditExerciseModal = (props) => {
   const setEditExerciseModalOpen = props.setEditExerciseModalOpen;
 
   const handleSave = () => {
-    console.log({ exerciseName, series, reps, rpes });
+    //console.log({ exerciseName, series, reps, rpes });
     dispatch(cyclesActions.editExercise({ info, exerciseIndex, exerciseName, series, reps, rpes }));
     handleClose();
   };

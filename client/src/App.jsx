@@ -20,6 +20,7 @@ import WorkoutTableEditable from './components/coach/WorkoutTableEditable'
 import ClientsPage from './components/coach/ClientsPage'
 import FetchTesting from './components/util/FetchTesting'
 import ClientFetchWrapper from './components/client/ClientFetchWrapper'
+import CoachFetchWrapper from './components/coach/CoachFetchWrapper'
 
 const darkTheme = createTheme({
   palette: {
@@ -47,12 +48,12 @@ const router = createBrowserRouter([
     element: <ClientFetchWrapper content={1} />
   },
   {
-    path: "/cyclesedit",
-    element: <CyclesPageEditable />
+    path: "clients/:clientid/cyclesedit",
+    element: <CoachFetchWrapper content={0} />
   },
   {
-    path: "/cyclesedit/:id",
-    element: <WorkoutTableEditable />
+    path: "clients/:clientid/cyclesedit/:id",
+    element: <CoachFetchWrapper content={1} />
   },
   {
     path: "/login",
@@ -87,7 +88,7 @@ function App() {
     ).then(
       data => {
         setBackendData(data)
-        console.log(backendData.users)
+        //console.log(backendData.users)
       }
     )
   }, []) */

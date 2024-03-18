@@ -33,7 +33,7 @@ function EditExerciseButton(props) {
     //dispatch(cyclesActions.deleteExercise({ info, exerciseIndex: exerciseIndex }))
     setExerciseIndex(exerciseIndex)
     openModal()
-    //console.log(info)
+    ////console.log(info)
   }
 
   return (

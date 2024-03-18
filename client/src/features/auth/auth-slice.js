@@ -13,20 +13,21 @@ const initialState = {
 // Check expiration status of JWT token when loading initial state
 if (localStorage.getItem('token') !== null) {
   const tokenExpiration = JSON.parse(localStorage.getItem('user')).exp;
-  //console.log(tokenExpiration)
+  ////console.log(tokenExpiration)
   if (Date.now() >= tokenExpiration * 1000) {
     // Token has expired, clear local storage
-    console.log("Purging localstorage after token expiration")
+    //console.log("Purging localstorage after token expiration")
     localStorage.removeItem('token');
     localStorage.removeItem('user');
   } else {
     // Token is still valid, set initial state from local storage
+    const user = JSON.parse(localStorage.getItem('user'));
     initialState.token = localStorage.getItem('token');
-    initialState.user = JSON.parse(localStorage.getItem('user'));
+    initialState.user = user;
     initialState.isLoggedIn = (localStorage.getItem('user')) ? true : false;
-    initialState.isClient = (localStorage.getItem('user')).client ? true : false;
-    initialState.isCoach = (localStorage.getItem('user')).coach ? true : false;
-    initialState.isAdmin = (localStorage.getItem('user')).admin ? true : false;
+    initialState.isClient = user.client ? true : false;
+    initialState.isCoach = user.coach ? true : false;
+    initialState.isAdmin = user.admin ? true : false;
   }
 }
 
@@ -45,6 +46,8 @@ const authSlice = createSlice({
       // Additional logic to update other permissions based on user attributes
     },
     logout(state, action) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       state.user = null
       state.token = null
       state.isLoggedIn = false

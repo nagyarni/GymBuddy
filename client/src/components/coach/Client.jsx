@@ -27,11 +27,11 @@ function Client(props) {
   const navigate = useNavigate()
 
   const handleCardClick = (e) => {
-    console.log(
-      "WIP!!! Need to handle this via HTTP request to update the cycles-slice store with"+
-      "the information of the currently selected client"
-    )
-    navigate('/cyclesedit')
+    //console.log(
+    //   "WIP!!! Need to handle this via HTTP request to update the cycles-slice store with"+
+    //   "the information of the currently selected client"
+    // )
+    navigate(`${props.data._id}/cyclesedit`)
   }
 
   return (

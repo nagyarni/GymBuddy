@@ -24,7 +24,7 @@ function AddTableDayButton(props) {
   const dispatch = useDispatch()
   const cycleIndex = props.cycleIndex
 
-  //console.log(cycleIndex)
+  ////console.log(cycleIndex)
 
   const handleAddDayClick = () => {
     dispatch(cyclesActions.addNewDay({cycleIndex: cycleIndex}))

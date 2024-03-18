@@ -37,28 +37,28 @@ export default function SignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    //console.log({
+    //   email: data.get('email'),
+    //   password: data.get('password'),
+    // });
 
     const email = data.get('email')
     const password = data.get('password')
 
     try {
       const userData = await login({ email, password }).unwrap()
-      //console.log(userData)
+      ////console.log(userData)
       const token = userData.token
       const decodedToken = atob(token.split('.')[1]); // Decode the Payload part
       const parsedToken = JSON.parse(decodedToken);
-      //console.log(parsedToken);
+      ////console.log(parsedToken);
       dispatch(setCredentials({ accessToken: token, user: parsedToken }))
       setSnackbarMessage({ message: "Successfully logged in!", isError: false });
       localStorage.setItem('token', token)
       localStorage.setItem('user', decodedToken)
       navigate("/")
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       const errorMessage = error.data ? error.data.message : 'An unexpected error occurred';
       setSnackbarMessage({ message: errorMessage, isError: true });
     }

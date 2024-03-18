@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import { Button, Modal, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { cyclesActions } from '../../../features/cycles/cycles-slice';
+import { useParams } from 'react-router-dom';
 
 const AddExerciseModal = (props) => {
   const info = props.info
 
-  const cycleData = useSelector((state) => state.cycles.cycles[info.cycleIndex])
+  const { id } = useParams()
+  // For the sake of naming the variable correctly :D
+  const urlId = id
+
+  const cycleData = useSelector((state) => state.cycles.cycles).find(workout => workout._id === urlId);  
   const rpeCount = cycleData.weeks
   const dispatch = useDispatch()
 
@@ -22,7 +27,7 @@ const AddExerciseModal = (props) => {
 
   const handleSave = () => {
     // Handle saving the form data or perform any desired action
-    console.log({ exerciseName, series, reps, rpes  });
+    //console.log({ exerciseName, series, reps, rpes  });
     dispatch(cyclesActions.addNewExercise({info, exerciseName, series, reps, rpes}))
     handleClose();
   };

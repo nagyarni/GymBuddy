@@ -16,6 +16,9 @@ function TopBar(props) {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+
+
   const handleLogin = (event) => {
     event.preventDefault()
     //dispatch(authActions.login())
@@ -57,15 +60,18 @@ function TopBar(props) {
             direction="row"
             spacing={2}
           >
-
-              <>
-                <Button color="inherit" onClick={handleLogin}>Login</Button>
-                <Button color="inherit" onClick={handleRegister}>Sign up</Button>
-              </> : <>
-                <Button color="inherit" onClick={handleLogout}>Logout</Button>
-                <Button color="inherit" onClick={handleAccount}>Account</Button>
-              </>
-
+            {
+              isLoggedIn ?
+                <>
+                  <Button color="inherit" onClick={handleLogout}>Logout</Button>
+                  <Button color="inherit" onClick={handleAccount}>Account</Button>
+                </>
+              :
+                <>
+                  <Button color="inherit" onClick={handleLogin}>Login</Button>
+                  <Button color="inherit" onClick={handleRegister}>Sign up</Button>
+                </>
+            }
           </Stack>
         </Toolbar>
       </AppBar>

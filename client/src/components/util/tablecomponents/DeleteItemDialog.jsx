@@ -27,7 +27,7 @@ export default function AlertDialog(props) {
 
   const handleDelete = () => {
     setOpen(false)
-    console.log("Deleting cycle!")
+    //console.log("Deleting cycle!")
     dispatch(cyclesActions.removeCycle({id: id}))
   }
 
