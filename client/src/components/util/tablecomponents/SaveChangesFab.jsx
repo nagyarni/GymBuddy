@@ -3,7 +3,7 @@ import React from 'react'
 import SaveIcon from '@mui/icons-material/Save';
 import { useDispatch, useSelector } from 'react-redux';
 import { cyclesActions } from '../../../features/cycles/cycles-slice';
-import { usePatchCyclesByUserIdMutation } from '../../../features/cycles/cyclesApi-slice';
+import { usePatchCycleByUserIdAndCycleIdMutation } from '../../../features/cycles/cyclesApi-slice';
 import { useSnackbar } from '../SnackBarContext';
 
 function SaveChangesFab(params) {
@@ -15,18 +15,17 @@ function SaveChangesFab(params) {
   const cycleid = params.cycleid
 
   // Get the current cycle info from state (has to be the currently open cycle)
-  const cycles = useSelector((state) => state.cycles.cycles);
-  const currentCycleInfo = cycles.find(cycle => cycle._id === cycleid);
+  const currentCycleInfo = useSelector((state) => state.cycles.cycleData);
 
-
-  const  [patchCyclesByUserId, patchCyclesByUserIdResult] = usePatchCyclesByUserIdMutation();
+  // Using Patch Cycle muation
+  const [patchCycleByUserIdAndCycleId, patchCycleByUserIdAndCycleIdResult] = usePatchCycleByUserIdAndCycleIdMutation();
 
   const handleSaveClick = async () => {
     // Your custom save function logic here
     //console.log('Save button clicked');
     //dispatch(cyclesActions.saveChanges(false))
     try {
-      const { data, error, isLoading } = await patchCyclesByUserId({ id: userid, cycleid: cycleid, cycle: currentCycleInfo });
+      const { data, error, isLoading } = await patchCycleByUserIdAndCycleId({ id: userid, cycleid: cycleid, cycle: currentCycleInfo });
 
       dispatch(cyclesActions.saveChanges(false))
       setSnackbarMessage({ message: "Successfully saved cycle!", isError: false });

@@ -5,12 +5,18 @@ const secretKey = require('../secret')
 const Cycle = require('./Cycle')
 
 const clientSchema = new mongoose.Schema({
-  emailnotif: Boolean,
+  emailnotif: {
+    type: Boolean,
+    default: false
+  },
   cycles: [mongoose.SchemaTypes.ObjectId]
 })
 
 const coachSchema = new mongoose.Schema({
-  emailnotif: Boolean,
+  emailnotif: {
+    type: Boolean,
+    default: false
+  },
   clients: [mongoose.SchemaTypes.ObjectId]
 })
 
@@ -61,7 +67,7 @@ userSchema.statics.authenticate = async function (email, password) {
 };
 
 // Adding a method to the User model to generate a JWT token
-userSchema.methods.generateAuthToken = function () {
+userSchema.methods.generateAuthToken = async function () {
   // You can customize the payload of the token based on your needs
   
   const client = this._client
@@ -75,9 +81,31 @@ userSchema.methods.generateAuthToken = function () {
     name: this.name,
     client: client,
     coach: coach,
-    admin: admin
+    admin: admin,
+    joinDate: this.createdAt,
     // Add other user-related data if needed...
   };
+
+  if (this._client) {
+    // If the user is a client, find the coach who has this client in their clients array
+    const coach = await User.findOne({ '_coach.clients': this._id }); // Assuming '_coach.clients' is the array of clients in the coach schema
+    console.log(coach)
+
+    // If a coach is found, include coach details in the payload
+    if (coach) {
+      payload.coachName = {
+        coachId: coach._id,
+        coachName: coach.name
+        // Add other coach-related data if needed...
+      };
+    } else {
+      // If no coach is found, specify that the client has no coach currently
+      payload.coachName = {
+        coachId: 0,
+        coachName: "No assigned coach"
+      }
+    }
+  }
 
   // Sign the token with your secret key
   const token = jwt.sign(payload, secretKey, { expiresIn: '12h' }); // Adjust the expiration time as needed

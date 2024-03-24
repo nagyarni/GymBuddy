@@ -20,7 +20,7 @@ import CardContent from '@mui/material/CardContent';
 import { CardActionArea, IconButton } from '@mui/material';
 import { Navigate, useNavigate } from 'react-router-dom';
 import RemoveIcon from '@mui/icons-material/Remove';
-import DeleteItemDialog from '../util/tablecomponents/DeleteItemDialog'
+import DeleteCycleDialog from '../util/DeleteCycleDialog'
 
 
 function Cycle(props) {
@@ -68,7 +68,7 @@ function Cycle(props) {
           
         </Card>
       </Grid>
-      <DeleteItemDialog open={open} setOpen={setOpen} id={props.data._id-1} />
+      <DeleteCycleDialog open={open} setOpen={setOpen} id={props.data._id-1} />
     </>
   )
 }

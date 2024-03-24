@@ -10,24 +10,26 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { selectUserId, selectUserIsAdmin, selectUserIsClient, selectUserIsCoach, selectUserIsLoggedIn } from '../../features/auth/auth-slice';
 
 const NavigationBar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const navigate = useNavigate()
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
-  const isClient = useSelector((state) => state.auth.isClient)
-  const isCoach = useSelector((state) => state.auth.isCoach)
-  const isAdmin = useSelector((state) => state.auth.isAdmin)
+  const isLoggedIn = useSelector((state) => (state.auth.isLoggedIn))
+  const isClient = useSelector((state) => (state.auth.isClient))
+  const isCoach = useSelector((state) => (state.auth.isCoach))
+  const isAdmin = useSelector((state) => (state.auth.isAdmin))
+  const userId = useSelector((state) => (state.auth.user?.userId))
 
 
   const handleHomepageClick = (event) => (
     navigate('/')
   )
   const handleMyCyclesClick = (event) => (
-    navigate('/cycles')
+    navigate(`/${userId}/cycles`)
   )
   const handleMyProfileClick = (event) => (
-    navigate('/profile')
+    navigate('/account')
   )
   const handleMyClientsClick = (event) => {
     navigate('/clients')

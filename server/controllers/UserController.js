@@ -52,7 +52,7 @@ const UserController = {
       }
 
       // Assuming you have a method to generate a JWT token
-      const token = user.generateAuthToken();
+      const token = await user.generateAuthToken();
 
       res.json({ token });
     } catch (error) {
@@ -63,6 +63,7 @@ const UserController = {
   // Type = 0 -> client, 1 -> coach
   register: async (req, res) => {
     try {
+      console.log(req.body)
       // Checking if registration data contains user type
       if (req.body.type === undefined || req.body.type === null) {
         return res.status(401).json({ message: 'Bad data 621' });
@@ -74,21 +75,17 @@ const UserController = {
       // Setting special fields based on user type
       req.body.type === 0 ? 
       req.body._client = {
-        emailNotif: false,
+        emailNotif: req.body.allowExtraEmails ? true : false,
         cycles: []
       } :
       req.body._coach = {
-        emailNotif: false,
+        emailNotif: req.body.allowExtraEmails ? true : false,
         clients: []
       }
 
-      // Assuming req.body contains user registration data
-      const newUser = await User.create(req.body);
-
-      // Assuming you have a method to generate a JWT token
-      const token = newUser.generateAuthToken();
-
-      // Checking if data includes coachID (user has to be Client type), setting coach
+      // Preliminary coachID checks
+      let coachIDCheckPassed = false
+      let fetchedCoach = null
       if (req.body.coachID && req.body.type === 0) {
 
         // Check if the provided coachID is a valid ObjectId
@@ -100,16 +97,28 @@ const UserController = {
 
         // Check if a user was found or not
         if (!coach) {
-          return res.status(401).json({ message: 'No user found with the provided ID' });
+          return res.status(401).json({ message: 'No coach found with the provided ID' });
         }
 
         if (!coach._coach) {
           return res.status(401).json({ message: 'Bad coach ID!' });
         }
+        fetchedCoach = coach
+        coachIDCheckPassed = true
+      }
 
-        coach._coach.clients.push(newUser._id)
-        await coach.save()
-        console.log("Registration request incluced coachID, successfully set created client to specified coach: " + coach._id)
+      // Assuming req.body contains user registration data
+      const newUser = await User.create(req.body);
+
+      // Assuming you have a method to generate a JWT token
+      const token = await newUser.generateAuthToken();
+
+      // Checking if data includes coachID (user has to be Client type), setting coach
+      if (coachIDCheckPassed) {
+        console.log(fetchedCoach)
+        fetchedCoach._coach.clients.push(newUser._id)
+        await fetchedCoach.save()
+        console.log("Registration request incluced coachID, successfully set created client to specified coach: " + fetchedCoach._id)
       }
 
       res.json({ token });
@@ -171,12 +180,28 @@ const UserController = {
         return res.status(400).json({ message: 'Invalid ID format' });
       }
 
+      const oldPassword = req.body.oldPassword
+      const email = req.body.email
+      const user = await User.authenticate(email, oldPassword);
+
+      if (user === null) {
+        return res.status(400).json({ message: 'Wrong password!' });
+      }
+
+      // Filter out permission change requests from newUserInfo
+      const { _admin, ...userInfo } = req.body.newUserInfo;
+
       // Assuming req.body contains the updated user information
-      const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      const updatedUser = await User.findByIdAndUpdate(req.params.id, userInfo, { new: true });
       if (!updatedUser) {
         return res.status(404).json({ message: 'User not found' });
       }
-      res.json(updatedUser);
+
+      console.log(updatedUser)
+
+      const token = await updatedUser.generateAuthToken();
+
+      res.json({ token });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

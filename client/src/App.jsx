@@ -21,6 +21,8 @@ import ClientsPage from './components/coach/ClientsPage'
 import FetchTesting from './components/util/FetchTesting'
 import ClientFetchWrapper from './components/client/ClientFetchWrapper'
 import CoachFetchWrapper from './components/coach/CoachFetchWrapper'
+import CyclesPageNew from './components/CyclesPageNew'
+import WorkoutTableNew from './components/WorkoutTableNew'
 
 const darkTheme = createTheme({
   palette: {
@@ -40,20 +42,12 @@ const router = createBrowserRouter([
     element: <HomeScreen />,
   },
   {
-    path: "/cycles",
-    element: <ClientFetchWrapper content={0} />,
+    path: "/:clientid/cycles",
+    element: <CyclesPageNew />,
   },
   {
-    path: "/cycles/:id",
-    element: <ClientFetchWrapper content={1} />
-  },
-  {
-    path: "clients/:clientid/cyclesedit",
-    element: <CoachFetchWrapper content={0} />
-  },
-  {
-    path: "clients/:clientid/cyclesedit/:id",
-    element: <CoachFetchWrapper content={1} />
+    path: "/:clientid/cycles/:cycleid",
+    element: <WorkoutTableNew />
   },
   {
     path: "/login",
@@ -77,22 +71,7 @@ const router = createBrowserRouter([
   }
 ]);
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  const [backendData, setBackendData] = useState([{}])
-
-/*   useEffect(() => {
-    fetch("/api").then(
-      response => response.json()
-    ).then(
-      data => {
-        setBackendData(data)
-        //console.log(backendData.users)
-      }
-    )
-  }, []) */
-  
+function App() {  
   return (
     <>
       <ThemeProvider theme={darkTheme}>

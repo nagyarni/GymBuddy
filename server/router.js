@@ -43,6 +43,7 @@ router.delete('/users/:id/clients/:clientid', authMiddleware, requestCoachClient
 router.get('/users', UserController.getAllUsers);
 router.get('/users/:id', UserController.getUserById);
 router.get('/users/:id/cycles', userTypeMiddleware.userTypeClient, CycleController.getCyclesByUserId);
+router.get('/users/:id/cycles/:cycleid', userTypeMiddleware.userTypeClient, CycleController.getCycleByCycleId);
 router.get('/users/:id/clients', userTypeMiddleware.userTypeCoach, UserController.getClientsByCoachId);
 
 // POST Endpoints

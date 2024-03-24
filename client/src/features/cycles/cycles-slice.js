@@ -3,21 +3,20 @@ import { createSlice, current } from '@reduxjs/toolkit'
 
 const cyclesSlice = createSlice({
   name: 'cycles',
-  initialState: { cycles: null, unsavedChanges: false, currentlyFetchedUserId: null },
+  initialState: { cycleData: null, unsavedChanges: false },
   reducers: {
     setCurrentlyFetchedUserId: (state, action) => {
       const { currentlyFetchedUserId } = action.payload
       state.currentlyFetchedUserId = currentlyFetchedUserId
     },
-    saveChanges: (state, action) => {
-      // This should only be called when the API call returns success state
-      state.unsavedChanges = false
+
+    updateCycleDataStore: (state, action) => {
+      const { cycle } = action.payload
+      state.cycleData = cycle
     },
-    updateCycleStore: (state, action) => {
-      const { cycles } = action.payload
-      ////console.log(cycles)
-      state.cycles = cycles
-    },
+
+
+    // Unused, delete later
     clearCycleStore: (state, action) => {
       state.cycles = {}
     },
@@ -26,76 +25,70 @@ const cyclesSlice = createSlice({
       const { cycleIndex } = action.payload;
       //console.log("Deleting cycle at index " + cycleIndex)
     },
-    updateWeight: (state, action) => {
-      state.unsavedChanges = true
-      const { cycleIndex, dayIndex, exerciseIndex, newWeight, weekIndex } = action.payload;
-
-      // Assuming action.payload contains the updated weight for a specific exercise
-      //console.log("Inside the updateWeight reducer:\n")
-      /* const test = current(state.cycles[cycleIndex].days[exerciseIndex][exerciseIndex].weight)
-      //console.log(test[dayIndex]) */
-      state.cycles[cycleIndex].days[dayIndex][exerciseIndex].weight[weekIndex] = newWeight;
-      /* let newState = current(state)
-      //console.log(state) */
-      
-    },
     addNewCycle: (state, action) => {
       //console.log("Implement this using http request, appending to current state would be pointless.")
     },
+
+    // Save changes if save button was clicked
+    saveChanges: (state, action) => {
+      // This should only be called when the API call returns success state
+      state.unsavedChanges = false
+    },
+    // CycleData reducers (WorkoutTable component)
+    updateWeight: (state, action) => {
+      state.unsavedChanges = true
+      const { dayIndex, exerciseIndex, newWeight, weekIndex } = action.payload;
+      state.cycleData.days[dayIndex][exerciseIndex].weight[weekIndex] = newWeight;
+    },
     addNewDay: (state, action) => {
       state.unsavedChanges = true
-      const { cycleIndex } = action.payload;
       const newDay = []
-      state.cycles[cycleIndex].days.push(newDay)
+      state.cycleData.days.push(newDay)
     },
     addNewWeek: (state, action) => {
       state.unsavedChanges = true
-      const { cycleIndex } = action.payload;
-      state.cycles[cycleIndex].weeks = state.cycles[cycleIndex].weeks + 1
-      state.cycles[cycleIndex].days = addWeekToExercises(state.cycles[cycleIndex].days)
+      state.cycleData.weeks = state.cycleData.weeks + 1
+      state.cycleData.days = addWeekToExercises(state.cycleData.days)
     },
     deleteDay: (state, action) => {
       state.unsavedChanges = true
-      const { cycleIndex, dayIndex } = action.payload
-      state.cycles[cycleIndex].days.splice(dayIndex, 1)
+      const { dayIndex } = action.payload
+      state.cycleData.days.splice(dayIndex, 1)
     },
     deleteWeek: (state, action) => {
       state.unsavedChanges = true
-      const { cycleIndex, weekIndex } = action.payload;
-      state.cycles[cycleIndex].weeks = state.cycles[cycleIndex].weeks - 1
-      state.cycles[cycleIndex].days = deleteWeekToExercises(state.cycles[cycleIndex].days, weekIndex)
+      const { weekIndex } = action.payload;
+      state.cycleData.weeks = state.cycleData.weeks - 1
+      state.cycleData.days = deleteWeekToExercises(state.cycleData.days, weekIndex)
     },
     addNewExercise: (state, action) => {
       state.unsavedChanges = true
-      const { exerciseName, series, reps, rpes  } = action.payload;
-      const { cycleIndex, dayIndex, weekCount } = action.payload.info;
+      const { exerciseName, series, reps, rpes, dayIndex  } = action.payload;
       const newExercise = {
         "name": exerciseName,
         "series": series,
         "reps": reps,
         "rpe": rpes,
-        "weight": Array(weekCount).fill(0)
+        "weight": Array(rpes.length).fill(0)
       }
-      state.cycles[cycleIndex].days[dayIndex].push(newExercise)
+      state.cycleData.days[dayIndex].push(newExercise)
     },
     deleteExercise: (state, action) => {
       state.unsavedChanges = true
-      const { exerciseIndex } = action.payload
-      const { cycleIndex, dayIndex, weekCount } = action.payload.info;
-      state.cycles[cycleIndex].days[dayIndex].splice(exerciseIndex, 1)
+      const { exerciseIndex, dayIndex } = action.payload
+      state.cycleData.days[dayIndex].splice(exerciseIndex, 1)
     },
     editExercise: (state, action) => {
       state.unsavedChanges = true
-      const { cycleIndex, dayIndex, weekCount } = action.payload.info;
-      const { exerciseIndex, exerciseName, series, reps, rpes } = action.payload
+      const { dayIndex, exerciseIndex, exerciseName, series, reps, rpes } = action.payload
       const modifiedExercise = {
         "name": exerciseName,
         "series": series,
         "reps": reps,
         "rpe": rpes,
-        "weight": Array(weekCount).fill(0)
+        "weight": Array(rpes.length).fill(0)
       }
-      state.cycles[cycleIndex].days[dayIndex][exerciseIndex] = modifiedExercise
+      state.cycleData.days[dayIndex][exerciseIndex] = modifiedExercise
     }
   }
 })

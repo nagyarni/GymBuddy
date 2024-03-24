@@ -5,20 +5,49 @@ export const cyclesApiSlice = apiSlice.injectEndpoints({
     getCyclesByUserId: builder.query({
       query: params => ({
         url: `/users/${params.id}/cycles`,
-        method: 'GET'
-      })
+        method: 'GET',
+      }),
+      providesTags: ['Cycles']
     }),
-    patchCyclesByUserId: builder.mutation({
+    getCycleDataByCycleId: builder.query({
+      query: params => ({
+        url: `/users/${params.id}/cycles/${params.cycleid}`,
+        method: 'GET',
+      }),
+      providesTags: ['CycleData']
+    }),
+    patchCycleByUserIdAndCycleId: builder.mutation({
       query: params => ({
         url: `/users/${params.id}/cycles/${params.cycleid}`,
         method: 'PATCH',
         body: params.cycle
-      })
+      }),
+      invalidatesTags: ['CycleData']
     }),
+
+    // Cycle DELETE and POST
+    postCycleByUserId: builder.mutation({
+      query: params => ({
+        url: `/users/${params.id}/cycles`,
+        method: 'POST',
+        body: params.cycle
+      }),
+      invalidatesTags: ['Cycles']
+    }),
+    deleteCycleByUserIdAndCycleId: builder.mutation({
+      query: params => ({
+        url: `/users/${params.id}/cycles/${params.cycleid}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['Cycles']
+    })
   })
 })
 // query or mutation based on get / something else
 export const {
   useGetCyclesByUserIdQuery,
-  usePatchCyclesByUserIdMutation
+  usePatchCycleByUserIdAndCycleIdMutation,
+  useGetCycleDataByCycleIdQuery,
+  usePostCycleByUserIdMutation,
+  useDeleteCycleByUserIdAndCycleIdMutation
 } = cyclesApiSlice

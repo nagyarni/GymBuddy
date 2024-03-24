@@ -62,5 +62,17 @@ export const { setCredentials, logout } = authSlice.actions
 
 export default authSlice.reducer
 
+// Selectors for auth states
+export const selectUserIsLoggedIn = (state) => state.auth.isLoggedIn
+export const selectUserIsClient = (state) => state.auth.isClient
+export const selectUserIsCoach = (state) => state.auth.isCoach
+export const selectUserIsAdmin = (state) => state.auth.isAdmin
+export const selectUserId = (state) => {
+  if (state.auth.user) {
+    return state.auth.user.userId
+  }
+}
+
+// Selectors for JWT token data
 export const selectCurrentUser = (state) => state.auth.user
 export const selectCurrentToken = (state) => state.auth.token

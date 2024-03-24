@@ -11,7 +11,7 @@ const CycleController = {
       const user = req.user;
       const cycles = user._client.cycles
       //console.log(cycles)
-      res.json({ cycles: cycles });
+      res.json({ cycles: cycles, userName: user.name });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -20,13 +20,34 @@ const CycleController = {
   // New method for the improved coach fetching logic
   getCycleByCycleId: async (req, res) => {
     try {
+      const cycleid = req.params.cycleid
+
+      if (!mongoose.Types.ObjectId.isValid(cycleid)) {
+        return res.status(404).json({ message: 'Invalid cycleID format' });
+      }
+
+      // Check if queried client has the specified cycleID in their list of cycleIDs
+      // Need to check req.user._client.cycles (array), each of these elements' _id attribute if it contains
+      // one that matches the req.params.id
+      const hasCycle = req.user._client.cycles.some(cycle => cycle._id.equals(cycleid));
+
+      if (!hasCycle) {
+        return res.status(401).json({ message: 'Client does not have the specified cycleID' });
+      }
+
+      const cycle = await Cycle.findById(cycleid)
+
+      if (!cycle) {
+        return res.status(404).json({ message: 'Cycle not found' });
+      }
+
+      const user = req.user
       
-
-
+      res.json({ cycle: cycle, userName: user.name })
     } catch (error) {
       res.status(500).json({ error: error.message })
     }
-  }
+  },
 
   addCycle: async (req, res) => {
     try {

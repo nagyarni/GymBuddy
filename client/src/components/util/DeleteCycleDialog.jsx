@@ -6,16 +6,26 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch } from 'react-redux';
-import { cyclesActions } from '../../../features/cycles/cycles-slice';
+import { cyclesActions } from '../../features/cycles/cycles-slice';
+import { useDeleteCycleByUserIdAndCycleIdMutation } from '../../features/cycles/cyclesApi-slice';
+import { useParams } from 'react-router-dom';
+import { useSnackbar } from './SnackBarContext';
 
 
 export default function AlertDialog(props) {
 
   const dispatch = useDispatch()
-
+  const { setSnackbarMessage } = useSnackbar()
+  
   const open = props.open
   const setOpen = props.setOpen
-  const id = props.id
+  const cycleid = props.id
+
+  // Extract userid from params
+  const { clientid } = useParams()
+
+  // Using Delete cycle mutation
+  const [deleteCycleByUserIdAndCycleId, deleteCycleByUserIdAndCycleIdResult] = useDeleteCycleByUserIdAndCycleIdMutation();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -25,10 +35,18 @@ export default function AlertDialog(props) {
     setOpen(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setOpen(false)
     //console.log("Deleting cycle!")
-    dispatch(cyclesActions.removeCycle({id: id}))
+    //dispatch(cyclesActions.removeCycle({id: id}))
+    try {
+      const { data, error } = await deleteCycleByUserIdAndCycleId({ id: clientid, cycleid: cycleid })
+      setSnackbarMessage({ message: "Successfully deleted cycle!", isError: false });
+    } catch (error) {
+      console.log(error)
+      const errorMessage = error.data ? error.data.message : 'Unexpected error occured while deleting cycle!';
+      setSnackbarMessage({ message: errorMessage, isError: true });
+    }
   }
 
   return (

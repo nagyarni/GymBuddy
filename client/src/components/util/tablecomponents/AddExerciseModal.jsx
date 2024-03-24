@@ -3,15 +3,14 @@ import { Button, Modal, TextField, Select, MenuItem, FormControl, InputLabel } f
 import { useDispatch, useSelector } from 'react-redux';
 import { cyclesActions } from '../../../features/cycles/cycles-slice';
 import { useParams } from 'react-router-dom';
+import { useSnackbar } from '../SnackBarContext';
 
 const AddExerciseModal = (props) => {
-  const info = props.info
+  const modalOpen = props.modalOpen
+  const setModalOpen = props.setModalOpen
+  const dayIndex = props.dayIndex - 1
 
-  const { id } = useParams()
-  // For the sake of naming the variable correctly :D
-  const urlId = id
-
-  const cycleData = useSelector((state) => state.cycles.cycles).find(workout => workout._id === urlId);  
+  const cycleData = useSelector((state) => state.cycles.cycleData)
   const rpeCount = cycleData.weeks
   const dispatch = useDispatch()
 
@@ -21,19 +20,17 @@ const AddExerciseModal = (props) => {
   const [reps, setReps] = useState(0);
   const [rpes, setRPEs] = useState(Array(rpeCount).fill(''));
 
-  const addExerciseModalOpen = props.addExerciseModalOpen
-  const setAddExerciseModalOpen = props.setAddExerciseModalOpen
-
+  const { setSnackbarMessage } = useSnackbar()
 
   const handleSave = () => {
     // Handle saving the form data or perform any desired action
-    //console.log({ exerciseName, series, reps, rpes  });
-    dispatch(cyclesActions.addNewExercise({info, exerciseName, series, reps, rpes}))
+    dispatch(cyclesActions.addNewExercise({ dayIndex, exerciseName, series, reps, rpes }))
+    setSnackbarMessage({ message: "Exercise added", isError: false });
     handleClose();
   };
 
   const handleClose = () => {
-    setAddExerciseModalOpen(false)
+    setModalOpen(false)
     setRPEs(Array(rpeCount).fill(''))
     setReps(0)
     setSeries(0)
@@ -41,7 +38,7 @@ const AddExerciseModal = (props) => {
   }
 
   return (
-    <Modal open={addExerciseModalOpen} onClose={handleClose}>
+    <Modal open={modalOpen} onClose={handleClose}>
       <div
         style={{
           position: 'absolute',

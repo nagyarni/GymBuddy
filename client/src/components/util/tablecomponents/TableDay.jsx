@@ -15,12 +15,9 @@ import {
 import { useDispatch } from 'react-redux';
 import { cyclesActions } from '../../../features/cycles/cycles-slice';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteTableDayButton from './DeleteTableDayButton';
 import AddIcon from '@mui/icons-material/Add';
 import AddExerciseModal from './AddExerciseModal';
-import DeleteExerciseButton from './DeleteExerciseButton';
 import EditExerciseModal from './EditExerciseModal'
-import EditExerciseButton from './EditExerciseButton'
 
 
 function TableDay(props) {

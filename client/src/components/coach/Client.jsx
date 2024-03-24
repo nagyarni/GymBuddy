@@ -20,7 +20,6 @@ import CardContent from '@mui/material/CardContent';
 import { CardActionArea, IconButton } from '@mui/material';
 import { Navigate, useNavigate } from 'react-router-dom';
 import RemoveIcon from '@mui/icons-material/Remove';
-import DeleteItemDialog from '../util/tablecomponents/DeleteItemDialog'
 
 function Client(props) {
 
@@ -31,7 +30,7 @@ function Client(props) {
     //   "WIP!!! Need to handle this via HTTP request to update the cycles-slice store with"+
     //   "the information of the currently selected client"
     // )
-    navigate(`${props.data._id}/cyclesedit`)
+    navigate(`/${props.data._id}/cycles`)
   }
 
   return (

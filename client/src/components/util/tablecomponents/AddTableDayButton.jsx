@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { cyclesActions } from '../../../features/cycles/cycles-slice';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+import { useSnackbar } from '../SnackBarContext';
 
 
 
@@ -24,9 +25,10 @@ function AddTableDayButton(props) {
   const dispatch = useDispatch()
   const cycleIndex = props.cycleIndex
 
-  ////console.log(cycleIndex)
+  const { setSnackbarMessage } = useSnackbar()
 
   const handleAddDayClick = () => {
+    setSnackbarMessage({ message: "Day added", isError: false });
     dispatch(cyclesActions.addNewDay({cycleIndex: cycleIndex}))
   }
 

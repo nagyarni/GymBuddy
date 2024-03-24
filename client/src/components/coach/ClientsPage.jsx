@@ -22,11 +22,12 @@ import NotLoggedInPage from '../util/tablecomponents/NotLoggedInPage';
 import { clientsActions } from '../../features/clients/clients-slice';
 import { useGetClientsByUserIdQuery } from '../../features/clients/clientsApi-slice';
 import { useSnackbar } from '../util/SnackBarContext';
+import LoadingSpinner from '../util/LoadingSpinner';
 
 
 function ClientsPage() {
-  // Fetch clients of current user (coach) on render
-  const [dataLoaded, setDataLoaded] = useState(false)
+  // Fetch clients data from store
+  const clientsData = useSelector((state) => state.clients.clients)
 
   // Import update cycle store reducer
   const { updateClientsStore } = clientsActions;
@@ -36,7 +37,6 @@ function ClientsPage() {
 
   // Access specific values from the state
   const userInfo = useSelector((state) => state.auth.user);
-  ////console.log(userInfo)
 
   const coachUserId = userInfo.userId
   if (!coachUserId) {
@@ -45,50 +45,60 @@ function ClientsPage() {
 
   const { setSnackbarMessage } = useSnackbar()
 
-  const { data, error, isLoading } = useGetClientsByUserIdQuery({ id: coachUserId });
-  //console.log("Fetching clients via query")
+  // Call API fetch hook to get clients info
+  const {
+    data,
+    isLoading,
+    isSuccess,
+    isError,
+    error
+  } = useGetClientsByUserIdQuery({ id: coachUserId })
+
+  let content
 
   if (isLoading) {
-    return <CircularProgress />;
+    content = <LoadingSpinner />
+  } 
+  else if (isSuccess) {
+    // Table week edit buttons can only be visible if user has a coach login
+    content = 
+        <Container maxWidth="lg">
+        <Box sx={{ bgcolor: 'black', height: '100vh' }}>
+          <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
+            My Clients
+          </Typography> 
+          <Grid container spacing={2} sx={{ flexGrow: 1, padding: 4 }}>
+            {
+              clientsData?.map((client, index) => {
+                return(
+                  <Client key={index} data={client} />
+                )
+              })
+            }
+          </Grid>
+        </Box>
+        </Container>
+  } else if (isError) {
+    //setSnackbarMessage({ message: "Error while fetching data, please reload page!", isError: true });
+    console.log(error)
+    content = <LoadingSpinner />
   }
 
-  if (error) {
-    setSnackbarMessage(error)
-    return <CircularProgress />;
-  }
+  // UseEffect for setting store data on successful fetch
+  useEffect(() => {
+    if (isSuccess && data) {
+      // Dispatch store changes
+      dispatch(updateClientsStore({ clients: data }))
 
-  ////console.log(data)
-
-  dispatch(updateClientsStore(data))
-
-  //console.log(coachUserId)
-
-  const clientsData = data
-  //console.log(clientsData)
-
-
+    }
+  }, [isSuccess])
 
 
 
   return (
     <>
-      <TopBar title="Training cycles" />
-      <Container maxWidth="lg">
-      <Box sx={{ bgcolor: 'black', height: '100vh' }}>
-        <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
-          Hello world
-        </Typography> 
-        <Grid container spacing={2} sx={{ flexGrow: 1, padding: 4 }}>
-          {
-            clientsData.map((client, index) => {
-              return(
-                <Client key={index} data={client} />
-              )
-            })
-          }
-        </Grid>
-      </Box>
-      </Container>
+      <TopBar title="My Clients" />
+      { content }
     </>
   )
 }

@@ -11,50 +11,51 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { cyclesActions } from '../../../features/cycles/cycles-slice';
 import { useParams } from 'react-router-dom';
+import { useSnackbar } from '../SnackBarContext';
 
 const EditExerciseModal = (props) => {
-  const info = props.info;
+  // Extract props
+  const modalOpen = props.modalOpen;
+  const setModalOpen = props.setModalOpen
+  const dayIndex = props.dayIndex - 1
   const exerciseIndex = props.exerciseIndex;
 
-  const { id } = useParams()
-  // For the sake of naming the variable correctly :D
-  const urlId = id
-  const cycleData = useSelector((state) => state.cycles.cycles).find(workout => workout._id === urlId);
+  const cycleData = useSelector((state) => state.cycles.cycleData)
   const rpeCount = cycleData.weeks;
   const dispatch = useDispatch();
-  const initialValues = cycleData.days[info.dayIndex][exerciseIndex];
+  const initialValues = cycleData.days.length > dayIndex && cycleData.days[dayIndex]?.[exerciseIndex];
 
-  const [exerciseName, setExerciseName] = useState(initialValues.name);
-  const [series, setSeries] = useState(initialValues.series);
-  const [reps, setReps] = useState(initialValues.reps);
-  const [rpes, setRPEs] = useState(initialValues.rpe || Array(rpeCount).fill(''));
+  const [exerciseName, setExerciseName] = useState(initialValues?.name || '');
+  const [series, setSeries] = useState(initialValues?.series || '');
+  const [reps, setReps] = useState(initialValues?.reps || '');
+  const [rpes, setRPEs] = useState(initialValues?.rpe ? initialValues.rpe : Array(rpeCount).fill(''));
 
-  const EditExerciseModalOpen = props.editExerciseModalOpen;
-  const setEditExerciseModalOpen = props.setEditExerciseModalOpen;
+  const { setSnackbarMessage } = useSnackbar()
 
   const handleSave = () => {
     //console.log({ exerciseName, series, reps, rpes });
-    dispatch(cyclesActions.editExercise({ info, exerciseIndex, exerciseName, series, reps, rpes }));
+    dispatch(cyclesActions.editExercise({ dayIndex, exerciseIndex, exerciseName, series, reps, rpes }));
+    setSnackbarMessage({ message: "Exercise edited", isError: false });
     handleClose();
   };
 
   const handleClose = () => {
-    setEditExerciseModalOpen(false);
-    setRPEs(initialValues.rpe);
+    setModalOpen(false);
+    setRPEs(initialValues?.rpe || Array(rpeCount).fill(''));
     setReps(initialValues.reps);
     setSeries(initialValues.series);
     setExerciseName(initialValues.name);
   };
 
   useEffect(() => {
-    setRPEs(initialValues.rpe || Array(rpeCount).fill(''));
-    setReps(initialValues.reps);
-    setSeries(initialValues.series);
-    setExerciseName(initialValues.name);
-  }, [EditExerciseModalOpen]);
+    setRPEs(initialValues?.rpe || Array(rpeCount).fill(''));
+    setReps(initialValues?.reps || Array(rpeCount).fill(''));
+    setSeries(initialValues?.series || '');
+    setExerciseName(initialValues?.name || '');
+  }, [modalOpen]);
 
   return (
-    <Modal open={EditExerciseModalOpen} onClose={handleClose}>
+    <Modal open={modalOpen} onClose={handleClose}>
       <div
         style={{
           position: 'absolute',

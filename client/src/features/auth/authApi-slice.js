@@ -9,10 +9,25 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: { ...credentials }
       })
     }),
-    
+    register: builder.mutation({
+      query: credentials => ({
+        url: '/auth/register',
+        method: 'POST',
+        body: {...credentials}
+      })
+    }),
+    updateUser: builder.mutation({
+      query: credentials => ({
+        url: `users/${credentials.userid}`,
+        method: 'PATCH',
+        body: {...credentials}
+      })
+    })
   })
 })
 // query or mutation based on get / something else
 export const {
-  useLoginMutation
+  useLoginMutation,
+  useRegisterMutation,
+  useUpdateUserMutation
 } = authApiSlice

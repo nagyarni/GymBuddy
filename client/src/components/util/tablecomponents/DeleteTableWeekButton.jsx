@@ -15,21 +15,23 @@ import {
 import { useDispatch } from 'react-redux';
 import { cyclesActions } from '../../../features/cycles/cycles-slice';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useSnackbar } from '../SnackBarContext';
 
 
 function DeleteTableWeekButton(props) {
 
   const dispatch = useDispatch()
-  const cycleIndex = props.cycleIndex
   const weekIndex = props.weekIndex
   const setWeekCounter = props.setWeekCounter
   const weekCounter = props.weekCounter
   const disabled = props.disabled
   const totalWeeks = props.totalWeeks
 
+  const { setSnackbarMessage } = useSnackbar()
 
   const handleDeleteWeekClick = () => {
-    dispatch(cyclesActions.deleteWeek({cycleIndex: cycleIndex, weekIndex: weekIndex}))
+    dispatch(cyclesActions.deleteWeek({ weekIndex: weekIndex}))
+    setSnackbarMessage({ message: "Week deleted", isError: false });
     if (weekCounter === totalWeeks - 1) {
       setWeekCounter(weekCounter - 1)
     }
