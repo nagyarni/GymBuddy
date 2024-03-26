@@ -23,6 +23,7 @@ import ClientFetchWrapper from './components/client/ClientFetchWrapper'
 import CoachFetchWrapper from './components/coach/CoachFetchWrapper'
 import CyclesPageNew from './components/CyclesPageNew'
 import WorkoutTableNew from './components/WorkoutTableNew'
+import AdminPage from './components/admin/AdminPage'
 
 const darkTheme = createTheme({
   palette: {
@@ -32,6 +33,28 @@ const darkTheme = createTheme({
     },
     secondary: {
       main: '#f50057',
+    },
+    info : {
+      main: '#ce71af',
+      light: '#e6bb18',
+      dark: '#018080',
+    },
+    customColor1: {
+      main: '#ce71af',
+      contrastText: '#ffffff',
+    },
+    customColor2: {
+      main: '#e6bb18',
+      contrastText: '#ffffff',
+    },
+    customColor3: {
+      main: '#018080',
+      contrastText: '#ffffff',
+    }
+  },
+  typography: {
+    caption: {
+      fontFamily: 'Roboto',
     },
   },
 })
@@ -66,8 +89,8 @@ const router = createBrowserRouter([
     element: <ClientsPage />
   },
   {
-    path: "/test",
-    element: <FetchTesting />
+    path: "/users",
+    element: <AdminPage />
   }
 ]);
 

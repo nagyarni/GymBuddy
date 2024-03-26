@@ -22,7 +22,7 @@ export const cyclesApiSlice = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: params.cycle
       }),
-      invalidatesTags: ['CycleData']
+      invalidatesTags: ['CycleData', 'Cycles']
     }),
 
     // Cycle DELETE and POST

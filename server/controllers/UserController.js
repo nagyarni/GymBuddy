@@ -7,7 +7,29 @@ const { isClientIDValid } = require('../middleware/userTypeMiddleware');
 const UserController = {
   getAllUsers: async (req, res) => {
     try {
-      const users = await User.find().select("-password");
+      let users = await User.find().select("-password");
+
+      // Create an array to store promises
+      const populatePromises = [];
+
+      // Iterate through each user
+      for (const user of users) {
+        // Check if the user has a _coach attribute
+        if (user._coach) {
+          // Push the promise returned by populate() to the array
+          populatePromises.push(
+            user.populate({
+              path: "_coach.clients",
+              model: "User",
+            })
+          );
+        }
+      }
+
+      // Wait for all populate() promises to resolve
+      await Promise.all(populatePromises);
+
+      // Send the populated users array in the response
       res.json(users);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -189,7 +211,28 @@ const UserController = {
       }
 
       // Filter out permission change requests from newUserInfo
-      const { _admin, ...userInfo } = req.body.newUserInfo;
+      const { _admin, _client, _coach, ...userInfo } = req.body.newUserInfo;
+
+      let clientNotif = null
+      let coachNotif = null
+
+      if (_client) {
+        clientNotif = _client.emailnotif
+      }
+      if (_coach) {
+        coachNotif = _coach.emailnotif
+      }
+
+      if (clientNotif !== null) {
+        userInfo._client = user._client
+        userInfo._client.emailnotif = clientNotif
+      }
+      if (coachNotif !== null) {
+        userInfo._coach = user._coach
+        userInfo._coach.emailnotif = coachNotif
+      }
+
+      console.log(userInfo)
 
       // Assuming req.body contains the updated user information
       const updatedUser = await User.findByIdAndUpdate(req.params.id, userInfo, { new: true });

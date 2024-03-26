@@ -137,7 +137,7 @@ function WorkoutTableNew() {
                 {
                   cycleData?.days.map((day, index) => {
                     return (
-                      <TableDayNew index={index + 1} key={index} day={day} weekCounter={weekCounter} />
+                      <TableDayNew index={index + 1} key={index} day={day} weekCounter={weekCounter} active={cycleData.active} />
                     )
                   })
                 }

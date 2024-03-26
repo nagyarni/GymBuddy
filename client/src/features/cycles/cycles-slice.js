@@ -89,6 +89,22 @@ const cyclesSlice = createSlice({
         "weight": Array(rpes.length).fill(0)
       }
       state.cycleData.days[dayIndex][exerciseIndex] = modifiedExercise
+    },
+    moveExercise: (state, action) => {
+      state.unsavedChanges = true;
+      const { dayIndex, fromIndex, toIndex } = action.payload;
+      
+      // Get the array of exercises for the specified day
+      const dayExercises = state.cycleData.days[dayIndex];
+    
+      // Remove the exercise from the 'fromIndex' position
+      const [movedExercise] = dayExercises.splice(fromIndex, 1);
+    
+      // Insert the exercise at the 'toIndex' position
+      dayExercises.splice(toIndex, 0, movedExercise);
+    
+      // Update the state with the modified array of exercises
+      state.cycleData.days[dayIndex] = dayExercises;
     }
   }
 })

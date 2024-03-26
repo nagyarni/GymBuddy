@@ -7,59 +7,68 @@ import AddExerciseModal from './util/tablecomponents/AddExerciseModal'
 import EditWeightModal from './util/tablecomponents/EditWeightModal'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { cyclesActions } from '../features/cycles/cycles-slice';
 import { useSnackbar } from './util/SnackBarContext';
+import { AnimatePresence, motion } from 'framer-motion';
 
 function TableDayNew(props) {
-
   const dispatch = useDispatch()
   const { setSnackbarMessage } = useSnackbar()
 
-  // Use states for modals
   const [isFormFilled, setIsFormFilled] = useState(false);
-  const [exerciseIndex, setExerciseIndex] = useState(0); // Initialize with a default value
+  const [exerciseIndex, setExerciseIndex] = useState(0);
   const [previousWeightData, setPreviousWeightData] = useState(0);
   const [addExerciseModalOpen, setAddExerciseModalOpen] = useState(false);
   const [editExerciseModalOpen, setEditExerciseModalOpen] = useState(false);
   const [editWeightmodalOpen, setEditWeightModalOpen] = useState(false);
   const [editedWeight, setEditedWeight] = useState('')
 
-  // Get user login state
-  // If user is coach, there will be extra features on this page available
-  // to edit cycle data
   const isCoach = useSelector((state) => state.auth.isCoach)
-
-  // Extract day data from props
+  const active = props.active
   const day = props.day
   const weekCounter = props.weekCounter
   const dayIndex = props.index
 
-  // Click handlers for modals and buttons
-  const handleAddExerciseClick = (event) => {
+  const handleAddExerciseClick = () => {
     setAddExerciseModalOpen(true)
   }
+
   const handleEditExerciseClick = ({ event, exerciseIndexParam }) => {
     setExerciseIndex(exerciseIndexParam)
     setEditExerciseModalOpen(true)
   }
+
   const handleEditWeightClick = ({ event, exerciseIndexParam }) => {
     setExerciseIndex(exerciseIndexParam)
-    console.log(exerciseIndexParam)
     setEditedWeight('')
     setPreviousWeightData(day[exerciseIndexParam].weight[weekCounter])
     setEditWeightModalOpen(true)
   }
+
   const handleDeleteExerciseClick = () => {
     setSnackbarMessage({ message: "Exercise deleted", isError: false });
     dispatch(cyclesActions.deleteExercise({ dayIndex: dayIndex - 1, exerciseIndex: exerciseIndex }))
   }
+
   const handleDeleteDayClick = () => {
     setSnackbarMessage({ message: "Day deleted", isError: false });
     dispatch(cyclesActions.deleteDay({ dayIndex: dayIndex - 1 }))
   }
 
+  const handleMoveExerciseUp = ({ exerciseIndexParam }) => {
+    if (exerciseIndexParam > 0) {
+      dispatch(cyclesActions.moveExercise({ dayIndex: dayIndex - 1, fromIndex: exerciseIndexParam, toIndex: exerciseIndexParam - 1 }))
+    }
+  }
 
-  // Generate day function
+  const handleMoveExerciseDown = ({ exerciseIndexParam }) => {
+    if (exerciseIndexParam < day.length - 1) {
+      dispatch(cyclesActions.moveExercise({ dayIndex: dayIndex - 1, fromIndex: exerciseIndexParam, toIndex: exerciseIndexParam + 1 }))
+    }
+  }
+
   const generateDay = function() {
     return (day).map((exercise, index) => {
       return (
@@ -75,6 +84,12 @@ function TableDayNew(props) {
                   </IconButton>
                   <IconButton aria-label="edit" onClick={() => {handleEditExerciseClick({ exerciseIndexParam: index })}}>
                     <EditIcon />
+                  </IconButton>
+                  <IconButton aria-label="move up" onClick={() => {handleMoveExerciseUp({ exerciseIndexParam: index })}} disabled={index === 0}>
+                    <ArrowUpwardIcon />
+                  </IconButton>
+                  <IconButton aria-label="move down" onClick={() => {handleMoveExerciseDown({ exerciseIndexParam: index })}} disabled={index === day.length - 1}>
+                    <ArrowDownwardIcon />
                   </IconButton>
                 </>
                 : ""
@@ -109,20 +124,19 @@ function TableDayNew(props) {
   return (
     <>
       <TableRow>
-        <TableCell rowSpan={ isCoach ? day.length+2 : day.length+1 } >
-          { "Day " + dayIndex }
-          {
+        <TableCell rowSpan={isCoach ? day.length + 2 : day.length + 1}>
+          <Typography variant="h5" color="text.primary">{"Day " + dayIndex}</Typography>
+          {isCoach &&
             <IconButton aria-label="delete" onClick={handleDeleteDayClick}>
               <DeleteIcon />
             </IconButton>
           }
         </TableCell>
       </TableRow>
-      {
-        generateDay()
-      }
-      {
-        isCoach ? 
+      <AnimatePresence>
+      {generateDay()}
+      </AnimatePresence>
+      {isCoach &&
         <TableRow>
           <TableCell>
             <IconButton aria-label="add" onClick={handleAddExerciseClick} >
@@ -134,7 +148,6 @@ function TableDayNew(props) {
           <TableCell />
           <TableCell />
         </TableRow>
-        : ""
       }
       
       <EditWeightModal weekIndex={weekCounter} modalOpen={editWeightmodalOpen} setModalOpen={setEditWeightModalOpen} exerciseIndex={exerciseIndex} dayIndex={dayIndex} previousWeightData={previousWeightData} setPreviousWeightData={setPreviousWeightData} editedWeight={editedWeight} setEditedWeight={setEditedWeight} />

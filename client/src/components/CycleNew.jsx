@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { Card, CardActionArea, CardContent, Grid, IconButton, Typography } from '@mui/material'
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteCycleDialog from './util/DeleteCycleDialog'
+import ArchiveIcon from '@mui/icons-material/Archive';
 
 function CycleNew(props) {
 
@@ -16,6 +17,7 @@ function CycleNew(props) {
 
   // Extract cycle data from props
   const cycle = props.cycle
+  const bgcolor = cycle.active ? "success.dark" : "error.dark"
 
   // Dialog utils
   const navigate = useNavigate()
@@ -29,10 +31,15 @@ function CycleNew(props) {
     setOpen(true)
   }
 
+  const handleToggleCycleStatus = () => {
+    // Call the parent component's function to toggle the active status
+    props.onToggleCycleStatus(cycle._id, cycle.active);
+  };
+
   return (
     <>
       <Grid item xs={4}>
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 345, bgcolor: bgcolor}} >
           <CardActionArea onClick={handleCardClick}>
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
@@ -48,6 +55,9 @@ function CycleNew(props) {
               <>
                 <IconButton aria-label="delete" onClick={handleCycleDelete}>
                   <RemoveIcon />
+                </IconButton>
+                <IconButton aria-label="archive" onClick={handleToggleCycleStatus}>
+                  <ArchiveIcon />
                 </IconButton>
               </>
               : ""

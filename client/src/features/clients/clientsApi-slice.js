@@ -6,14 +6,45 @@ export const clientsApiSlice = apiSlice.injectEndpoints({
       query: params => ({
         url: `/users/${params.id}/clients`,
         method: 'GET',
-        invalidateTags: [Date.now().toString()], // Unique value to disable caching
-      })
+      }),
+      providesTags: ['AllUsers']
     }),
-
+    getAllUsers: builder.query({
+      query: params => ({
+        url: '/users',
+        method: 'GET',
+      }),
+      providesTags: ['AllUsers']
+    }),
+    deleteUserById: builder.mutation({
+      query: params => ({
+        url: `/users/${params.userid}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['AllUsers']
+    }),
+    deleteClientFromCoach: builder.mutation({
+      query: params => ({
+        url: `/users/${params.userid}/clients/${params.clientid}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['AllUsers']
+    }),
+    addClientToCoach: builder.mutation({
+      query: params => ({
+        url: `/users/${params.coachid}/clients`,
+        body: { ...params },
+        method: 'POST'
+      }),
+      invalidatesTags: ['AllUsers']
+    })
   })
 })
 // query or mutation based on get / something else
 export const {
   useGetClientsByUserIdQuery,
-
+  useGetAllUsersQuery,
+  useDeleteUserByIdMutation,
+  useDeleteClientFromCoachMutation,
+  useAddClientToCoachMutation,
 } = clientsApiSlice
