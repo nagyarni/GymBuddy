@@ -5,6 +5,7 @@ const authMiddleware = require('./middleware/authMiddleware'); // Import your au
 const userTypeMiddleware = require('./middleware/userTypeMiddleware')
 const UserController = require('./controllers/UserController'); // Import your user controller
 const CycleController = require('./controllers/CycleController'); // Import your cycle controller
+const ChatController = require('./controllers/ChatController')
 const { requestSelf, requestCoachClient, requestCoachClientOrSelf, requestAdmin } = require('./middleware/validateRequesterMiddleware')
 const { populate } = require('./schemas/User');
 
@@ -40,33 +41,37 @@ router.delete('/users/:id/clients/:clientid', authMiddleware, requestCoachClient
  */
 
 // GET Endpoints
-router.get('/users', UserController.getAllUsers);
-router.get('/users/:id', UserController.getUserById);
-router.get('/users/:id/cycles', userTypeMiddleware.userTypeClient, CycleController.getCyclesByUserId);
-router.get('/users/:id/cycles/:cycleid', userTypeMiddleware.userTypeClient, CycleController.getCycleByCycleId);
-router.get('/users/:id/clients', userTypeMiddleware.userTypeCoach, UserController.getClientsByCoachId);
+router.get('/users', authMiddleware, UserController.getAllUsers);
+router.get('/users/:id', authMiddleware, UserController.getUserById);
+router.get('/users/:id/cycles', authMiddleware, userTypeMiddleware.userTypeClient, CycleController.getCyclesByUserId);
+router.get('/users/:id/cycles/:cycleid', authMiddleware, userTypeMiddleware.userTypeClient, CycleController.getCycleByCycleId);
+router.get('/users/:id/clients', authMiddleware, userTypeMiddleware.userTypeCoach, UserController.getClientsByCoachId);
 
 // POST Endpoints
 router.post('/auth/login', UserController.login);
 router.post('/auth/register', UserController.register);
-router.post('/users/:id/cycles', (req, res, next) => userTypeMiddleware.userTypeClient(req, res, next, false), CycleController.addCycle);
+router.post('/users/:id/cycles', authMiddleware, (req, res, next) => userTypeMiddleware.userTypeClient(req, res, next, false), CycleController.addCycle);
 
 // Query param includes coachID (checked with middleware), 
 // request body includes clientID
-router.post('/users/:id/clients', (req, res, next) => userTypeMiddleware.userTypeCoach(req, res, next, false), UserController.addClient);
+router.post('/users/:id/clients', authMiddleware, (req, res, next) => userTypeMiddleware.userTypeCoach(req, res, next, false), UserController.addClient);
 
 // PATCH Endpoints
-router.patch('/users/:id/cycles/:cycleid', (req, res, next) => userTypeMiddleware.userTypeClient(req, res, next, false), CycleController.updateCycle);
-router.patch('/users/:id',  UserController.updateUser);
+router.patch('/users/:id/cycles/:cycleid', authMiddleware, (req, res, next) => userTypeMiddleware.userTypeClient(req, res, next, false), CycleController.updateCycle);
+router.patch('/users/:id', authMiddleware,  UserController.updateUser);
 
 // DELETE Endpoints
 // Delete user
-router.delete('/users/:id', UserController.deleteUser);
+router.delete('/users/:id', authMiddleware, UserController.deleteUser);
 
 // Delete cycle
-router.delete('/users/:id/cycles/:cycleid', (req, res, next) => userTypeMiddleware.userTypeClient(req, res, next, false), CycleController.deleteCycle);
+router.delete('/users/:id/cycles/:cycleid', authMiddleware, (req, res, next) => userTypeMiddleware.userTypeClient(req, res, next, false), CycleController.deleteCycle);
 
 // Delete client from coach (first id belongs to coach)
-router.delete('/users/:id/clients/:clientid', (req, res, next) => userTypeMiddleware.userTypeCoach(req, res, next, false), UserController.deleteClient);
+router.delete('/users/:id/clients/:clientid', authMiddleware, (req, res, next) => userTypeMiddleware.userTypeCoach(req, res, next, false), UserController.deleteClient);
+
+// Chat Endpoints
+router.get('/chat/:clientId/:coachId', authMiddleware, ChatController.getChatByUserIds)
+router.post('/chat/:chatId', authMiddleware, ChatController.postMessageByChatId)
 
 module.exports = router;

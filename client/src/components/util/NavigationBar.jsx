@@ -11,6 +11,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUserId, selectUserIsAdmin, selectUserIsClient, selectUserIsCoach, selectUserIsLoggedIn } from '../../features/auth/auth-slice';
+import ChatIcon from '@mui/icons-material/Chat';
 
 const NavigationBar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
@@ -21,6 +22,7 @@ const NavigationBar = () => {
   const isAdmin = useSelector((state) => (state.auth.isAdmin))
   const userId = useSelector((state) => (state.auth.user?.userId))
 
+  const coachId = useSelector((state) => (state.auth.user?.coachName?.coachId))
 
   const handleHomepageClick = (event) => (
     navigate('/')
@@ -36,6 +38,10 @@ const NavigationBar = () => {
   }
   const handleManageUsersClick = (event) => {
     navigate('/users')
+  }
+  // This method of navigation is only available to Client users, with an assigned coach
+  const handleChatClick = (event) => {
+    navigate(`/chat/${userId}/${coachId}`)
   }
 
   return (
@@ -119,6 +125,19 @@ const NavigationBar = () => {
             }
 
             <Divider />
+
+            { isClient && coachId !== 0 ?
+              <ListItem disablePadding>
+                <ListItemButton onClick={handleChatClick} disabled={!isLoggedIn}>
+                    <ListItemIcon>
+                      <ChatIcon />
+                    </ListItemIcon>
+                  <ListItemText primary={"Chat with coach"} />
+                </ListItemButton>
+              </ListItem>
+              : ""
+            }
+            
             <ListItem disablePadding>
               <ListItemButton onClick={handleMyProfileClick} disabled={!isLoggedIn}>
                 <ListItemIcon>

@@ -40,6 +40,11 @@ const cyclesSlice = createSlice({
       const { dayIndex, exerciseIndex, newWeight, weekIndex } = action.payload;
       state.cycleData.days[dayIndex][exerciseIndex].weight[weekIndex] = newWeight;
     },
+    updateExtraInfo: (state, action) => {
+      state.unsavedChanges = true
+      const { dayIndex, exerciseIndex, weekIndex, newExtraInfo } = action.payload
+      state.cycleData.days[dayIndex][exerciseIndex].extraInfo[weekIndex] = newExtraInfo
+    },
     addNewDay: (state, action) => {
       state.unsavedChanges = true
       const newDay = []
@@ -64,12 +69,18 @@ const cyclesSlice = createSlice({
     addNewExercise: (state, action) => {
       state.unsavedChanges = true
       const { exerciseName, series, reps, rpes, dayIndex  } = action.payload;
+      const extraInfoObj = {
+        series: null,
+        reps: null,
+        rpe: null
+      }
       const newExercise = {
         "name": exerciseName,
         "series": series,
         "reps": reps,
         "rpe": rpes,
-        "weight": Array(rpes.length).fill(0)
+        "weight": Array(rpes.length).fill(0),
+        "extraInfo": Array(rpes.length).fill(extraInfoObj)
       }
       state.cycleData.days[dayIndex].push(newExercise)
     },

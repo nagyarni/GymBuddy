@@ -5,7 +5,14 @@ const exerciseSchema = new mongoose.Schema({
   series: Number,
   reps: Number,
   rpe: [Number],
-  weight: [Number]
+  weight: [Number],
+  extraInfo: [
+    {
+      series: Number,
+      reps: Number,
+      rpe: Number
+    }
+  ]
 })
 
 const cycleSchema = new mongoose.Schema({

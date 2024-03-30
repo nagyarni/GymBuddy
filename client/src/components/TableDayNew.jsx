@@ -1,4 +1,4 @@
-import { IconButton, TableCell, TableRow, Typography } from '@mui/material'
+import { IconButton, TableCell, TableRow, Typography, FormControlLabel, Radio, Chip, Grid } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AddIcon from '@mui/icons-material/Add';
@@ -12,6 +12,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { cyclesActions } from '../features/cycles/cycles-slice';
 import { useSnackbar } from './util/SnackBarContext';
 import { AnimatePresence, motion } from 'framer-motion';
+import EditExtraDataModal from './util/tablecomponents/EditExtraDataModal';
 
 function TableDayNew(props) {
   const dispatch = useDispatch()
@@ -24,6 +25,8 @@ function TableDayNew(props) {
   const [editExerciseModalOpen, setEditExerciseModalOpen] = useState(false);
   const [editWeightmodalOpen, setEditWeightModalOpen] = useState(false);
   const [editedWeight, setEditedWeight] = useState('')
+  const [editExtraDataModalOpen, setEditExtraDataModalOpen] = useState(0)
+  const [oldExtraInfo, setOldExtraInfo] = useState(null)
 
   const isCoach = useSelector((state) => state.auth.isCoach)
   const active = props.active
@@ -69,68 +72,184 @@ function TableDayNew(props) {
     }
   }
 
+  // Handlers for extra info feature
+  const handleEditSeriesClick = ({ exerciseIndexParam }) => {
+    setExerciseIndex(exerciseIndexParam)
+    setOldExtraInfo(day[exerciseIndexParam].extraInfo[weekCounter])
+    setEditExtraDataModalOpen(1)
+  }
+  const handleDeleteSeriesClick = ({ exerciseIndexParam }) => {
+    const newExtraInfo = {
+      ...day[exerciseIndexParam].extraInfo[weekCounter],
+      series: null
+    }
+    dispatch(cyclesActions.updateExtraInfo({ dayIndex: dayIndex - 1, exerciseIndex: exerciseIndexParam, weekIndex: weekCounter, newExtraInfo: newExtraInfo }))
+    setSnackbarMessage({ message: "Series extra information deleted!", isError: false });
+  }
+
+  const handleEditRepsClick = ({ exerciseIndexParam }) => {
+    setExerciseIndex(exerciseIndexParam)
+    setOldExtraInfo(day[exerciseIndexParam].extraInfo[weekCounter])
+    setEditExtraDataModalOpen(2)
+  }
+  const handleDeleteRepsClick = ({ exerciseIndexParam }) => {
+    const newExtraInfo = {
+      ...day[exerciseIndexParam].extraInfo[weekCounter],
+      reps: null
+    }
+    dispatch(cyclesActions.updateExtraInfo({ dayIndex: dayIndex - 1, exerciseIndex: exerciseIndexParam, weekIndex: weekCounter, newExtraInfo: newExtraInfo }))
+    setSnackbarMessage({ message: "Reps extra information deleted!", isError: false });
+  }
+
+  const handleEditRpeClick = ({ exerciseIndexParam }) => {
+    setExerciseIndex(exerciseIndexParam)
+    setOldExtraInfo(day[exerciseIndexParam].extraInfo[weekCounter])
+    setEditExtraDataModalOpen(3)
+  }
+  const handleDeleteRpeClick = ({ exerciseIndexParam }) => {
+    const newExtraInfo = {
+      ...day[exerciseIndexParam].extraInfo[weekCounter],
+      rpe: null
+    }
+    dispatch(cyclesActions.updateExtraInfo({ dayIndex: dayIndex - 1, exerciseIndex: exerciseIndexParam, weekIndex: weekCounter, newExtraInfo: newExtraInfo }))
+    setSnackbarMessage({ message: "Rpe extra information deleted!", isError: false });
+  }
+
   const generateDay = function() {
     return (day).map((exercise, index) => {
+      const seriesExtra = exercise.extraInfo[weekCounter].series !== null;
+      const repsExtra = exercise.extraInfo[weekCounter].reps !== null;
+      const rpeExtra = exercise.extraInfo[weekCounter].rpe !== null;
+  
       return (
-        <>
-          <TableRow key={index} >
-            <TableCell>
-              <Typography variant="body1" color="text.primary">{ exercise.name }</Typography>
-              {
-                isCoach ?
-                <>
-                  <IconButton aria-label="delete" onClick={handleDeleteExerciseClick}>
-                    <DeleteIcon />
-                  </IconButton>
-                  <IconButton aria-label="edit" onClick={() => {handleEditExerciseClick({ exerciseIndexParam: index })}}>
+        <TableRow key={index}>
+          <TableCell style={{ borderRight: '1px solid #e0e0e0' }}>
+            <Typography variant="h5" color="text.primary">{ exercise.name }</Typography>
+            {isCoach &&
+              <>
+                <IconButton aria-label="delete" onClick={handleDeleteExerciseClick} color='error'>
+                  <DeleteIcon />
+                </IconButton>
+                <IconButton aria-label="edit" color='info' onClick={() => {handleEditExerciseClick({ exerciseIndexParam: index })}}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton aria-label="move up" onClick={() => {handleMoveExerciseUp({ exerciseIndexParam: index })}} disabled={index === 0}>
+                  <ArrowUpwardIcon />
+                </IconButton>
+                <IconButton aria-label="move down" onClick={() => {handleMoveExerciseDown({ exerciseIndexParam: index })}} disabled={index === day.length - 1}>
+                  <ArrowDownwardIcon />
+                </IconButton>
+              </>
+            }
+          </TableCell>
+          <TableCell style={{ borderRight: '1px solid #e0e0e0' }}>
+            <Grid container spacing={0} alignItems={'center'}>
+              <Grid item xs={6}>
+                <Typography variant="h6">{ exercise.weight[weekCounter] }</Typography>
+              </Grid>
+              {active && 
+                <Grid item xs={6}>
+                  <IconButton aria-label="edit" color='info' onClick={() => {handleEditWeightClick({ exerciseIndexParam: index })}}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton aria-label="move up" onClick={() => {handleMoveExerciseUp({ exerciseIndexParam: index })}} disabled={index === 0}>
-                    <ArrowUpwardIcon />
-                  </IconButton>
-                  <IconButton aria-label="move down" onClick={() => {handleMoveExerciseDown({ exerciseIndexParam: index })}} disabled={index === day.length - 1}>
-                    <ArrowDownwardIcon />
-                  </IconButton>
-                </>
-                : ""
+                </Grid>
               }
-            </TableCell>
-            <TableCell>
-              { exercise.weight[weekCounter] }
-            {
-              isCoach ? 
-              // Edit weight button
-              <IconButton aria-label="edit" onClick={() => {handleEditWeightClick({ exerciseIndexParam: index })}}>
-                <EditIcon />
-              </IconButton>
-              : ""
-            }
-            </TableCell>
-            <TableCell>
-              { exercise.series }
-            </TableCell>
-            <TableCell>
-              { exercise.reps }
-            </TableCell>
-            <TableCell>
-              { exercise.rpe[weekCounter] }
-            </TableCell>
-          </TableRow>
-        </>
-      )
-    })
+            </Grid>
+          </TableCell>
+          <TableCell style={{ borderRight: '1px solid #e0e0e0' }}>
+            <Grid container spacing={0}>
+              <Grid item xs={6}>
+                <Typography variant="h6" color={ seriesExtra ? '#c9335c' : 'text.primary' }>{ exercise.series }</Typography>
+              </Grid>
+              <Grid item xs={6} alignContent={'center'}>
+                { seriesExtra &&
+                  <Typography variant="h6">{ exercise.extraInfo[weekCounter].series }</Typography>
+                }
+              </Grid>
+              {active &&
+                <Grid item xs={6}>
+                  <IconButton aria-label="edit" color='info' onClick={() => {handleEditSeriesClick({ exerciseIndexParam: index })}}>
+                    <EditIcon />
+                  </IconButton>
+                </Grid>
+              }
+              {active && seriesExtra &&
+                <Grid item xs={6}>
+                  <IconButton aria-label="delete" color='warning' onClick={() => {handleDeleteSeriesClick({ exerciseIndexParam: index })}}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Grid>
+              }
+            </Grid>
+          </TableCell>
+          <TableCell style={{ borderRight: '1px solid #e0e0e0' }}>
+            <Grid container spacing={0}>
+              <Grid item xs={6}>
+                <Typography variant="h6" color={ repsExtra ? '#c9335c' : 'text.primary' }>{ exercise.reps }</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                { repsExtra &&
+                  <Typography variant="h6">{ exercise.extraInfo[weekCounter].reps }</Typography>
+                }
+              </Grid>
+              {active &&
+                <Grid item xs={6}>
+                  <IconButton aria-label="edit" color='info' onClick={() => {handleEditRepsClick({ exerciseIndexParam: index })}}>
+                    <EditIcon />
+                  </IconButton>
+                </Grid>
+              }
+              {active && repsExtra &&
+                <Grid item xs={6}>
+                  <IconButton aria-label="delete" color='warning' onClick={() => {handleDeleteRepsClick({ exerciseIndexParam: index })}}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Grid>
+              }
+            </Grid>
+          </TableCell>
+          <TableCell>
+            <Grid container spacing={0}>
+              <Grid item xs={6}>
+                <Typography variant="h6" color={ rpeExtra ? '#c9335c' : 'text.primary' }>{ exercise.rpe[weekCounter] }</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                { rpeExtra &&
+                  <Typography variant="h6">{ exercise.extraInfo[weekCounter].rpe }</Typography>
+                }
+              </Grid>
+              {active &&
+                <Grid item xs={6}>
+                  <IconButton aria-label="edit" color='info' onClick={() => {handleEditRpeClick({ exerciseIndexParam: index })}}>
+                    <EditIcon />
+                  </IconButton>
+                </Grid>
+              }
+              {active && rpeExtra &&
+                <Grid item xs={6}>
+                  <IconButton aria-label="delete" color='warning' onClick={() => {handleDeleteRpeClick({ exerciseIndexParam: index })}}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Grid>
+              }
+            </Grid>
+          </TableCell>
+        </TableRow>
+      );
+    });
   }
 
   return (
     <>
       <TableRow>
         <TableCell rowSpan={isCoach ? day.length + 2 : day.length + 1}>
-          <Typography variant="h5" color="text.primary">{"Day " + dayIndex}</Typography>
+          <Typography variant="h5" color="text.primary">{"Day " + dayIndex}
           {isCoach &&
-            <IconButton aria-label="delete" onClick={handleDeleteDayClick}>
+            <IconButton aria-label="delete" onClick={handleDeleteDayClick} color='error'>
               <DeleteIcon />
             </IconButton>
           }
+          </Typography>
         </TableCell>
       </TableRow>
       <AnimatePresence>
@@ -153,6 +272,7 @@ function TableDayNew(props) {
       <EditWeightModal weekIndex={weekCounter} modalOpen={editWeightmodalOpen} setModalOpen={setEditWeightModalOpen} exerciseIndex={exerciseIndex} dayIndex={dayIndex} previousWeightData={previousWeightData} setPreviousWeightData={setPreviousWeightData} editedWeight={editedWeight} setEditedWeight={setEditedWeight} />
       <AddExerciseModal modalOpen={addExerciseModalOpen} setModalOpen={setAddExerciseModalOpen} dayIndex={dayIndex} />
       <EditExerciseModal modalOpen={editExerciseModalOpen} setModalOpen={setEditExerciseModalOpen} dayIndex={dayIndex} exerciseIndex={exerciseIndex} />
+      <EditExtraDataModal modalOpen={editExtraDataModalOpen} setModalOpen={setEditExtraDataModalOpen} dayIndex={dayIndex} exerciseIndex={exerciseIndex} weekIndex={weekCounter} oldExtraInfo={oldExtraInfo} />
     </>
   )
 }

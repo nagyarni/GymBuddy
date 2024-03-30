@@ -132,9 +132,6 @@ const UserController = {
       // Assuming req.body contains user registration data
       const newUser = await User.create(req.body);
 
-      // Assuming you have a method to generate a JWT token
-      const token = await newUser.generateAuthToken();
-
       // Checking if data includes coachID (user has to be Client type), setting coach
       if (coachIDCheckPassed) {
         console.log(fetchedCoach)
@@ -142,6 +139,9 @@ const UserController = {
         await fetchedCoach.save()
         console.log("Registration request incluced coachID, successfully set created client to specified coach: " + fetchedCoach._id)
       }
+
+      // Assuming you have a method to generate a JWT token
+      const token = await newUser.generateAuthToken();
 
       res.json({ token });
     } catch (error) {

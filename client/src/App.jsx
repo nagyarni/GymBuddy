@@ -24,6 +24,7 @@ import CoachFetchWrapper from './components/coach/CoachFetchWrapper'
 import CyclesPageNew from './components/CyclesPageNew'
 import WorkoutTableNew from './components/WorkoutTableNew'
 import AdminPage from './components/admin/AdminPage'
+import Chat from './components/chat/Chat'
 
 const darkTheme = createTheme({
   palette: {
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
   {
     path: "/users",
     element: <AdminPage />
+  },
+  {
+    path: "/chat/:clientid/:coachid",
+    element: <Chat />
   }
 ]);
 
