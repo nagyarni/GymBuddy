@@ -92,12 +92,14 @@ const cyclesSlice = createSlice({
     editExercise: (state, action) => {
       state.unsavedChanges = true
       const { dayIndex, exerciseIndex, exerciseName, series, reps, rpes } = action.payload
+      const previousExercise = state.cycleData.days[dayIndex][exerciseIndex]
       const modifiedExercise = {
         "name": exerciseName,
         "series": series,
         "reps": reps,
         "rpe": rpes,
-        "weight": Array(rpes.length).fill(0)
+        "weight": previousExercise.weight,
+        "extraInfo": previousExercise.extraInfo
       }
       state.cycleData.days[dayIndex][exerciseIndex] = modifiedExercise
     },
@@ -126,9 +128,15 @@ export default cyclesSlice
 
 const addWeekToExercises = (days) => {
   days.map((day, index) => {
+    const extraInfoObj = {
+      series: null,
+      reps: null,
+      rpe: null
+    }
     day.forEach(exercise => {
       exercise.rpe.push(exercise.rpe[exercise.rpe.length - 1])
       exercise.weight.push(0)
+      exercise.extraInfo.push(extraInfoObj)
     });
   })
   return days
@@ -139,6 +147,7 @@ const deleteWeekToExercises = (days, weekIndex) => {
     day.forEach(exercise => {
       exercise.rpe.splice(weekIndex, 1)
       exercise.weight.splice(weekIndex, 1)
+      exercise.extraInfo.splice(weekIndex, 1)
     });
   })
   return days

@@ -10,7 +10,7 @@ const chatSchema = new mongoose.Schema({
   },
   coachId: {
     type: mongoose.SchemaTypes.ObjectId,
-    unique: true,
+    unique: false,
     required: true
   },
   messages: [
