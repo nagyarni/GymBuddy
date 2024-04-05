@@ -252,9 +252,7 @@ function TableDayNew(props) {
           </Typography>
         </TableCell>
       </TableRow>
-      <AnimatePresence>
       {generateDay()}
-      </AnimatePresence>
       {isCoach &&
         <TableRow>
           <TableCell>

@@ -16,6 +16,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddDeleteWeekConfirmationDialog from './util/tablecomponents/AddDeleteWeekConfirmationDialog'
 import DeleteIcon from '@mui/icons-material/Delete';
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import WorkoutTablePdf from './WorkoutTablePdf'
 
 function WorkoutTableNew() {
 
@@ -114,6 +116,11 @@ function WorkoutTableNew() {
           <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
             Week {weekCounter + 1}
           </Typography>
+          <PDFDownloadLink document={<WorkoutTablePdf cycleData={cycleData} />} fileName="test.pdf">
+            {({ blob, url, loading, error }) =>
+              loading ? 'Loading document...' : 'Download now!'
+            }
+          </PDFDownloadLink>
           {
             isCoach && totalWeeks !== 1 ?
             <IconButton aria-label="delete" onClick={handleDeleteWeekClick}>

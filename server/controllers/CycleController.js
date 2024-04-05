@@ -52,19 +52,116 @@ const CycleController = {
   addCycle: async (req, res) => {
     try {
       //Query the user based on query param ID
-      const user = req.user
+      const user = req.user;
       // Assuming req.body contains the cycle information
-      const cycle = await Cycle.create({ ...req.body });
-      //Update user cycles information with new cycle ID
-      user._client.cycles.push(cycle._id)
-      await user.save()
+      //const cycle = await Cycle.create({ ...req.body });
+      const exercisePerDay = parseInt(req.body.exercisePerDay);
+      const cycleLength = parseInt(req.body.cycleLength);
+      const weekLength = parseInt(req.body.weekLength);
+  
+      // Logic for randomized cycle creation
+      if (req.body.randomize) {
+        // These params need to be present
+        if (!exercisePerDay || !cycleLength || !weekLength) {
+          return res.status(400).json({ message: 'Bad data!' });
+        }
 
-      res.json(cycle);
+
+        console.log(exercisePerDay, cycleLength, weekLength)
+        console.log(Array(2).fill(0))
+        // Fetch all the exercises in every cycle of the user that is requesting
+        const userCycles = user._client.cycles;
+        const previousExercises = [];
+  
+        // Iterate through every cycle of the user
+        userCycles.forEach(cycle => {
+          // Iterate through every day
+          cycle.days.forEach(day => {
+            // Iterate through every exercise
+            day.forEach(exercise => {
+              // Add exercise to collecting array
+              previousExercises.push(exercise);
+            });
+          });
+        });
+  
+        //console.log(previousExercises);
+  
+        let randomizedContent = {
+          days: []
+        };
+        // Create a new object that will serve as the contents
+        // of the new randomized cycle document.
+        // Base parameters: ...randomizedContent
+        // randomizedContent will contain the randomly generated exercises of the cycle
+        // Steps: iterate through a loop (i < weekLength), under
+        // randomizedContent.days: add a new array element
+        for (let i = 0; i < weekLength; i++) {
+          let day = []
+          // Iterate through a loop (j < exercisePerDay), under randomizedContent.days[i] add
+          // a new object to the array, that is a randomly selected exercise from previousExercises.
+          for (let j = 0; j < exercisePerDay; j++) {
+            const randomIndex = Math.floor(Math.random() * previousExercises.length);
+            const randomExercise = previousExercises[randomIndex];
+            //console.log(randomExercise)
+            // const exercise = {
+            //   ...randomExercise,
+            //   weight: Array(cycleLength).fill(0),
+            //   rpe: randomExercise.rpe.length < cycleLength ? 
+            //     [...randomExercise.rpe, ...Array(cycleLength - randomExercise.rpe.length).fill(randomExercise.rpe.slice(-1)[0])] : 
+            //     randomExercise.rpe,
+            //   extraInfo: Array(cycleLength).fill({
+            //     series: null,
+            //     reps: null,
+            //     rpe: null
+            //   })
+            // };
+            randomExercise.weight = Array(cycleLength).fill(0)
+            randomExercise.rpe = randomExercise.rpe.length < cycleLength ? 
+              [...randomExercise.rpe, ...Array(cycleLength - randomExercise.rpe.length).fill(randomExercise.rpe.slice(-1)[0])] : 
+              randomExercise.rpe.slice(0, cycleLength);
+            randomExercise.extraInfo = Array(cycleLength).fill({
+              series: null,
+              reps: null,
+              rpe: null
+            })
+            console.log(randomExercise)
+            //randomizedContent.days[i].push(exercise);
+            day.push(randomExercise)
+          }
+          randomizedContent.days.push(day)
+        }
+        //console.log(randomizedContent);
+  
+        // Now, you can create the cycle document using the randomizedContent
+  
+        const cycle = await Cycle.create({
+          days: randomizedContent.days,
+          name: req.body.name,
+          weeks: cycleLength
+        });
+  
+        //Update user cycles information with new cycle ID
+        user._client.cycles.push(cycle._id);
+        await user.save();
+  
+        res.json(cycle);
+        //res.json({randomizedContent});
+      } else {
+        // If not randomizing, create the cycle normally
+        const cycle = await Cycle.create({ ...req.body });
+  
+        //Update user cycles information with new cycle ID
+        user._client.cycles.push(cycle._id);
+        await user.save();
+
+        res.json(cycle);
+      }
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   },
-
+  
   updateCycle: async (req, res) => {
     try {
       // Check if cycleid is a valid ID format

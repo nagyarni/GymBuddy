@@ -53,14 +53,20 @@ function CyclesPageNew() {
     setNewCycleModalOpen(true);
   };
 
-  const handleConfirmCycle = async (cycleName) => {
+  const handleConfirmCycle = async ({ cycleName, randomize, cycleLength, workoutDaysPerWeek, exercisesPerDay }) => {
     // Your logic to handle the confirmation action here
-    console.log('New cycle name:', cycleName);
+    //console.log('New cycle name:', cycleName);
     setNewCycleModalOpen(false);
     try {
       const body = {
         name: cycleName
       };
+      if (randomize) {
+        body.randomize = randomize
+        body.cycleLength = cycleLength
+        body.weekLength = workoutDaysPerWeek
+        body.exercisePerDay = exercisesPerDay
+      }
       const { data, error } = await postCycleByUserId({ id: clientid, cycle: body });
       setSnackbarMessage({ message: 'Successfully added cycle!', isError: false });
     } catch (error) {

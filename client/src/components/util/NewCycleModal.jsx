@@ -7,14 +7,30 @@ import {
   Typography,
   Container,
   Grid,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 
 function NewCycleModal({ open, onClose, onConfirm }) {
   const [cycleName, setCycleName] = useState('');
+  const [randomize, setRandomize] = useState(false);
+  const [cycleLength, setCycleLength] = useState('');
+  const [workoutDaysPerWeek, setWorkoutDaysPerWeek] = useState('');
+  const [exercisesPerDay, setExercisesPerDay] = useState('');
 
   const handleConfirm = () => {
-    onConfirm(cycleName);
+    onConfirm({
+      cycleName,
+      randomize,
+      cycleLength,
+      workoutDaysPerWeek,
+      exercisesPerDay,
+    });
     setCycleName(''); // Reset cycleName after confirming
+    setRandomize(false);
+    setCycleLength('');
+    setWorkoutDaysPerWeek('');
+    setExercisesPerDay('');
   };
 
   return (
@@ -22,6 +38,7 @@ function NewCycleModal({ open, onClose, onConfirm }) {
       <Container maxWidth="sm">
         <Box
           sx={{
+            width: 400, // Fixed width for the modal content container
             bgcolor: 'background.paper',
             boxShadow: 24,
             padding: 4,
@@ -44,6 +61,49 @@ function NewCycleModal({ open, onClose, onConfirm }) {
                 onChange={(e) => setCycleName(e.target.value)}
               />
             </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={randomize}
+                    onChange={(e) => setRandomize(e.target.checked)}
+                    name="randomize"
+                  />
+                }
+                label="Randomize Cycle"
+              />
+            </Grid>
+            {randomize && (
+              <>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Cycle Length (weeks)"
+                    value={cycleLength}
+                    onChange={(e) => setCycleLength(e.target.value)}
+                    type="number"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Workout Days Per Week"
+                    value={workoutDaysPerWeek}
+                    onChange={(e) => setWorkoutDaysPerWeek(e.target.value)}
+                    type="number"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Exercises Per Day"
+                    value={exercisesPerDay}
+                    onChange={(e) => setExercisesPerDay(e.target.value)}
+                    type="number"
+                  />
+                </Grid>
+              </>
+            )}
             <Grid item xs={6}>
               <Button variant="contained" onClick={handleConfirm} fullWidth>
                 Confirm

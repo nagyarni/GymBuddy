@@ -5,6 +5,7 @@ import RegisterPage from './components/auth/RegisterPage'
 import AccountPage from './components/auth/AccountPage'
 import {
   createBrowserRouter,
+  Navigate,
   Router,
   RouterProvider,
 } from "react-router-dom";
@@ -25,6 +26,8 @@ import CyclesPageNew from './components/CyclesPageNew'
 import WorkoutTableNew from './components/WorkoutTableNew'
 import AdminPage from './components/admin/AdminPage'
 import Chat from './components/chat/Chat'
+import { useSelector } from 'react-redux'
+import { useSnackbar } from './components/util/SnackBarContext'
 
 const darkTheme = createTheme({
   palette: {
@@ -60,6 +63,70 @@ const darkTheme = createTheme({
   },
 })
 
+
+// ProtectedRoute component to protect routes
+const ProtectedRouteClient = ({ component: Component, props }) => {
+const { setSnackbarMessage } = useSnackbar()
+const isClient = useSelector((state) => state.auth.isClient);
+
+  if (!isClient) {
+    setSnackbarMessage({ message: "Please log in before accessing this page!", isError: true });
+    return <> {Navigate({to:"/login"})} </>;
+  }
+
+  return <Component {...props} />;
+};
+
+const ProtectedRouteCoach = ({ component: Component, props }) => {
+const { setSnackbarMessage } = useSnackbar()
+const isCoach = useSelector((state) => state.auth.isCoach);
+
+  if (!isCoach) {
+    setSnackbarMessage({ message: "Please log in before accessing this page!", isError: true });
+    return <> {Navigate({to:"/login"})} </>;
+  }
+
+  return <Component {...props} />;
+};
+
+const ProtectedRouteClientOrCoach = ({ component: Component, props }) => {
+const { setSnackbarMessage } = useSnackbar()
+const isClient = useSelector((state) => state.auth.isClient);
+  const isCoach = useSelector((state) => state.auth.isCoach);
+
+  if (!isClient && !isCoach) {
+    setSnackbarMessage({ message: "Please log in before accessing this page!", isError: true });
+    return <> {Navigate({to:"/login"})} </>;
+  }
+
+  return <Component {...props} />;
+};
+
+const ProtectedRouteAdmin = ({ component: Component, props }) => {
+const { setSnackbarMessage } = useSnackbar()
+const isAdmin = useSelector((state) => state.auth.isAdmin);
+
+  if (!isAdmin) {
+    setSnackbarMessage({ message: "Please log in before accessing this page!", isError: true });
+    return <> {Navigate({to:"/login"})} </>;
+  }
+
+  return <Component {...props} />;
+};
+
+const ProtectedRouteLoggedIn = ({ component: Component, props }) => {
+const { setSnackbarMessage } = useSnackbar()
+const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  if (!isLoggedIn) {
+    setSnackbarMessage({ message: "Please log in before accessing this page!", isError: true });
+    return <> {Navigate({to:"/login"})} </>;
+  }
+
+  return <Component {...props} />;
+};
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -67,11 +134,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/:clientid/cycles",
-    element: <CyclesPageNew />,
+    element: <ProtectedRouteClientOrCoach component={CyclesPageNew} />,
   },
   {
     path: "/:clientid/cycles/:cycleid",
-    element: <WorkoutTableNew />
+    element: <ProtectedRouteClientOrCoach component={WorkoutTableNew} />
   },
   {
     path: "/login",
@@ -83,19 +150,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/account",
-    element: <AccountPage />
+    element: <ProtectedRouteLoggedIn component={AccountPage} />
   },
   {
     path: "/clients",
-    element: <ClientsPage />
+    element: <ProtectedRouteCoach component={ClientsPage} />
   },
   {
     path: "/users",
-    element: <AdminPage />
+    element: <ProtectedRouteAdmin component={AdminPage} />
   },
   {
     path: "/chat/:clientid/:coachid",
-    element: <Chat />
+    element: <ProtectedRouteClientOrCoach component={Chat} />
   }
 ]);
 

@@ -50,7 +50,7 @@ router.get('/users/:id/clients', authMiddleware, userTypeMiddleware.userTypeCoac
 // POST Endpoints
 router.post('/auth/login', UserController.login);
 router.post('/auth/register', UserController.register);
-router.post('/users/:id/cycles', authMiddleware, (req, res, next) => userTypeMiddleware.userTypeClient(req, res, next, false), CycleController.addCycle);
+router.post('/users/:id/cycles', authMiddleware, userTypeMiddleware.userTypeClient, CycleController.addCycle);
 
 // Query param includes coachID (checked with middleware), 
 // request body includes clientID
