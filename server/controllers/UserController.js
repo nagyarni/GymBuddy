@@ -3,6 +3,7 @@ const { default: mongoose } = require('mongoose');
 const User = require('../schemas/User'); // Assuming you have a User model
 const Cycle = require('../schemas/Cycle')
 const { isClientIDValid } = require('../middleware/userTypeMiddleware');
+const { sendEmail } = require('../mailer')
 
 const UserController = {
   getAllUsers: async (req, res) => {
@@ -144,6 +145,13 @@ const UserController = {
       const token = await newUser.generateAuthToken();
 
       res.json({ token });
+
+      // Send email confirmation about account creation
+      if (req.body.allowExtraEmails) {
+        sendEmail('GymBuddy Account Creation', req.body.email)
+      }
+
+
     } catch (error) {
       if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
         // Duplicate key violation for the email field
