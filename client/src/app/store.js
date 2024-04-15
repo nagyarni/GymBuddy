@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import cyclesSlice from '../features/cycles/cycles-slice'
 import unsavedChangesSlice from '../features/cycles/unsavedChanges-slice'
 import clientsSlice from '../features/clients/clients-slice'
@@ -21,5 +21,20 @@ const store = configureStore({
     getDefaultMiddleware().concat(apiSlice.middleware),
   devTools: true
 })
+
+// Create the root reducer separately so we can extract the RootState type
+const rootReducer = combineReducers({
+  cycles: cyclesSlice.reducer,
+  unsavedChanges: unsavedChangesSlice.reducer,
+  clients: clientsSlice.reducer,
+  chat: chatSlice.reducer
+})
+
+export function setupStore(preloadedState) {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState
+  })
+}
 
 export default store
