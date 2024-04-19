@@ -147,6 +147,7 @@ const UserController = {
       res.json({ token });
 
       // Send email confirmation about account creation
+      console.log(req.body.allowExtraEmails)
       if (req.body.allowExtraEmails) {
         sendEmail('GymBuddy Account Creation', req.body.email)
       }

@@ -55,7 +55,7 @@ export default function RegisterPage() {
 
     // Send register user request, save received credentials for further use and navigate to '/'
     try {
-      const userData = await register({ email, password, name, type, coachID }).unwrap()
+      const userData = await register({ email, password, name, type, coachID, allowExtraEmails }).unwrap()
       console.log(userData)
       const token = userData.token
       const decodedToken = atob(token.split('.')[1]); // Decode the Payload part

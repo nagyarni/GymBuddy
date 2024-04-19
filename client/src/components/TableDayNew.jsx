@@ -166,14 +166,14 @@ function TableDayNew(props) {
                   <Typography variant="h6">{ exercise.extraInfo[weekCounter].series }</Typography>
                 }
               </Grid>
-              {active &&
+              {active && !isCoach &&
                 <Grid item xs={6}>
                   <IconButton aria-label="edit" color='info' onClick={() => {handleEditSeriesClick({ exerciseIndexParam: index })}}>
                     <EditIcon />
                   </IconButton>
                 </Grid>
               }
-              {active && seriesExtra &&
+              {active && seriesExtra && !isCoach &&
                 <Grid item xs={6}>
                   <IconButton aria-label="delete" color='warning' onClick={() => {handleDeleteSeriesClick({ exerciseIndexParam: index })}}>
                     <DeleteIcon />
@@ -192,14 +192,14 @@ function TableDayNew(props) {
                   <Typography variant="h6">{ exercise.extraInfo[weekCounter].reps }</Typography>
                 }
               </Grid>
-              {active &&
+              {active && !isCoach &&
                 <Grid item xs={6}>
                   <IconButton aria-label="edit" color='info' onClick={() => {handleEditRepsClick({ exerciseIndexParam: index })}}>
                     <EditIcon />
                   </IconButton>
                 </Grid>
               }
-              {active && repsExtra &&
+              {active && repsExtra && !isCoach &&
                 <Grid item xs={6}>
                   <IconButton aria-label="delete" color='warning' onClick={() => {handleDeleteRepsClick({ exerciseIndexParam: index })}}>
                     <DeleteIcon />
@@ -218,14 +218,14 @@ function TableDayNew(props) {
                   <Typography variant="h6">{ exercise.extraInfo[weekCounter].rpe }</Typography>
                 }
               </Grid>
-              {active &&
+              {active && !isCoach &&
                 <Grid item xs={6}>
                   <IconButton aria-label="edit" color='info' onClick={() => {handleEditRpeClick({ exerciseIndexParam: index })}}>
                     <EditIcon />
                   </IconButton>
                 </Grid>
               }
-              {active && rpeExtra &&
+              {active && rpeExtra && !isCoach &&
                 <Grid item xs={6}>
                   <IconButton aria-label="delete" color='warning' onClick={() => {handleDeleteRpeClick({ exerciseIndexParam: index })}}>
                     <DeleteIcon />

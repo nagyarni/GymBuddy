@@ -21,7 +21,7 @@ function AccountPage() {
     isClient: useSelector((state) => state.auth.isClient),
     isCoach: useSelector((state) => state.auth.isCoach),
     isAdmin: useSelector((state) => state.auth.isAdmin),
-    coachName: useSelector((state) => state.auth.user.coachName.coachName),
+    coachName: useSelector((state) => state.auth.user.coachName?.coachName),
     coachId: useSelector((state) => state.auth.user.coachName?.coachId),
     joinDate: useSelector((state) => state.auth.user.joinDate),
     numCycles: useSelector((state) => state.auth.user.client?.cycles?.length),

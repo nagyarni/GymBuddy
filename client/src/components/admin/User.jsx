@@ -36,12 +36,17 @@ function User({ setOpenDeleteClientConfirmation, setDeleteClientId, setCoachUser
                 {isCoach && <Chip label="Coach" color="customColor1" style={{ marginRight: '8px' }} />}
                 {isAdmin && <Chip label="Admin" color="customColor2" style={{ marginRight: '8px' }} />}
               </div>
-              <Button variant="contained" color="error" sx={{ marginRight: 4 }} onClick={() => {
-                setDeleteUserId(user._id);
-                setOpenDeleteConfirmation(true);
-              }}>
-                Delete User
-              </Button>
+              {
+                !isAdmin ? 
+                <Button variant="contained" color="error" sx={{ marginRight: 4 }} onClick={() => {
+                  setDeleteUserId(user._id);
+                  setOpenDeleteConfirmation(true);
+                }}>
+                  Delete User
+                </Button>
+                : ""
+              }
+
               {isCoach && (
                 <Button variant="contained" color="customColor1" onClick={() => {
                   setCoachUserId(user._id);
