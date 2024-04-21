@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Container, MenuItem, Fab, Typography  } from '@mui/material';
-import TableDay from '../util/tablecomponents/TableDay';
+import TableDay from '../components/util/tablecomponents/TableDay';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -15,17 +15,17 @@ import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import TopBar from '../util/TopBar';
+import TopBar from '../components/util/TopBar';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import SaveIcon from '@mui/icons-material/Save';
-import { setUnsavedChanges } from '../../features/cycles/unsavedChanges-slice';
-import { cyclesActions } from '../../features/cycles/cycles-slice';
-import AddTableDayButton from '../util/tablecomponents/AddTableDayButton'
-import DeleteTableWeekButton from '../util/tablecomponents/DeleteTableWeekButton';
+import { setUnsavedChanges } from './unsavedChanges-slice';
+import { cyclesActions } from '../features/cycles/cycles-slice';
+import AddTableDayButton from '../components/util/tablecomponents/AddTableDayButton'
+import DeleteTableWeekButton from '../components/util/tablecomponents/DeleteTableWeekButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import NotLoggedInPage from '../util/tablecomponents/NotLoggedInPage';
-import SaveChangesFab from '../util/tablecomponents/SaveChangesFab';
+
+import SaveChangesFab from '../components/util/tablecomponents/SaveChangesFab';
 
 
 function WorkoutTableEditable(props) {

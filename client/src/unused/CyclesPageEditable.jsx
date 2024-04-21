@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Container, MenuItem, Fab, Typography  } from '@mui/material';
-import TableDay from '../util/tablecomponents/TableDay';
+import TableDay from '../components/util/tablecomponents/TableDay';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -14,15 +14,15 @@ import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import TopBar from '../util/TopBar';
+import TopBar from '../components/util/TopBar';
 import { useSelector } from 'react-redux';
 import Cycle from '../client/Cycle';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { CardActionArea } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { cyclesActions } from '../../features/cycles/cycles-slice';
-import NotLoggedInPage from '../util/tablecomponents/NotLoggedInPage';
+import { cyclesActions } from '../features/cycles/cycles-slice';
+
 
 function CyclesPageEditable(props) {
 

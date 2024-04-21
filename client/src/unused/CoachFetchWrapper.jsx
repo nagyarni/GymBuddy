@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Container, MenuItem, Fab, Typography, CircularProgress  } from '@mui/material';
 import { useDispatch, useSelector, useStore } from 'react-redux';
-import { useSnackbar } from '../util/SnackBarContext';
-import { useGetCyclesByUserIdQuery } from '../../features/cycles/cyclesApi-slice';
-import { cyclesActions } from '../../features/cycles/cycles-slice';
-import FetchCycles from '../util/FetchCycles';
+import { useSnackbar } from '../components/util/SnackBarContext';
+import { useGetCyclesByUserIdQuery } from '../features/cycles/cyclesApi-slice';
+import { cyclesActions } from '../features/cycles/cycles-slice';
+import FetchCycles from '../components/util/FetchCycles';
 import WorkoutTableEditable from './WorkoutTableEditable'
 import CyclesPageEditable from './CyclesPageEditable';
 import { useParams } from 'react-router-dom';

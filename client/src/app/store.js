@@ -1,6 +1,5 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import cyclesSlice from '../features/cycles/cycles-slice'
-import unsavedChangesSlice from '../features/cycles/unsavedChanges-slice'
 import clientsSlice from '../features/clients/clients-slice'
 // const applyMiddleware = redux.applyMiddleware
 // const thunkMiddleware = require('redux-thunk').default
@@ -13,7 +12,6 @@ const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
     cycles: cyclesSlice.reducer,
-    unsavedChanges: unsavedChangesSlice.reducer,
     clients: clientsSlice.reducer,
     chat: chatSlice.reducer
   },
@@ -25,7 +23,6 @@ const store = configureStore({
 // Create the root reducer separately so we can extract the RootState type
 const rootReducer = combineReducers({
   cycles: cyclesSlice.reducer,
-  unsavedChanges: unsavedChangesSlice.reducer,
   clients: clientsSlice.reducer,
   chat: chatSlice.reducer
 })

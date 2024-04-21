@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Container, MenuItem, Fab, Typography, CircularProgress  } from '@mui/material';
-import TableDay from '../util/tablecomponents/TableDay';
+import TableDay from '../components/util/tablecomponents/TableDay';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -14,12 +14,12 @@ import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import TopBar from '../util/TopBar';
+import TopBar from '../components/util/TopBar';
 import { useSelector } from 'react-redux';
 import Cycle from './Cycle';
-import NotLoggedInPage from '../util/tablecomponents/NotLoggedInPage';
-import { useSnackbar } from '../util/SnackBarContext';
-import { useGetCyclesByUserIdQuery } from '../../features/cycles/cyclesApi-slice';
+
+import { useSnackbar } from '../components/util/SnackBarContext';
+import { useGetCyclesByUserIdQuery } from '../features/cycles/cyclesApi-slice';
 
 
 function CyclesPage(props) {

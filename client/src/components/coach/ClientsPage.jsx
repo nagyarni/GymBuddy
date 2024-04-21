@@ -16,9 +16,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import TopBar from '../util/TopBar';
 import { useDispatch, useSelector } from 'react-redux';
-import Cycle from '../client/Cycle';
 import Client from './Client';
-import NotLoggedInPage from '../util/tablecomponents/NotLoggedInPage';
+
 import { clientsActions } from '../../features/clients/clients-slice';
 import { useGetClientsByUserIdQuery } from '../../features/clients/clientsApi-slice';
 import { useSnackbar } from '../util/SnackBarContext';

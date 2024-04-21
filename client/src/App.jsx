@@ -14,14 +14,7 @@ import TopBar from './components/util/TopBar';
 import HomeScreen from './components/HomeScreen';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import CyclesPage from './components/client/CyclesPage';
-import WorkoutTable from './components/client/WorkoutTable';
-import CyclesPageEditable from './components/coach/CyclesPageEditable';
-import WorkoutTableEditable from './components/coach/WorkoutTableEditable'
 import ClientsPage from './components/coach/ClientsPage'
-import FetchTesting from './components/util/FetchTesting'
-import ClientFetchWrapper from './components/client/ClientFetchWrapper'
-import CoachFetchWrapper from './components/coach/CoachFetchWrapper'
 import CyclesPageNew from './components/CyclesPageNew'
 import WorkoutTableNew from './components/WorkoutTableNew'
 import AdminPage from './components/admin/AdminPage'

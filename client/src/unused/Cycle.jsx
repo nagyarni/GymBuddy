@@ -13,14 +13,14 @@ import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import TopBar from '../util/TopBar';
+import TopBar from '../components/util/TopBar';
 import { useSelector } from 'react-redux';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { CardActionArea, IconButton } from '@mui/material';
 import { Navigate, useNavigate } from 'react-router-dom';
 import RemoveIcon from '@mui/icons-material/Remove';
-import DeleteCycleDialog from '../util/DeleteCycleDialog'
+import DeleteCycleDialog from '../components/util/DeleteCycleDialog'
 
 
 function Cycle(props) {

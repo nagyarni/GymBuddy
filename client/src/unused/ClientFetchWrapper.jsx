@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Container, MenuItem, Fab, Typography, CircularProgress  } from '@mui/material';
 import { useDispatch, useSelector, useStore } from 'react-redux';
-import { useSnackbar } from '../util/SnackBarContext';
-import { useGetCyclesByUserIdQuery } from '../../features/cycles/cyclesApi-slice';
-import { cyclesActions } from '../../features/cycles/cycles-slice';
-import FetchCycles from '../util/FetchCycles';
-import WorkoutTable from './WorkoutTable'
-import CyclesPage from './CyclesPage';
+import { useSnackbar } from '../components/util/SnackBarContext';
+import { useGetCyclesByUserIdQuery } from '../features/cycles/cyclesApi-slice';
+import { cyclesActions } from '../features/cycles/cycles-slice';
+import FetchCycles from '../components/util/FetchCycles';
+import WorkoutTable from '../components/client/WorkoutTable'
+import CyclesPage from '../components/client/CyclesPage';
 
 
 function ClientFetchWrapper(props) {
