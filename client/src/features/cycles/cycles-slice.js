@@ -135,6 +135,8 @@ const addWeekToExercises = (days) => {
     }
     day.forEach(exercise => {
       exercise.rpe.push(exercise.rpe[exercise.rpe.length - 1])
+      exercise.series.push(exercise.series[exercise.series.length - 1])
+      exercise.reps.push(exercise.reps[exercise.reps.length - 1])
       exercise.weight.push(0)
       exercise.extraInfo.push(extraInfoObj)
     });
@@ -146,6 +148,8 @@ const deleteWeekToExercises = (days, weekIndex) => {
   days.map((day, index) => {
     day.forEach(exercise => {
       exercise.rpe.splice(weekIndex, 1)
+      exercise.series.splice(weekIndex, 1)
+      exercise.reps.splice(weekIndex, 1)
       exercise.weight.splice(weekIndex, 1)
       exercise.extraInfo.splice(weekIndex, 1)
     });

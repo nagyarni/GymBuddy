@@ -122,7 +122,7 @@ function WorkoutTableNew() {
             }
           </PDFDownloadLink>
           {
-            isCoach && totalWeeks !== 1 ?
+            isCoach && cycleData?.active && totalWeeks !== 1 ?
             <IconButton aria-label="delete" onClick={handleDeleteWeekClick}>
               <DeleteIcon />
             </IconButton>
@@ -149,7 +149,7 @@ function WorkoutTableNew() {
                   })
                 }
                 {
-                  numOfDays < 7 && isCoach ? 
+                  numOfDays < 7 && isCoach && cycleData?.active ? 
                      <AddTableDayButton />
                   : ""
                 }
@@ -175,7 +175,7 @@ function WorkoutTableNew() {
             </Grid>
             <Grid item xs={3}>
               {
-                isRightButtonDisabled && isCoach ?
+                isRightButtonDisabled && isCoach && cycleData?.active ?
                   <Fab color='success' aria-label='add' onClick={handleAddWeekClick}>
                     <AddCircleOutlineIcon />
                   </Fab>

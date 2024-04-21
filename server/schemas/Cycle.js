@@ -2,8 +2,8 @@ const { default: mongoose } = require("mongoose");
 
 const exerciseSchema = new mongoose.Schema({
   name: String,
-  series: Number,
-  reps: Number,
+  series: [Number],
+  reps: [Number],
   rpe: [Number],
   weight: [Number],
   extraInfo: [

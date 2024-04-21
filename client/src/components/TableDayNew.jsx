@@ -1,4 +1,4 @@
-import { IconButton, TableCell, TableRow, Typography, FormControlLabel, Radio, Chip, Grid } from '@mui/material'
+import { IconButton, TableCell, TableRow, Typography, FormControlLabel, Radio, Chip, Grid, Tooltip } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AddIcon from '@mui/icons-material/Add';
@@ -13,6 +13,7 @@ import { cyclesActions } from '../features/cycles/cycles-slice';
 import { useSnackbar } from './util/SnackBarContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import EditExtraDataModal from './util/tablecomponents/EditExtraDataModal';
+import EditCoachDataModal from './util/tablecomponents/EditCoachDataModal';
 
 function TableDayNew(props) {
   const dispatch = useDispatch()
@@ -27,6 +28,8 @@ function TableDayNew(props) {
   const [editedWeight, setEditedWeight] = useState('')
   const [editExtraDataModalOpen, setEditExtraDataModalOpen] = useState(0)
   const [oldExtraInfo, setOldExtraInfo] = useState(null)
+  const [editCoachDataModalOpen, setEditCoachDataModalOpen] = useState(0)
+  const [oldExerciseInfo, setOldExerciseInfo] = useState(null)
 
   const isCoach = useSelector((state) => state.auth.isCoach)
   const active = props.active
@@ -115,6 +118,23 @@ function TableDayNew(props) {
     setSnackbarMessage({ message: "Rpe extra information deleted!", isError: false });
   }
 
+  // Handle coach info edit functions
+  const handleEditSeriesClickCoach = ({ exerciseIndexParam }) => {
+    setExerciseIndex(exerciseIndexParam)
+    setOldExerciseInfo(day[exerciseIndexParam])
+    setEditCoachDataModalOpen(1)
+  }
+  const handleEditRepsClickCoach = ({ exerciseIndexParam }) => {
+    setExerciseIndex(exerciseIndexParam)
+    setOldExerciseInfo(day[exerciseIndexParam])
+    setEditCoachDataModalOpen(2)
+  }
+  const handleEditRpeClickCoach = ({ exerciseIndexParam }) => {
+    setExerciseIndex(exerciseIndexParam)
+    setOldExerciseInfo(day[exerciseIndexParam])
+    setEditCoachDataModalOpen(3)
+  }
+
   const generateDay = function() {
     return (day).map((exercise, index) => {
       const seriesExtra = exercise.extraInfo[weekCounter].series !== null;
@@ -125,7 +145,7 @@ function TableDayNew(props) {
         <TableRow key={index}>
           <TableCell style={{ borderRight: '1px solid #e0e0e0' }}>
             <Typography variant="h5" color="text.primary">{ exercise.name }</Typography>
-            {isCoach &&
+            {isCoach && active &&
               <>
                 <IconButton aria-label="delete" onClick={handleDeleteExerciseClick} color='error'>
                   <DeleteIcon />
@@ -159,7 +179,7 @@ function TableDayNew(props) {
           <TableCell style={{ borderRight: '1px solid #e0e0e0' }}>
             <Grid container spacing={0}>
               <Grid item xs={6}>
-                <Typography variant="h6" color={ seriesExtra ? '#c9335c' : 'text.primary' }>{ exercise.series }</Typography>
+                <Typography variant="h6" color={ seriesExtra ? '#c9335c' : 'text.primary' }>{ exercise.series[weekCounter] }</Typography>
               </Grid>
               <Grid item xs={6} alignContent={'center'}>
                 { seriesExtra &&
@@ -168,9 +188,21 @@ function TableDayNew(props) {
               </Grid>
               {active && !isCoach &&
                 <Grid item xs={6}>
-                  <IconButton aria-label="edit" color='info' onClick={() => {handleEditSeriesClick({ exerciseIndexParam: index })}}>
-                    <EditIcon />
-                  </IconButton>
+                  <Tooltip title="Edit completed series value for current week">
+                    <IconButton aria-label="edit" color='info' onClick={() => {handleEditSeriesClick({ exerciseIndexParam: index })}}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+              }
+              {
+                active && isCoach &&
+                <Grid item xs={6}>
+                  <Tooltip title="Edit series value for current week">
+                    <IconButton aria-label="edit" color='info' onClick={() => {handleEditSeriesClickCoach({ exerciseIndexParam: index })}}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
               }
               {active && seriesExtra && !isCoach &&
@@ -185,18 +217,30 @@ function TableDayNew(props) {
           <TableCell style={{ borderRight: '1px solid #e0e0e0' }}>
             <Grid container spacing={0}>
               <Grid item xs={6}>
-                <Typography variant="h6" color={ repsExtra ? '#c9335c' : 'text.primary' }>{ exercise.reps }</Typography>
+                <Typography variant="h6" color={ repsExtra ? '#c9335c' : 'text.primary' }>{ exercise.reps[weekCounter] }</Typography>
               </Grid>
               <Grid item xs={6}>
                 { repsExtra &&
                   <Typography variant="h6">{ exercise.extraInfo[weekCounter].reps }</Typography>
                 }
               </Grid>
+              {
+                active && isCoach &&
+                <Grid item xs={6}>
+                  <Tooltip title="Edit reps value for current week">
+                    <IconButton aria-label="edit" color='info' onClick={() => {handleEditRepsClickCoach({ exerciseIndexParam: index })}}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+              }
               {active && !isCoach &&
                 <Grid item xs={6}>
-                  <IconButton aria-label="edit" color='info' onClick={() => {handleEditRepsClick({ exerciseIndexParam: index })}}>
-                    <EditIcon />
-                  </IconButton>
+                  <Tooltip title="Edit completed reps value for current week">
+                    <IconButton aria-label="edit" color='info' onClick={() => {handleEditRepsClick({ exerciseIndexParam: index })}}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
               }
               {active && repsExtra && !isCoach &&
@@ -220,9 +264,21 @@ function TableDayNew(props) {
               </Grid>
               {active && !isCoach &&
                 <Grid item xs={6}>
-                  <IconButton aria-label="edit" color='info' onClick={() => {handleEditRpeClick({ exerciseIndexParam: index })}}>
-                    <EditIcon />
-                  </IconButton>
+                  <Tooltip title="Edit completed rpe value for current week">
+                    <IconButton aria-label="edit" color='info' onClick={() => {handleEditRpeClick({ exerciseIndexParam: index })}}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+              }
+              {
+                active && isCoach &&
+                <Grid item xs={6}>
+                  <Tooltip title="Edit rpe value for current week">
+                    <IconButton aria-label="edit" color='info' onClick={() => {handleEditRpeClickCoach({ exerciseIndexParam: index })}}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
               }
               {active && rpeExtra && !isCoach &&
@@ -242,9 +298,9 @@ function TableDayNew(props) {
   return (
     <>
       <TableRow>
-        <TableCell rowSpan={isCoach ? day.length + 2 : day.length + 1}>
+        <TableCell rowSpan={isCoach && active ? day.length + 2 : day.length + 1}>
           <Typography variant="h5" color="text.primary">{"Day " + dayIndex}
-          {isCoach &&
+          {isCoach && active &&
             <IconButton aria-label="delete" onClick={handleDeleteDayClick} color='error'>
               <DeleteIcon />
             </IconButton>
@@ -253,7 +309,7 @@ function TableDayNew(props) {
         </TableCell>
       </TableRow>
       {generateDay()}
-      {isCoach &&
+      {isCoach && active &&
         <TableRow>
           <TableCell>
             <IconButton aria-label="add" onClick={handleAddExerciseClick} >
@@ -271,6 +327,7 @@ function TableDayNew(props) {
       <AddExerciseModal modalOpen={addExerciseModalOpen} setModalOpen={setAddExerciseModalOpen} dayIndex={dayIndex} />
       <EditExerciseModal modalOpen={editExerciseModalOpen} setModalOpen={setEditExerciseModalOpen} dayIndex={dayIndex} exerciseIndex={exerciseIndex} />
       <EditExtraDataModal modalOpen={editExtraDataModalOpen} setModalOpen={setEditExtraDataModalOpen} dayIndex={dayIndex} exerciseIndex={exerciseIndex} weekIndex={weekCounter} oldExtraInfo={oldExtraInfo} />
+      <EditCoachDataModal modalOpen={editCoachDataModalOpen} setModalOpen={setEditCoachDataModalOpen} dayIndex={dayIndex} exerciseIndex={exerciseIndex} weekIndex={weekCounter} oldExerciseInfo={oldExerciseInfo}/>
     </>
   )
 }
