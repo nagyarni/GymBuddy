@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useSnackbar } from './util/SnackBarContext'
 import { useSelector } from 'react-redux'
 import { Card, CardActionArea, CardContent, Grid, IconButton, Typography } from '@mui/material'
-import RemoveIcon from '@mui/icons-material/Remove';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteCycleDialog from './util/DeleteCycleDialog'
 import ArchiveIcon from '@mui/icons-material/Archive';
 
@@ -36,9 +36,15 @@ function CycleNew(props) {
     props.onToggleCycleStatus(cycle._id, cycle.active);
   };
 
+  const readableDate = new Date(cycle.createdAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
   return (
     <>
-      <Grid item xs={4}>
+      <Grid item xs={12}>
         <Card sx={{ maxWidth: 345, bgcolor: bgcolor}} >
           <CardActionArea onClick={handleCardClick}>
             <CardContent>
@@ -46,7 +52,7 @@ function CycleNew(props) {
                 { cycle.name }
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                { cycle.createdAt }
+                { readableDate }
               </Typography>
             </CardContent>
           </CardActionArea>
@@ -54,7 +60,7 @@ function CycleNew(props) {
             isCoach ?
               <>
                 <IconButton aria-label="delete" onClick={handleCycleDelete}>
-                  <RemoveIcon />
+                  <DeleteIcon />
                 </IconButton>
                 <IconButton aria-label="archive" onClick={handleToggleCycleStatus}>
                   <ArchiveIcon />

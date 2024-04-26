@@ -21,6 +21,7 @@ import { CardActionArea, IconButton } from '@mui/material';
 import { Navigate, useNavigate } from 'react-router-dom';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteCycleDialog from '../components/util/DeleteCycleDialog'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 function Cycle(props) {
@@ -60,7 +61,7 @@ function Cycle(props) {
             props.removable ?
               <>
                 <IconButton aria-label="delete" onClick={handleCycleDelete}>
-                  <RemoveIcon />
+                  <DeleteIcon />
                 </IconButton>
               </>
               : ""

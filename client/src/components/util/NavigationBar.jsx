@@ -143,7 +143,7 @@ const NavigationBar = () => {
                 <ListItemIcon>
                   <AccountBoxIcon />
                 </ListItemIcon>
-              <ListItemText primary={"My Profile"} />
+              <ListItemText primary={"Account"} />
               </ListItemButton>
             </ListItem>
           </List>

@@ -31,7 +31,7 @@ const darkTheme = createTheme({
     secondary: {
       main: '#f50057',
     },
-    info : {
+    info: {
       main: '#ce71af',
       light: '#e6bb18',
       dark: '#018080',
@@ -49,12 +49,8 @@ const darkTheme = createTheme({
       contrastText: '#ffffff',
     }
   },
-  typography: {
-    caption: {
-      fontFamily: 'Roboto',
-    },
-  },
-})
+});
+
 
 
 // ProtectedRoute component to protect routes

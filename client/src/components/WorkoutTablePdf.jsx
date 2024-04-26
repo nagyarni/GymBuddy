@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   rpeText: {
     fontSize: 10,
-    letterSpacing: 4,
+    wordSpacing: 4, // Adjust word spacing
     textAlign: 'center', // Center align RPE text
   }
 });
@@ -79,10 +79,14 @@ const WorkoutTablePdf = ({ cycleData }) => {
                   </Text>
                 }
                 <Text style={[styles.tableCell, styles.bodyText]}>{exercise.name}</Text>
-                <Text style={[styles.tableCell, styles.bodyText]}>{/* Blank cell for weight */}</Text>
-                <Text style={[styles.tableCell, styles.bodyText]}>{exercise.series}</Text>
-                <Text style={[styles.tableCell, styles.bodyText]}>{exercise.reps}</Text>
-                <Text style={[styles.tableCell, styles.rpeText]}>{exercise.rpe}</Text>
+                {parseInt(exercise.weight) !== 0 ? (
+                  <Text style={[styles.tableCell, styles.rpeText]}>{exercise.series.toString().split('')}</Text>
+                )
+                : <Text style={[styles.tableCell, styles.rpeText]}></Text>
+                }
+                <Text style={[styles.tableCell, styles.rpeText]}>{exercise.series.toString().split('')}</Text>
+                <Text style={[styles.tableCell, styles.rpeText]}>{exercise.reps.toString().split('')}</Text>
+                <Text style={[styles.tableCell, styles.rpeText]}>{exercise.rpe.toString().split('')}</Text>
               </View>
             ))
           ))}

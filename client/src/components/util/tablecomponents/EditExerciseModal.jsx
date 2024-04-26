@@ -25,20 +25,20 @@ const EditExerciseModal = (props) => {
   const cycleData = useSelector((state) => state.cycles.cycleData);
   const rpeCount = cycleData.weeks;
   const dispatch = useDispatch();
-  const initialValues =
-    cycleData.days.length > dayIndex && cycleData.days[dayIndex]?.[exerciseIndex];
+  const initialValues = cycleData.days[dayIndex]?.[exerciseIndex]
+
+  console.log(initialValues)
 
   const [exerciseName, setExerciseName] = useState(initialValues?.name || '');
   const [series, setSeries] = useState(
-    initialValues?.series ? initialValues.series : Array(rpeCount).fill('')
+    initialValues?.series ? initialValues.series : Array(rpeCount).fill(0)
   );
   const [reps, setReps] = useState(
-    initialValues?.reps ? initialValues.reps : Array(rpeCount).fill('')
+    initialValues?.reps ? initialValues.reps : Array(rpeCount).fill(0)
   );
   const [rpes, setRPEs] = useState(
-    initialValues?.rpe ? initialValues.rpe : Array(rpeCount).fill('')
+    initialValues?.rpe ? initialValues.rpe : Array(rpeCount).fill(0)
   );
-
   const [perWeekInput, setPerWeekInput] = useState(false); // State for per-week input toggle
 
   const { setSnackbarMessage } = useSnackbar();
@@ -62,14 +62,14 @@ const EditExerciseModal = (props) => {
     setModalOpen(false);
     setRPEs(initialValues?.rpe || Array(rpeCount).fill(''));
     setReps(initialValues?.reps || Array(rpeCount).fill(''));
-    setSeries(initialValues?.series || '');
+    setSeries(initialValues?.series || Array(rpeCount).fill(''));
     setExerciseName(initialValues?.name || '');
   };
 
   useEffect(() => {
     setRPEs(initialValues?.rpe || Array(rpeCount).fill(''));
     setReps(initialValues?.reps || Array(rpeCount).fill(''));
-    setSeries(initialValues?.series || '');
+    setSeries(initialValues?.series || Array(rpeCount).fill(''));
     setExerciseName(initialValues?.name || '');
   }, [modalOpen]);
 
@@ -84,6 +84,8 @@ const EditExerciseModal = (props) => {
           backgroundColor: '#1e1e1e',
           padding: '20px',
           borderRadius: '8px',
+          maxHeight: '80vh', // Set maximum height
+          overflowY: 'auto', // Enable vertical scrolling
         }}
       >
         <h2>Edit Exercise</h2>
@@ -97,7 +99,7 @@ const EditExerciseModal = (props) => {
           />
           <Grid container spacing={2}>
             {series.map((serie, index) => (
-              <Grid item xs={4} key={index} style={{ paddingRight: '10px' }}>
+              <Grid item sm={12} md={rpeCount === 1 ? 12 : rpeCount === 2 ? 6 : 4} key={index} style={{ paddingRight: '10px' }}>
                 <TextField
                   type="number"
                   label={`Series Week ${index + 1}`}
@@ -115,7 +117,7 @@ const EditExerciseModal = (props) => {
           </Grid>
           <Grid container spacing={2} style={{ marginTop: '10px' }}>
             {reps.map((rep, index) => (
-              <Grid item xs={4} key={index} style={{ paddingRight: '10px' }}>
+              <Grid item sm={12} md={rpeCount === 1 ? 12 : rpeCount === 2 ? 6 : 4} key={index} style={{ paddingRight: '10px' }}>
                 <TextField
                   type="number"
                   label={`Reps Week ${index + 1}`}
@@ -133,7 +135,7 @@ const EditExerciseModal = (props) => {
           </Grid>
           <Grid container spacing={2} style={{ marginTop: '10px' }}>
             {Array.from({ length: rpeCount }, (_, index) => (
-              <Grid item xs={4} key={index} style={{ paddingRight: '10px' }}>
+              <Grid item xs={12} sm={12} md={rpeCount === 1 ? 12 : rpeCount === 2 ? 6 : 4} key={index} style={{ paddingRight: '10px' }}>
                 <FormControl fullWidth margin="normal">
                   <InputLabel>RPE Week {index + 1}</InputLabel>
                   {rpes[index] !== undefined && (
@@ -158,11 +160,6 @@ const EditExerciseModal = (props) => {
               </Grid>
             ))}
           </Grid>
-          <Checkbox
-            checked={perWeekInput}
-            onChange={(e) => setPerWeekInput(e.target.checked)}
-          />
-          Use per-week inputs
           <Button variant="contained" color="primary" onClick={handleSave}>
             Save
           </Button>

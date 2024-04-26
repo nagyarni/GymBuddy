@@ -19,43 +19,37 @@ import {
   Container,
   Divider,
   Grid,
-  Typography
+  Typography,
+  useMediaQuery
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import NewCycleModal from './util/NewCycleModal';
+import { useTheme } from '@emotion/react';
 
 function CyclesPageNew() {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   const dispatch = useDispatch();
 
-  // Get user login state
-  // If user is coach, there will be extra features on this page available
-  // to edit cycle data
   const isCoach = useSelector((state) => state.auth.isCoach);
 
-  // useState hook for modal
   const [isNewCycleModalOpen, setNewCycleModalOpen] = useState(false);
 
-  // Using Post cycle mutation
   const [postCycleByUserId, postCycleByUserIdResult] = usePostCycleByUserIdMutation();
 
-  // Using Patch cycle mutation
   const [patchCycleByUserIdAndCycleId, patchCycleByUserIdAndCycleIdResult] =
     usePatchCycleByUserIdAndCycleIdMutation();
 
-  // Get userId from url
   const { clientid } = useParams();
 
-  // Snackbar message hook
   const { setSnackbarMessage } = useSnackbar();
 
-  // Add cycle click handler
   const handleAddCycleClick = () => {
     setNewCycleModalOpen(true);
   };
 
   const handleConfirmCycle = async ({ cycleName, randomize, cycleLength, workoutDaysPerWeek, exercisesPerDay }) => {
-    // Your logic to handle the confirmation action here
-    //console.log('New cycle name:', cycleName);
     setNewCycleModalOpen(false);
     try {
       const body = {
@@ -78,7 +72,6 @@ function CyclesPageNew() {
 
   const handleToggleCycleStatus = async (cycleId, active) => {
     try {
-      // Invert the active status
       const updatedStatus = {
         active: !active
       };
@@ -96,7 +89,6 @@ function CyclesPageNew() {
     }
   };
 
-  // Call API fetch hook to get client info
   const { data, isLoading, isSuccess, isError, error } = useGetCyclesByUserIdQuery({ id: clientid });
 
   let content;
@@ -108,7 +100,15 @@ function CyclesPageNew() {
     topBarTitle = data.userName + "'s Cycles";
     content = (
       <>
-        <Container maxWidth="lg">
+        <Container
+          maxWidth="lg"
+          sx={{
+            width: isSmallScreen ? '100%' : 'auto', // Fill the width on small screens, otherwise auto
+            marginLeft: isSmallScreen ? 0 : 'auto', // Center horizontally on non-small screens
+            marginRight: isSmallScreen ? 0 : 'auto', // Center horizontally on non-small screens
+            paddingLeft: isSmallScreen ? 0 : theme.spacing(2), // Remove left padding on small screens
+            paddingRight: isSmallScreen ? 0 : theme.spacing(2), // Remove right padding on small screens
+          }}>
           <Box sx={{ bgcolor: 'black', height: '100vh' }}>
             <Typography variant="h3" color="text" textAlign={'center'} padding={2}>
               Cycles
@@ -118,15 +118,15 @@ function CyclesPageNew() {
               </Typography>
             <Divider sx={{ margin: 2 }} />
             <Grid container spacing={2} sx={{ flexGrow: 1, padding: 4 }}>
-              {/* Active Cycles */}
               {data.cycles
-                .filter((cycle) => cycle.active) // Filter active cycles
+                .filter((cycle) => cycle.active)
                 .map((cycle, index) => (
-                  <CycleNew cycle={cycle} key={index} onToggleCycleStatus={handleToggleCycleStatus} />
+                  <Grid item key={index} xs={12} sm={4}> {/* Only one item per row on small screens */}
+                    <CycleNew cycle={cycle} onToggleCycleStatus={handleToggleCycleStatus} />
+                  </Grid>
                 ))}
-              {/* Add new cycle button area */}
               {isCoach && (
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={4}> {/* Adjust the column size for larger screens */}
                   <Card sx={{ bgcolor: 'primary.dark', color: 'primary.contrastText', maxWidth: 345 }}>
                     <CardActionArea onClick={handleAddCycleClick}>
                       <CardContent>
@@ -142,11 +142,12 @@ function CyclesPageNew() {
             </Typography>
             <Divider sx={{ margin: 2 }} />
             <Grid container spacing={2} sx={{ flexGrow: 1, padding: 4 }}>
-              {/* Inactive Cycles */}
               {data.cycles
-                .filter((cycle) => !cycle.active) // Filter inactive cycles
+                .filter((cycle) => !cycle.active)
                 .map((cycle, index) => (
-                  <CycleNew cycle={cycle} key={index} onToggleCycleStatus={handleToggleCycleStatus} />
+                  <Grid item key={index} xs={12} sm={4}> {/* Only one item per row on small screens */}
+                    <CycleNew cycle={cycle} onToggleCycleStatus={handleToggleCycleStatus} />
+                  </Grid>
                 ))}
               {!isCoach && data.cycles.length === 0 && (
                 <Grid item xs={12}>

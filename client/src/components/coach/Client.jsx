@@ -41,7 +41,7 @@ function Client(props) {
   }
 
   return (
-    <Grid item xs={4}>
+    <Grid item xs={12} sm={4}>
         <Card sx={{ maxWidth: 345 }}>
           <CardActionArea onClick={handleCardClick}>
             <CardContent>
