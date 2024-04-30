@@ -230,7 +230,11 @@ A \ref{fig:clientspage} ábrán megjelenő oldalon edző felhasználóknak a kli
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{clientpage}
+	\subcaptionbox{Listázó oldal}{
+		\includegraphics[width=1\linewidth]{clientpage}}
+	\hspace{5pt}
+	\subcaptionbox{Ciklus hozzáadása űrlap}{
+		\includegraphics[width=0.45\linewidth]{randomcycle}}
 	\caption{Kliens ciklusainak listázó oldala (edző)}
 	\label{fig:clientpage}
 \end{figure}
@@ -238,6 +242,8 @@ A \ref{fig:clientspage} ábrán megjelenő oldalon edző felhasználóknak a kli
 Adott kliensünknek a ciklusait megtekinteni, módosítani, törölni, aktív státuszát megváltoztatni, illetve új ciklust létrehozni a \ref{fig:clientpage} ábrán lévő oldalon tudunk. Az oldal felépítése hasonló a kliens nézethez (\ref{fig:cyclesclient}), egy cellára kattintva szintén az adott ciklust tudjuk megtekinteni.
 
 Ha ciklust szeretnénk törölni, a törlés gomb megnyomása után egy felugró ablakban a jóváhagyást követően a ciklus maradandóan törölve lesz az adatbázisból. Az archiválás ikonra kattintva pedig az aktív ciklust inaktívvá, az inaktívat aktívvá tudjuk tenni.
+
+Új ciklus hozzáadása a kék háttérszínű plusz gombbal lehetséges. Ilyenkor megjelenik egy űrlap a képernyőn, ahol válaszhatunk nevet a ciklusnak, illetve opcionálisan tudunk véletlenszerűen generálni a már megírt programok gyakorlatai közül (\ref{fig:clientpage} ábra). Meg kell ilyenkor adnunk, hogy hány hetes legyen a program, mennyi edzésnap legyen hetente, illetve hány darab gyakorlatot szeretnénk naponta.
 
 \subsection{Ciklus/edzésterv oldal (edző)}
 
@@ -325,5 +331,176 @@ A fenti \ref{fig:manageusers} ábrán az adminisztrátor felület látható. Ez 
 
 A program használata során számos üzenet megjelenhet. Közöttük vannak hibaüzenetek, és visszaigazolás jellegűek. Típustól függetlenül az oldal bal alsó sarkában láthatóak, zöld vagy piros színnel, rendre ha visszaigazolás vagy hiba jellegűek.
 
-\subsection{Tájékoztató üzenetek}
+\subsection{Visszaigazoló üzenetek}
 
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{deleteclient}
+			\caption{Kliens törlése}
+			\label{fig:deleteclient}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{addclient}
+			\caption{Kliens hozzáadása}
+			\label{fig:addclient}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{deleteuser}
+			\caption{Kliens törlése}
+			\label{fig:deleteuser}
+	\end{subfigure}
+	
+	\medskip
+	
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{weekdelete}
+			\caption{Hét törlése}
+			\label{fig:weekdelete}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{exerciseedit}
+			\caption{Gyakorlat módosítása}
+			\label{fig:exerciseedit}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{exercisedelete}
+			\caption{Gyakorlat törlése}
+			\label{fig:exercisedelete}
+	\end{subfigure}
+	
+	\medskip
+	
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{exerciseadd}
+			\caption{Új gyakorlat hozzáadása}
+			\label{fig:exerciseadd}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{deleteday}
+			\caption{Nap törlése}
+			\label{fig:deleteday}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{adday}
+			\caption{Nap hozzáadása}
+			\label{fig:adday}
+	\end{subfigure}
+	
+	\medskip
+	
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{cycledeactivate}
+			\caption{Ciklus deaktiválása}
+			\label{fig:cycledeactivate}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{cycleactive}
+			\caption{Ciklus aktiválása}
+			\label{fig:cycleactive}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{registermessage}
+			\caption{Regisztráció}
+			\label{fig:registermessage}
+	\end{subfigure}
+	
+	\medskip
+	
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{accountpagesave}
+			\caption{Profil adatok frissítése}
+			\label{fig:accountpagesave}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{cyclesaved}
+			\caption{Ciklus elmentése}
+			\label{fig:cyclesaved}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{loggedinmessage}
+			\caption{Bejelentkezés}
+			\label{fig:loggedinmessage}
+	\end{subfigure}
+	
+	\caption{Visszaigazoló üzenetek}
+	\label{fig:visszaigazolo}
+\end{figure}
+
+Ezek a lehetséges visszaigazoló üzenetek, amelyekkel a program használata közben találkozhatunk (\ref{fig:visszaigazolo}). Céljuk csupán egy gyors visszajelzést adni a felhasználónak, hogy a kért művelet valóban elvégződött-e.
+
+\pagebreak
+
+\subsection{Hibaüzenetek}
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{errorlogin}
+		\caption{Rossz adatok bejelentkezéskor}
+		\label{fig:errorlogin}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{internalerror}
+		\caption{Szerver hiba}
+		\label{fig:internalerror}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{errorcoachid}
+		\caption{Rossz edző azonosító megadása regisztrációkor}
+		\label{fig:errorcoachid}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{errornotloggedin}
+		\caption{Nincs jogosultság az oldal megnyitásához}
+		\label{fig:errornotloggedin}
+	\end{subfigure}
+	
+	\caption{Hibaüzenetek}
+	\label{fig:hiba}
+\end{figure}
+
+A \ref{fig:hiba} ábrán látható néhány lehetséges hibaüzenet. Ha egy ilyet látunk, a kért művelet nem ment végbe, így újra kell próbálni azt. A "Szerver hiba" üzenet felléphet, ha nincsen kapcsolatunk a szerverhez, vagy egyéb más szerveroldali hiba fellépése esetén. Ha lehetséges, a szerver is képes részletesebb üzenetet küldeni a hiba okáról.
+
+\subsection{Űrlapon megjelenő hibaüzenetek}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{editweighterror}
+	\caption{Űrlap hibaüzenet}
+	\label{fig:editweighterror}
+\end{figure}
+
+A ciklus oldalon (\ref{fig:cycleclient} / \ref{fig:cyclecoach}) található űrlapokon a fenti \ref{fig:editweighterror} ábrához hasonló üzenetbe ütközünk, ha a beírt szám negatív. Ilyenkor nem tudjuk elmenteni az adatot, a küldés gomb inaktívvá válik.

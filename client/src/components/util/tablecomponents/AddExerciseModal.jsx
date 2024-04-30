@@ -23,7 +23,10 @@ const AddExerciseModal = (props) => {
   const cycleData = useSelector((state) => state.cycles.cycleData);
   const rpeCount = cycleData.weeks;
   const dispatch = useDispatch();
-
+  
+  // State variable to track form validity
+  const [isFormValid, setIsFormValid] = useState(true);
+  
   const [exerciseName, setExerciseName] = useState('');
   const [series, setSeries] = useState(Array(rpeCount).fill(''));
   const [reps, setReps] = useState(Array(rpeCount).fill(''));
@@ -120,8 +123,8 @@ const AddExerciseModal = (props) => {
                     onChange={(e) =>
                       handleSeriesChange(e.target.value, 0)
                     }
-                    error={seriesErrors[index]}
-                    helperText={seriesErrors[index] ? "Please enter a positive number" : ""}
+                    error={seriesErrors[0]}
+                    helperText={seriesErrors[0] ? "Please enter a positive number" : ""}
                   />
                 </Grid>
                 <Grid item sm={12} md={4}>
@@ -134,8 +137,8 @@ const AddExerciseModal = (props) => {
                     onChange={(e) =>
                       handleRepsChange(e.target.value, 0)
                     }
-                    error={repsErrors[index]}
-                    helperText={repsErrors[index] ? "Please enter a positive number" : ""}
+                    error={repsErrors[0]}
+                    helperText={repsErrors[0] ? "Please enter a positive number" : ""}
                   />
                 </Grid>
               </>
@@ -215,6 +218,7 @@ const AddExerciseModal = (props) => {
                 variant="contained"
                 color="primary"
                 onClick={handleSave}
+                disabled={!isFormValid}
               >
                 Save
               </Button>
