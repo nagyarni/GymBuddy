@@ -7,7 +7,6 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Checkbox,
   Grid,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,8 +26,6 @@ const EditExerciseModal = (props) => {
   const dispatch = useDispatch();
   const initialValues = cycleData.days[dayIndex]?.[exerciseIndex]
 
-  console.log(initialValues)
-
   const [exerciseName, setExerciseName] = useState(initialValues?.name || '');
   const [series, setSeries] = useState(
     initialValues?.series ? initialValues.series : Array(rpeCount).fill(0)
@@ -39,7 +36,14 @@ const EditExerciseModal = (props) => {
   const [rpes, setRPEs] = useState(
     initialValues?.rpe ? initialValues.rpe : Array(rpeCount).fill(0)
   );
-  const [perWeekInput, setPerWeekInput] = useState(false); // State for per-week input toggle
+
+  // State variables for input validation and error messages
+  const [seriesErrors, setSeriesErrors] = useState(Array(rpeCount).fill(false));
+  const [repsErrors, setRepsErrors] = useState(Array(rpeCount).fill(false));
+  const [rpesErrors, setRpesErrors] = useState(Array(rpeCount).fill(false));
+
+  // State variable to track form validity
+  const [isFormValid, setIsFormValid] = useState(true);
 
   const { setSnackbarMessage } = useSnackbar();
 
@@ -60,18 +64,57 @@ const EditExerciseModal = (props) => {
 
   const handleClose = () => {
     setModalOpen(false);
-    setRPEs(initialValues?.rpe || Array(rpeCount).fill(''));
-    setReps(initialValues?.reps || Array(rpeCount).fill(''));
-    setSeries(initialValues?.series || Array(rpeCount).fill(''));
+    setSeriesErrors(Array(rpeCount).fill(false));
+    setRepsErrors(Array(rpeCount).fill(false));
+    setRpesErrors(Array(rpeCount).fill(false));
     setExerciseName(initialValues?.name || '');
   };
 
   useEffect(() => {
-    setRPEs(initialValues?.rpe || Array(rpeCount).fill(''));
-    setReps(initialValues?.reps || Array(rpeCount).fill(''));
-    setSeries(initialValues?.series || Array(rpeCount).fill(''));
+    setSeriesErrors(Array(rpeCount).fill(false));
+    setRepsErrors(Array(rpeCount).fill(false));
+    setRpesErrors(Array(rpeCount).fill(false));
     setExerciseName(initialValues?.name || '');
   }, [modalOpen]);
+
+  const handleSeriesChange = (value, index) => {
+    const updatedSeries = [...series];
+    updatedSeries[index] = value;
+    setSeries(updatedSeries);
+
+    // Validate input
+    const isValid = !isNaN(value) && value >= 0;
+    const errors = [...seriesErrors];
+    errors[index] = !isValid;
+    setSeriesErrors(errors);
+    setIsFormValid(errors.every(error => !error));
+  };
+
+  const handleRepsChange = (value, index) => {
+    const updatedReps = [...reps];
+    updatedReps[index] = value;
+    setReps(updatedReps);
+
+    // Validate input
+    const isValid = !isNaN(value) && value >= 0;
+    const errors = [...repsErrors];
+    errors[index] = !isValid;
+    setRepsErrors(errors);
+    setIsFormValid(errors.every(error => !error));
+  };
+
+  const handleRpesChange = (value, index) => {
+    const updatedRpes = [...rpes];
+    updatedRpes[index] = value;
+    setRPEs(updatedRpes);
+
+    // Validate input
+    const isValid = !isNaN(value) && value >= 0;
+    const errors = [...rpesErrors];
+    errors[index] = !isValid;
+    setRpesErrors(errors);
+    setIsFormValid(errors.every(error => !error));
+  };
 
   return (
     <Modal open={modalOpen} onClose={handleClose}>
@@ -106,11 +149,9 @@ const EditExerciseModal = (props) => {
                   fullWidth
                   margin="normal"
                   value={series[index]}
-                  onChange={(e) => {
-                    const updatedSeries = [...series];
-                    updatedSeries[index] = e.target.value;
-                    setSeries(updatedSeries);
-                  }}
+                  onChange={(e) => handleSeriesChange(e.target.value, index)}
+                  error={seriesErrors[index]}
+                  helperText={seriesErrors[index] ? "Please enter a positive number" : ""}
                 />
               </Grid>
             ))}
@@ -124,11 +165,9 @@ const EditExerciseModal = (props) => {
                   fullWidth
                   margin="normal"
                   value={reps[index]}
-                  onChange={(e) => {
-                    const updatedReps = [...reps];
-                    updatedReps[index] = e.target.value;
-                    setReps(updatedReps);
-                  }}
+                  onChange={(e) => handleRepsChange(e.target.value, index)}
+                  error={repsErrors[index]}
+                  helperText={repsErrors[index] ? "Please enter a positive number" : ""}
                 />
               </Grid>
             ))}
@@ -141,11 +180,8 @@ const EditExerciseModal = (props) => {
                   {rpes[index] !== undefined && (
                     <Select
                       value={rpes[index]}
-                      onChange={(e) => {
-                        const updatedRpes = [...rpes];
-                        updatedRpes[index] = e.target.value;
-                        setRPEs(updatedRpes);
-                      }}
+                      onChange={(e) => handleRpesChange(e.target.value, index)}
+                      error={rpesErrors[index]}
                     >
                       <MenuItem value="5">5</MenuItem>
                       <MenuItem value="6">6</MenuItem>
@@ -160,7 +196,7 @@ const EditExerciseModal = (props) => {
               </Grid>
             ))}
           </Grid>
-          <Button variant="contained" color="primary" onClick={handleSave}>
+          <Button variant="contained" color="primary" onClick={handleSave} disabled={!isFormValid}>
             Save
           </Button>
         </form>

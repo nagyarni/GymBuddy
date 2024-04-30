@@ -94,7 +94,13 @@ const UserController = {
       if (req.body.type !== 0 && req.body.type !== 1) {
         return res.status(401).json({ message: 'Bad data 622' });
       }
-      
+
+      // Validating email format using regular expression
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(req.body.email)) {
+        return res.status(400).json({ message: 'Invalid email format' })
+      }
+        
       // Setting special fields based on user type
       req.body.type === 0 ? 
       req.body._client = {

@@ -20,12 +20,15 @@ function EditWeightModal(props) {
   const weekCounter = props.weekCounter
 
   const [isFormFilled, setIsFormFilled] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
     setEditedWeight(value);
     console.log(editedWeight)
     setIsFormFilled(value !== ''); // Set isFormFilled based on whether the input is not empty
+    setError(!(value === '' || parseFloat(value) >= 0)); // Check if the value is not empty and not a positive number or zero
+
   };
 
   const handleConfirm = (event) => {
@@ -45,6 +48,7 @@ function EditWeightModal(props) {
 
   const handleCloseModal = () => {
     setModalOpen(false);
+    setError(false)
   };
 
   return (
@@ -60,11 +64,13 @@ function EditWeightModal(props) {
             fullWidth
             value={editedWeight}
             onChange={handleInputChange}
+            error={error}
+            helperText={error ? "Please enter a positive number or zero" : ""}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal}>Cancel</Button>
-          <Button onClick={handleConfirm} disabled={!isFormFilled}>Confirm</Button>
+          <Button onClick={handleConfirm} disabled={!isFormFilled || error}>Confirm</Button>
         </DialogActions>
       </Dialog>
   )

@@ -17,12 +17,14 @@ function EditCoachDataModal(props) {
   const [editedValue, setEditedValue] = useState(0)
 
   const [isFormFilled, setIsFormFilled] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
     setEditedValue(value);
     console.log(editedValue)
     setIsFormFilled(value !== ''); // Set isFormFilled based on whether the input is not empty
+    setError(!(value === '' || parseFloat(value) >= 0)); // Check if the value is not empty and not a positive number or zero
   };
 
   const handleConfirm = (event) => {
@@ -55,6 +57,7 @@ function EditCoachDataModal(props) {
 
   const handleCloseModal = () => {
     setEditedValue(0)
+    setError(false)
     setModalOpen(0);
   };
 
@@ -70,11 +73,13 @@ function EditCoachDataModal(props) {
             fullWidth
             value={editedValue}
             onChange={handleInputChange}
+            error={error}
+            helperText={error ? "Please enter a positive number or zero" : ""}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal}>Cancel</Button>
-          <Button onClick={handleConfirm} disabled={!isFormFilled}>Confirm</Button>
+          <Button onClick={handleConfirm} disabled={!isFormFilled || error}>Confirm</Button>
         </DialogActions>
       </Dialog>
   )
