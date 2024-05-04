@@ -34,8 +34,15 @@
       \endverb
     \endentry
   \enddatalist
+  \missing{express}
+  \missing{jsonwebtoken}
+  \missing{materialui}
+  \missing{mongoose}
   \missing{nodejs}
+  \missing{nodemailer}
   \missing{react}
+  \missing{reactredux}
+  \missing{reactrouterdom}
 \endrefsection
 \endinput
 

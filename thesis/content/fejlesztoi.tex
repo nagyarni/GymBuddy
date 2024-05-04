@@ -1170,7 +1170,7 @@ Adminisztrátorként nem elérhetőek a kliens és edző felhasználók funkció
 	\item Gyakorlat neve: Kötelező, maximum 30 karakter
 	\item Súly: $x \in \mathbb{N}$, $0 \leq x < 10000$
 	\item Sorozatok, ismétlések: Kötelező, $x \in \mathbb{N}$, $0 \leq x < 100$
-	\item RPE: Kötelező, listából választott szám $x \in {5, 6, 7, 8, 8.5, 9, 10}$
+	\item RPE: Kötelező, listából választott szám $x \in \{5, 6, 7, 8, 8.5, 9, 10\}$
 \end{itemize}
 
 \subsubsection{Regisztráció/profil oldal}
@@ -1210,7 +1210,7 @@ A legjelentősebb használt függvénykönyvtárakat a következő alfejezetben 
 
 \bigskip
 
-A program megvalósítása során az MVC tervezési mintát követtem (Model, View, Controller).
+A program megvalósítása során az MVC tervezési mintát (\ref{ch:mvc}) követtem (Model, View, Controller).
 
 
 \subsection{Jelentősebb használt függvénykönyvtárak}
@@ -1231,6 +1231,213 @@ A program megvalósítása során az MVC tervezési mintát követtem (Model, Vi
 	\item[Nodemailer: \cite{nodemailer}] A Nodemailer egy Node.js könyvtár, amely lehetővé teszi az egyszerű és hatékony e-mail küldést a szerveroldali alkalmazásokból.
 \end{description}
 
+\section{Nem funkcionális követelmények}
+
+\begin{itemize}
+	\item Hatékonyság: 
+	\begin{itemize}
+		\item Adatok elérhetősége gyorsan és hatékonyan
+		\item Kis erőforrásigény
+		\item Gyors válaszidő a lekérdezésekre
+	\end{itemize}
+	\item Megbízhatóság:
+	\begin{itemize}
+		\item Helyes használat esetén nem lép fel hiba a programban
+		\item Hibás használat esetén nem romlik el a program működése, hibaüzenetekkel érthetően kommunikálva van a hiba oka
+	\end{itemize}
+	\item Biztonság:
+	\begin{itemize}
+		\item Alapszintű védelem
+	\end{itemize}	
+	\item Hordozhatóság:
+	\begin{itemize}
+		\item Egy áltagos teljesítményű számítógépen a megfelelő böngészőprogramok használata mellett helyes működés
+	\end{itemize}
+	\item Felhasználhatóság:
+	\begin{itemize}
+		\item Egyszerű és logikus felhasználói felület, kontextus alapú interfész
+	\end{itemize}
+\end{itemize}
+
 \pagebreak
 
 \section{MVC architektúra}
+
+\label{ch:mvc}
+
+Az MVC (Model, View, Controller) egy olyan szofterfejlesztési architektúra, amelyet három különálló szoftver rész jellemez. Ezeket az egységeket a következő alfejezetekben fogom részletesen tárgyalni, illetve a hozzájuk tartozó szoftver implementációmat bemutatni.
+
+Ezen architektúra alkalmazásával egy logikusan tagolt és könnyen kezelhető programot tudunk készíteni, áltátható könyvtárstruktúrával.
+
+Programomhoz hozzátartozik ezen felül egy \textbf{Router} is, amely a REST API végpontok kezelésért és a kliens-szerver közötti közvetlen kommunikációért felel. Tulajdonképpen a \textbf{Router} fogja továbbítani a helyes kontrollernek a kapott HTTP kérést.
+
+A REST API végpontokhoz használtam még úgynevezett middlewareket. Ezek a függvények mindig a kontroller hívás előtt futnak le, programomban a felhaszáló hitelesítéséért felelnek. Ezeket a metódusokat is az egyik itt található alfejezetben fogom bemutatni.
+
+\subsection{Model}
+
+A model felelős az alkalmazás üzleti logikájának és adatkezelésének végrehajtásáért. Ide tartoznak az adatbázisból érkező adatok kezelése, az adatok feldolgozása és az üzleti szabályok végrehajtása.
+
+Programomban a model rész a backenden, azaz a szerveroldalon található. NodeJs és Mongoose segítségével van megvalósítva, minden modelhez tartozik egy külön JavaScript modul (Mongoose sémáknak nevezi őket), amelynek létezését a Mongoose függvénykönyvtár előírja. Ezek a modulok fogják tartalmazni az adatbázis szerkezeti leírását:
+\begin{itemize}
+	\item Milyen típusú mezői vannak egy adatbázis objektumnak,
+	\item Milyen esetleges megszorításokkal rendelkeznek,
+	\item Definiálhatunk sémánkra statikus (osztályszintű) függvényeket, objektumokra értelmezett függvényeket, illetve például middleware-ként funkcionáló függvényeket is, amelyek minden adott sémához tartozó adatbázis elem módosítása előtt lefutó kódot eredményez.
+\end{itemize}
+
+A modellek közötti kapcsolatokat a \ref{fig:model} ábrán látható UML diagramon mutatom be.
+Az adatbázis részletesebb leírása a \ref{ch:adatbazis} fejezetben található. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{model}
+	\caption{Modellek (sémák) közötti kapcsolatok}
+	\label{fig:model}
+\end{figure}
+
+Programomban a "server/schemas" útvonalon érhetőek el az ábrán látható sémák.
+
+\subsection{View}
+
+A view (nézet) felelős az alkalmazás felhasználói felületének megjelenítéséért és a felhasználói interakciók kezeléséért. Ide tartozik az UI elemek létrehozása, elrendezése és formázása, valamint az eseménykezelők hozzárendelése.
+
+A kliensoldali nézetek megjelenítéséért és kezeléséért felelős React komponensek (.jsx kiterjesztésű fájlok, "client/src" útvonalon találhatók) a frontend alkalmazás részét képezik, és közvetlenül kommunikálnak a backenddel HTTP-n keresztül REST API kérések formájában
+
+\subsection{Controller}
+
+Programomban a controller rész a backenden, azaz a szerveroldalon található a "server/controllers" mappában. A Node.js környezetben a routerek és kontrollerek felelősek az útvonalak kezeléséért és az üzleti logika végrehajtásáért. Ezek a kontrollerek az HTTP kéréseket kezelik, és válaszolnak a megfelelő válaszokkal a kliens felé.
+
+A következő alfejezetekben bemutatom a programban lévő kontrollereket, és ezek függvényeit. 
+
+\subsubsection{Általános metódusok}
+
+Ezek a metódusok minden modelhez tartoznak, alapvető adatbázis kezelő utasítások amelyeket a modellekre meghívhatunk.
+
+\begin{itemize}
+	\item Model.find(\{\}) - visszaadja az összes modellhez tartozó adatbázis objektumot
+	\item Model.find(\{...searchparams\}) - visszaadja a legelső, paraméterekre illeszkedő adatbázis objektumot
+	\item Model.save() - elmenti az adatbázisban az adott objektumot
+	\item Model.updateOne(\{...searchparams\}, \{...changedattributes\}) - megkeresi a legelső illeszkedő objektumot, majd frissíti a megadott információkkal
+	\item Model.deleteOne(\{...serachparams\}) - megkeresi a legelső illeszkedő objektumot és törli az adatbázisból
+\end{itemize}
+
+A tobábbiakban A req, res paraméterek a \emph{Request} (kérés) és \emph{Response} (válasz). Mivel a kliensoldal és szerveroldal REST API kérésekkel kommunikál egymással, minden szükséges információ a műveletek végrehajtásához a \emph{Request} paraméterben lesz tárolva JSON formátumban. A \emph{Response} paraméter tartalma pedig visszakerül 
+
+\subsubsection{CycleController}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\linewidth]{cyclecontroller}
+	\caption{CycleController osztály}
+	\label{fig:cyclecontroller}
+\end{figure}
+
+A \ref{fig:cyclecontroller} ábrán láthatóak a CycleController osztály metódusai.
+
+\begin{description}
+	\item[getCyclesByUserId(req, res):] Visszaadja egy adott felhasználó hoz (ID szerint) tartozó összes ciklus objektumot
+	\item[getCycleByCycleId(req, res):] Visszaad egy ciklus objektumot ID alapján
+	\item[addCycle(req, res):] A kérésben található JSON-ban tárolt információ alapján létrehoz egy ciklus adatbázis objektumot az adott felhasználóhoz rendelve
+	\item[updateCycle(req, res):] Ciklus ID alapján megkeresi a kért objektumot az adatbázisban, és a kérésben JSON-ban tárolt információkra cseréli ki az objektum tartalmát
+	\item[deleteCycle(req, res):] Ciklus ID alapján törli a talált objektumot az adatbázisból  
+\end{description}
+
+Ha véletlenül egy olyan adatbázis objektumra hívunk meg egy metódust, amelyre nincsen értelmezve, a szerver hibaüzenettel fog visszatérni. Például ha egy edző típusú felhasználóhoz szeretnénk egy új ciklust hozzáadni, a program le fogja kezelni az esetet és hibával tér vissza. 
+
+Ilyen fajta hibakezeléssel mindegyik kontroller rendelkezik, middleware-ként vannak definiálva ezek az ellenőrző és hibakezelő függvények.
+
+\subsubsection{UserController}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\linewidth]{usercontroller}
+	\caption{UserController osztály}
+	\label{fig:usercontroller}
+\end{figure}
+
+A \ref{fig:usercontroller} ábrán láthatóak a UserController osztályhoz tartozó függvények.
+
+\begin{description}
+	\item[getClientsByCoachId(req, res):] Edző objektumnak adja vissza az összes hozzárendelt kliens objektumot
+	\item[login(req, res):] Bejelentkezést kezeli, sikeres hitelesítés után egy aláírt JWT tokent küld vissza a kliensnek
+	\item[register(req, res):] Sikeres regisztráció után egy aláírt JWT tokent küld vissza, illetve kezeli az edzőhöz való ID alapú hozzárendelést is
+	\item[addClient(req, res):] Kliens objektumok edzőhöz való rendelésére szolgál
+	\item[deleteUser(req, res):] Töröl egy felhasználót az adatbázisból, ha kliens típusú akkor a hozzá tartozó ciklusokat is törli
+	\item[deleteClient(req, res):] Megszüntet egy kliens-edző hozzárendelést
+\end{description}
+
+A getAllUsers, getUserById, updateUser metódusokhoz nem szükséges külön magyarázat, ezek a függvények minden fajta User objektumra használhatóak.
+
+\subsubsection{ChatController}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\linewidth]{chatcontroller}
+	\caption{ChatController osztály}
+	\label{fig:chatcontroller}
+\end{figure}
+
+A \ref{fig:chatcontroller} ábrán látható a ChatController osztály metódusai.
+
+\begin{description}
+	\item[getChatByUserIds(req, res):] Egy kliens és egy edző közötti chatet keresi meg, a két felhaszáló azonosítójából
+	\item[postMessageByChatId(req, res):] Üzenet elküldésére szolgál egy chatben
+\end{description}
+
+
+\subsection{Router}
+
+Ebben az alfejezetben a \textbf{Router} REST API útvonalait fogom felsorolni és leírni a hozzá tartozó kontroller hívást. A \emph{":param"} szöveg mindig egy paramétert jelent az útvonalakban.
+
+\subsubsection{\underline{GET végpontok}}
+
+\begin{description}
+	\item[/users] - UserController.getAllUsers
+	\item[/users/:id] - UserController.getUserById 
+	\item[/users/:id/cycles] - CycleController.getCyclesByUserId
+	\item[/users/:id/cycles/:cycleid] - CycleController.getCycleByCycleId
+	\item[/users/:id/clients] - UserController.getClientsByCoachId
+	\item[/chat/:clientId/:coachId] - ChatController.getChatByUserIds
+\end{description}
+
+\subsubsection*{\underline{POST végpontok}}
+
+\begin{description}
+	\item[/auth/login] - UserController.login
+	\item[/auth/register] - UserController.register
+	\item[/users/:id/cycles] -  CycleController.addCycle
+	\item[/users/:id/clients] - UserController.addClient
+	\item[/chat/:chatId] - ChatController.postMessageByChatId
+\end{description}
+
+\subsubsection{\underline{PATCH végpontok}}
+
+\begin{description}
+	\item[/users/:id/cycles/:cycleid] - CycleController.updateCycle
+	\item[/users/:id] - UserController.updateUser
+\end{description}
+
+\subsubsection{\underline{DELETE végpontok}}
+
+\begin{description}
+	\item[/users/:id] - UserController.deleteUser
+	\item[/users/:id/cycles/:cycleid] - CycleController.deleteCycle
+	\item[/users/:id/clients/:clientid] - UserController.deleteClient
+\end{description}
+
+
+\subsection{Middlerwarek}
+
+\begin{itemize}
+	\item authMiddleware
+	\begin{itemize}
+		\item authenticateToken - Ez a függvény felel a JWT tokenek hitelesítéséért, ellenőrzi hogy az aláírás és lejárati időbélyeg valid-e
+	\end{itemize}
+	\item userTypeMiddleware
+	\begin{itemize}
+		\item userTypeClient - Ellenőrzi, hogy a kérést küldő felhasználó létezik-e és valóban kliens típusú
+		\item userTypeCoach - Ugyanez, edző felhasználóra
+		\item userTypeAdmin - Ugyanez, adminisztrátor felhasználóra
+		\item isClientIdValid - Ellenőrzi, hogy a kapott ID hivatkozik-e egy kliens objektumra
+		\item isCoachIdValid - Ugyanez, edző felhasználóra
+	\end{itemize}
+\end{itemize}
