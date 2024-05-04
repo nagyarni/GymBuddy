@@ -27,7 +27,7 @@ function EditWeightModal(props) {
     setEditedWeight(value);
     console.log(editedWeight)
     setIsFormFilled(value !== ''); // Set isFormFilled based on whether the input is not empty
-    setError(!(value === '' || parseFloat(value) >= 0)); // Check if the value is not empty and not a positive number or zero
+    setError(!(value === '' || parseFloat(value) >= 0) || parseFloat(value) > 10000); // Check if the value is not empty and not a positive number or zero
 
   };
 
@@ -65,7 +65,7 @@ function EditWeightModal(props) {
             value={editedWeight}
             onChange={handleInputChange}
             error={error}
-            helperText={error ? "Please enter a positive number or zero" : ""}
+            helperText={error ? "Please enter a positive number less than 10000" : ""}
           />
         </DialogContent>
         <DialogActions>

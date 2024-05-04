@@ -16,5 +16,26 @@
   {}
 \endgroup
 
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{visualparadigm}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Accessed: April 30, 2024}
+      \field{title}{Visual Paradigm Online}
+      \verb{urlraw}
+      \verb https://online.visual-paradigm.com/
+      \endverb
+      \verb{url}
+      \verb https://online.visual-paradigm.com/
+      \endverb
+    \endentry
+  \enddatalist
+  \missing{nodejs}
+  \missing{react}
+\endrefsection
 \endinput
 

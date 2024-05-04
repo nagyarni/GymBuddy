@@ -83,7 +83,11 @@ const EditExerciseModal = (props) => {
     setSeries(updatedSeries);
 
     // Validate input
-    const isValid = !isNaN(value) && value >= 0;
+    let isValid = !isNaN(value) && value >= 0;
+    // validation 2
+    if (value > 100 || value === "") {
+      isValid = false
+    }
     const errors = [...seriesErrors];
     errors[index] = !isValid;
     setSeriesErrors(errors);
@@ -96,7 +100,11 @@ const EditExerciseModal = (props) => {
     setReps(updatedReps);
 
     // Validate input
-    const isValid = !isNaN(value) && value >= 0;
+    let isValid = !isNaN(value) && value >= 0;
+    // validation 2
+    if (value > 100 || value === "") {
+      isValid = false
+    }
     const errors = [...repsErrors];
     errors[index] = !isValid;
     setRepsErrors(errors);
@@ -139,6 +147,7 @@ const EditExerciseModal = (props) => {
             margin="normal"
             value={exerciseName}
             onChange={(e) => setExerciseName(e.target.value)}
+            inputProps={{ maxLength: 30 }}
           />
           <Grid container spacing={2}>
             {series.map((serie, index) => (
@@ -151,7 +160,7 @@ const EditExerciseModal = (props) => {
                   value={series[index]}
                   onChange={(e) => handleSeriesChange(e.target.value, index)}
                   error={seriesErrors[index]}
-                  helperText={seriesErrors[index] ? "Please enter a positive number" : ""}
+                  helperText={seriesErrors[index] ? "Please enter a positive number less than 100" : ""}
                 />
               </Grid>
             ))}
@@ -167,7 +176,7 @@ const EditExerciseModal = (props) => {
                   value={reps[index]}
                   onChange={(e) => handleRepsChange(e.target.value, index)}
                   error={repsErrors[index]}
-                  helperText={repsErrors[index] ? "Please enter a positive number" : ""}
+                  helperText={repsErrors[index] ? "Please enter a positive number less than 100" : ""}
                 />
               </Grid>
             ))}

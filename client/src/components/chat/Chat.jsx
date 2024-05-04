@@ -133,6 +133,7 @@ function Chat() {
                 }
               }}
               autoComplete="off"
+              inputProps={{ maxLength: 255 }}
             />
             <IconButton
               color="primary"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Modal,
@@ -25,15 +25,16 @@ const AddExerciseModal = (props) => {
   const dispatch = useDispatch();
   
   // State variable to track form validity
-  const [isFormValid, setIsFormValid] = useState(true);
+  const [isFormValid, setIsFormValid] = useState(false);
   
   const [exerciseName, setExerciseName] = useState('');
   const [series, setSeries] = useState(Array(rpeCount).fill(''));
   const [reps, setReps] = useState(Array(rpeCount).fill(''));
   const [rpes, setRPEs] = useState(Array(rpeCount).fill(''));
-  const [seriesErrors, setSeriesErrors] = useState(Array(rpeCount).fill(false));
-  const [repsErrors, setRepsErrors] = useState(Array(rpeCount).fill(false));
+  const [seriesErrors, setSeriesErrors] = useState(Array(rpeCount).fill(true));
+  const [repsErrors, setRepsErrors] = useState(Array(rpeCount).fill(true));
   const [perWeekInput, setPerWeekInput] = useState(false); // State for per-week input toggle
+  const [exerciseNameError, setExerciseNameError] = useState(true)
 
   const { setSnackbarMessage } = useSnackbar();
 
@@ -57,34 +58,59 @@ const AddExerciseModal = (props) => {
     setReps(Array(rpeCount).fill(''));
     setSeries(Array(rpeCount).fill(''));
     setExerciseName('');
-    setSeriesErrors(Array(rpeCount).fill(false));
-    setRepsErrors(Array(rpeCount).fill(false));
-    setRpesErrors(Array(rpeCount).fill(false));
+    setSeriesErrors(Array(rpeCount).fill(true));
+    setRepsErrors(Array(rpeCount).fill(true));
+    //setRpesErrors(Array(rpeCount).fill(false));
   };
 
-  const handleSeriesChange = (value, index) => {
+
+  const handleSeriesChange = (value, index, perWeek) => {
     const updatedSeries = [...series];
     updatedSeries[index] = value;
     setSeries(updatedSeries);
     // Validate input
-    const isValid = !isNaN(value) && value >= 0;
+    let isValid = !isNaN(value) && value >= 0 && value < 100 && value !== "";
+    // if (updatedSeries.every((e) => {e !== ""})) {
+    //   isValid = true
+    // }
     const errors = [...seriesErrors];
-    errors[index] = !isValid;
+    if (perWeek) {
+      errors[index] = !isValid;
+    }
+    else {
+      errors.fill(!isValid)
+    }
     setSeriesErrors(errors);
-    setIsFormValid(errors.every(error => !error));
   };
-
-  const handleRepsChange = (value, index) => {
+  
+  const handleRepsChange = (value, index, perWeek) => {
     const updatedReps = [...reps];
     updatedReps[index] = value;
     setReps(updatedReps);
     // Validate input
-    const isValid = !isNaN(value) && value >= 0;
+    let isValid = !isNaN(value) && value >= 0 && value < 100 && value !== "";
     const errors = [...repsErrors];
-    errors[index] = !isValid;
+    if (perWeek) {
+      errors[index] = !isValid;
+    }
+    else {
+      errors.fill(!isValid)
+    }
     setRepsErrors(errors);
-    setIsFormValid(errors.every(error => !error));
   };
+
+  const handleExerciseNameChange = (value) => {
+    setExerciseName(value)
+    setExerciseNameError(value === "")
+  }
+
+  useEffect(() => {
+    setIsFormValid(seriesErrors.every(error => !error) && repsErrors.every(error => !error && !exerciseNameError))
+    console.log(seriesErrors)
+    console.log(repsErrors)
+    console.log(exerciseNameError)
+  }, [seriesErrors, repsErrors, exerciseNameError])
+  
 
   return (
     <Modal open={modalOpen} onClose={handleClose}>
@@ -108,7 +134,8 @@ const AddExerciseModal = (props) => {
             fullWidth
             margin="normal"
             value={exerciseName}
-            onChange={(e) => setExerciseName(e.target.value)}
+            onChange={(e) => handleExerciseNameChange(e.target.value)}
+            inputProps={{ maxLength: 30 }}
           />
           <Grid container spacing={2}>
             {!perWeekInput && (
@@ -121,11 +148,11 @@ const AddExerciseModal = (props) => {
                     margin="normal"
                     value={series[0]}
                     onChange={(e) =>
-                      handleSeriesChange(e.target.value, 0)
+                      handleSeriesChange(e.target.value, 0, false)
                     }
                     error={seriesErrors[0]}
-                    helperText={seriesErrors[0] ? "Please enter a positive number" : ""}
-                  />
+                    helperText={seriesErrors[0] ? "Please enter a positive number less than 100" : ""}
+                    />
                 </Grid>
                 <Grid item sm={12} md={4}>
                   <TextField
@@ -135,10 +162,10 @@ const AddExerciseModal = (props) => {
                     margin="normal"
                     value={reps[0]}
                     onChange={(e) =>
-                      handleRepsChange(e.target.value, 0)
+                      handleRepsChange(e.target.value, 0, false)
                     }
                     error={repsErrors[0]}
-                    helperText={repsErrors[0] ? "Please enter a positive number" : ""}
+                    helperText={repsErrors[0] ? "Please enter a positive number less than 100" : ""}
                   />
                 </Grid>
               </>
@@ -154,11 +181,11 @@ const AddExerciseModal = (props) => {
                       margin="normal"
                       value={series[index]}
                       onChange={(e) => {
-                        handleSeriesChange(e.target.value, index);
+                        handleSeriesChange(e.target.value, index, true);
                       }}
                       error={seriesErrors[index]}
-                      helperText={seriesErrors[index] ? "Please enter a positive number" : ""}
-                    />
+                      helperText={seriesErrors[index] ? "Please enter a positive number less than 100" : ""}
+                      />
                   </Grid>
                 ))}
                 {reps.map((rep, index) => (
@@ -170,11 +197,11 @@ const AddExerciseModal = (props) => {
                       margin="normal"
                       value={reps[index]}
                       onChange={(e) => {
-                        handleRepsChange(e.target.value, index);
+                        handleRepsChange(e.target.value, index, true);
                       }}
                       error={repsErrors[index]}
-                      helperText={repsErrors[index] ? "Please enter a positive number" : ""}
-                    />
+                      helperText={seriesErrors[index] ? "Please enter a positive number less than 100" : ""}
+                      />
                   </Grid>
                 ))}
               </>
@@ -187,7 +214,7 @@ const AddExerciseModal = (props) => {
                   <InputLabel>RPE Week {index + 1}</InputLabel>
                   {rpes[index] !== undefined && (
                     <Select
-                      value={rpes[index]}
+                      value={rpes[index] || '5'}
                       onChange={(e) => {
                         const updatedRpes = [...rpes];
                         updatedRpes[index] = e.target.value;
@@ -209,7 +236,12 @@ const AddExerciseModal = (props) => {
             <Grid item xs={12} style={{ paddingRight: '10px' }}>
               <Checkbox
                 checked={perWeekInput}
-                onChange={(e) => setPerWeekInput(e.target.checked)}
+                onChange={(e) => {
+                    setPerWeekInput(e.target.checked)
+                    setSeriesErrors(Array(rpeCount).fill(true));
+                    setRepsErrors(Array(rpeCount).fill(true));
+                  }
+                }
               />
               Use per-week inputs
             </Grid>

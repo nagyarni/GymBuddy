@@ -23,7 +23,7 @@ function EditExtraDataModal(props) {
     setEditedValue(value);
     console.log(editedValue)
     setIsFormFilled(value !== ''); // Set isFormFilled based on whether the input is not empty
-    setError(!(value === '' || parseFloat(value) >= 0)); // Check if the value is not empty and not a positive number or zero
+    setError(!(value === '' || parseFloat(value) >= 0) || value > 100); // Check if the value is not empty and not a positive number or zero
   };
 
   const handleConfirm = (event) => {
@@ -70,7 +70,7 @@ function EditExtraDataModal(props) {
             value={editedValue}
             onChange={handleInputChange}
             error={error}
-            helperText={error ? "Please enter a positive number or zero" : ""}
+            helperText={error ? "Please enter a positive number less than 100" : ""}
           />
         </DialogContent>
         <DialogActions>

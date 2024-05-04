@@ -99,6 +99,7 @@ function AccountPage() {
                   label="Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  inputProps={{ maxLength: 20 }}
                 />
                 <TextField sx={{ marginTop: 3 }} fullWidth label="Email" value={userData.email} disabled />
                 <TextField sx={{ marginTop: 3 }} fullWidth label="Join Date" value={userData.joinDate} disabled />
