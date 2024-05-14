@@ -24,7 +24,7 @@
       \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labeltitlesource}{title}
       \field{howpublished}{Website}
-      \field{note}{Accessed: April 30, 2024}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
       \field{title}{Visual Paradigm Online}
       \verb{urlraw}
       \verb https://online.visual-paradigm.com/
@@ -33,16 +33,161 @@
       \verb https://online.visual-paradigm.com/
       \endverb
     \endentry
+    \entry{react}{misc}{}{}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{React}
+      \verb{urlraw}
+      \verb https://react.dev/
+      \endverb
+      \verb{url}
+      \verb https://react.dev/
+      \endverb
+    \endentry
+    \entry{nodejs}{misc}{}{}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{NodeJs}
+      \verb{urlraw}
+      \verb https://nodejs.org/en
+      \endverb
+      \verb{url}
+      \verb https://nodejs.org/en
+      \endverb
+    \endentry
+    \entry{materialui}{misc}{}{}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{Material UI}
+      \verb{urlraw}
+      \verb https://mui.com/
+      \endverb
+      \verb{url}
+      \verb https://mui.com/
+      \endverb
+    \endentry
+    \entry{reactredux}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{React Redux}
+      \verb{urlraw}
+      \verb https://react-redux.js.org/
+      \endverb
+      \verb{url}
+      \verb https://react-redux.js.org/
+      \endverb
+    \endentry
+    \entry{reactrouterdom}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{React Router}
+      \verb{urlraw}
+      \verb https://reactrouter.com/en/main
+      \endverb
+      \verb{url}
+      \verb https://reactrouter.com/en/main
+      \endverb
+    \endentry
+    \entry{express}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{Express routing keretrendszer}
+      \verb{urlraw}
+      \verb https://expressjs.com/
+      \endverb
+      \verb{url}
+      \verb https://expressjs.com/
+      \endverb
+    \endentry
+    \entry{jsonwebtoken}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{JSON web token függvénykönyvtár}
+      \verb{urlraw}
+      \verb https://www.npmjs.com/package/jsonwebtoken
+      \endverb
+      \verb{url}
+      \verb https://www.npmjs.com/package/jsonwebtoken
+      \endverb
+    \endentry
+    \entry{mongoose}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{Mongoose függvénykönyvtár}
+      \verb{urlraw}
+      \verb https://mongoosejs.com/
+      \endverb
+      \verb{url}
+      \verb https://mongoosejs.com/
+      \endverb
+    \endentry
+    \entry{nodemailer}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{Nodemailer függvénykönyvtár}
+      \verb{urlraw}
+      \verb https://nodemailer.com/
+      \endverb
+      \verb{url}
+      \verb https://nodemailer.com/
+      \endverb
+    \endentry
+    \entry{mongomodeler}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{Mongomodeler diagramkészítő}
+      \verb{urlraw}
+      \verb https://mongomodeler.com/
+      \endverb
+      \verb{url}
+      \verb https://mongomodeler.com/
+      \endverb
+    \endentry
+    \entry{mongodb}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Website}
+      \field{note}{Hozzáférés dátuma: April 30, 2024}
+      \field{title}{MongoDB}
+      \verb{urlraw}
+      \verb https://www.mongodb.com/
+      \endverb
+      \verb{url}
+      \verb https://www.mongodb.com/
+      \endverb
+    \endentry
   \enddatalist
-  \missing{express}
-  \missing{jsonwebtoken}
-  \missing{materialui}
-  \missing{mongoose}
-  \missing{nodejs}
-  \missing{nodemailer}
-  \missing{react}
-  \missing{reactredux}
-  \missing{reactrouterdom}
 \endrefsection
 \endinput
 

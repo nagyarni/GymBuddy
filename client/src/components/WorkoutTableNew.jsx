@@ -207,7 +207,7 @@ function WorkoutTableNew() {
             <Fab color="primary" aria-label="previous week" disabled={isLeftButtonDisabled} onClick={handleLeftClick}>
               <ArrowBackIosNewIcon />
             </Fab>
-            {isRightButtonDisabled && isCoach && cycleData?.active ? (
+            {isRightButtonDisabled && isCoach && cycleData?.active && weekCounter < 5 ? (
               <Fab color="success" aria-label="add new week" onClick={handleAddWeekClick}>
                 <AddCircleOutlineIcon />
               </Fab>

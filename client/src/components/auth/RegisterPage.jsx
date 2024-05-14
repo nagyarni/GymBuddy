@@ -48,12 +48,15 @@ export default function RegisterPage() {
 
     if (!email) {
       setFormErrors((prevErrors) => ({ ...prevErrors, email: true }));
+      setSnackbarMessage({ message: 'Please make sure the given email is valid!', isError: true });
     }
     if (!password) {
       setFormErrors((prevErrors) => ({ ...prevErrors, password: true }));
+      setSnackbarMessage({ message: 'You must provide a password!', isError: true });
     }
     if (!name) {
       setFormErrors((prevErrors) => ({ ...prevErrors, name: true }));
+      setSnackbarMessage({ message: 'You must provide a username!', isError: true });
     }
 
     if (email && password && name) {
